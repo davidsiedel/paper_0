@@ -1,0 +1,23 @@
+Cette note résumé le travail réalisé au cours de la seconde année
+de doctorat de David Siedel qui vise à fournir une méthode de résolution
+robuste des équations d'équilibre mécanique couplées aux équations
+décrivant la fissuration des matériaux fragiles (par champs de phase ou
+par une approche micromorphe).
+
+La section~\ref{sec:dsiedel2a:implantation} décrit les différentes
+implémentations de la méthode Hybrid High Order que nous avons
+réalisées:
+
+\begin{itemize}
+  \item La première, nommée \texttt{h2O}, est écrite en
+  \texttt{python} pour explorer les potentialités de cette nouvelle
+  méthode numérique. Il s'agit d'un code de résolution complet
+  permettant de traiter des problèmes arbitraires. Nous l'avons utilisé
+  en mécanique non linéaire, en transformations infinitésimales et en
+  grandes transformations, et pour le problème de champs de phase.
+  \item La seconde, nommée \texttt{feta}, est une bibliothèque
+  {\tt C++} permettant d'implanter la méthode {\tt HHO} dans des codes
+  existant. Cette bibliothèque est actuellement utilisée dans la version
+  officielle {\tt Cast3M}.
+\end{itemize}
+

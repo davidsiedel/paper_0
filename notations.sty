@@ -1,0 +1,75 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{notations}[2014/08/21 custom_notations]
+
+\RequirePackage{bm}
+\RequirePackage{amsmath}
+\RequirePackage{stackengine}
+
+\newcommand{\subscript}[1]{
+    {}_{#1}
+}
+
+\newcommand{\supscript}[1]{
+    {}^{#1}
+}
+
+\newcommand{\subsupscript}[2]{
+    {}_{#1}^{#2}
+}
+
+\newcommand{\algebrize}[1]{
+  \mathsfit{#1}
+}
+
+\newcommand*{\captize}[2][4]{\scalebox{1.60}{$#2$}}
+
+\DeclareMathOperator{\Det}{det}
+
+\DeclareMathOperator{\Tr}{tr}
+
+% ======================================================================================================================
+% TENSORIAL NOTATIONS
+% ======================================================================================================================
+
+\newcommand{\tensoro}[1]{
+    % \bm{#1}
+    {#1}
+}
+
+\newcommand{\tensori}[1]{
+    % {\stackunder[-1.5pt]{${\bm{#1}}$}{$-$}}
+    \bm{#1}
+}
+
+\newcommand{\tensorii}[1]{
+    {\stackunder[1.2pt]{${\bm{#1}}$}{$\scriptstyle \sim$}}
+}
+
+\newcommand{\tensoriis}[1]{
+    % \smash{\underset{\sim}{\bm{#1}}}
+    \stackunder[1.2pt]{{\textit{#1}}}{$\scriptstyle \sim$}
+}
+
+\newcommand{\tensoriv}[1]{
+    {\stackunder[1.2pt]{${\bm{#1}}$}{$\scriptstyle \approx$}}
+}
+
+% ======================================================================================================================
+% TENSORIAL NOTATIONS 2
+% ======================================================================================================================
+
+\newcommand{\lighttensoro}[1]{
+    {#1}
+}
+
+\newcommand{\lighttensori}[1]{
+    {\stackunder[-1.5pt]{${{#1}}$}{$-$}}
+}
+
+\newcommand{\lighttensorii}[1]{
+    {\stackunder[1.2pt]{${{#1}}$}{$\scriptstyle \sim$}}
+}
+
+\newcommand{\lighttensoriv}[1]{
+    {\stackunder[1.2pt]{${{#1}}$}{$\scriptstyle \approx$}}
+}
