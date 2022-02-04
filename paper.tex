@@ -1,0 +1,1567 @@
+
+% Template for Elsevier CRC journal article
+% version 1.2 dated 09 May 2011
+
+% This file (c) 2009-2011 Elsevier Ltd.  Modifications may be freely made,
+% provided the edited file is saved under a different name
+
+% This file contains modifications for Procedia Computer Science
+% but may easily be adapted to other journals
+
+% Changes since version 1.1
+% - added "procedia" option compliant with ecrc.sty version 1.2a
+%   (makes the layout approximately the same as the Word CRC template)
+% - added example for generating copyright line in abstract
+
+%-----------------------------------------------------------------------------------
+
+%% This template uses the elsarticle.cls document class and the extension package ecrc.sty
+%% For full documentation on usage of elsarticle.cls, consult the documentation "elsdoc.pdf"
+%% Further resources available at http://www.elsevier.com/latex
+
+%-----------------------------------------------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                          %%
+%% Important note on usage                                  %%
+%% -----------------------                                  %%
+%% This file should normally be compiled with PDFLaTeX      %%
+%% Using standard LaTeX should work but may produce clashes %%
+%%                                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% The '3p' and 'times' class options of elsarticle are used for Elsevier CRC
+%% Add the 'procedia' option to approximate to the Word template
+%\documentclass[3p,times,procedia]{elsarticle}
+\documentclass[3p,times,fleqn]{elsarticle}
+% \documentclass[fleqn]{article}
+
+%% The `ecrc' package must be called to make the CRC functionality available
+\usepackage{ecrc}
+
+%% The ecrc package defines commands needed for running heads and logos.
+%% For running heads, you can set the journal name, the volume, the starting page and the authors
+
+%% set the volume if you know. Otherwise `00'
+\volume{00}
+
+%% set the starting page if not 1
+\firstpage{1}
+
+%% Give the name of the journal
+\journalname{Procedia Computer Science}
+
+%% Give the author list to appear in the running head
+%% Example \runauth{C.V. Radhakrishnan et al.}
+\runauth{}
+
+%% The choice of journal logo is determined by the \jid and \jnltitlelogo commands.
+%% A user-supplied logo with the name <\jid>logo.pdf will be inserted if present.
+%% e.g. if \jid{yspmi} the system will look for a file yspmilogo.pdf
+%% Otherwise the content of \jnltitlelogo will be set between horizontal lines as a default logo
+
+%% Give the abbreviation of the Journal.  Contact the journal editorial office if in any doubt
+\jid{procs}
+
+%% Give a short journal name for the dummy logo (if needed)
+\jnltitlelogo{Procedia Computer Science}
+
+%% Provide the copyright line to appear in the abstract
+%% Usage:
+%   \CopyrightLine[<text-before-year>]{<year>}{<restt-of-the-copyright-text>}
+%   \CopyrightLine[Crown copyright]{2011}{Published by Elsevier Ltd.}
+%   \CopyrightLine{2011}{Elsevier Ltd. All rights reserved}
+\CopyrightLine{2011}{Published by Elsevier Ltd.}
+
+%% Hereafter the template follows `elsarticle'.
+%% For more details see the existing template files elsarticle-template-harv.tex and elsarticle-template-num.tex.
+
+%% Elsevier CRC generally uses a numbered reference style
+%% For this, the conventions of elsarticle-template-num.tex should be followed (included below)
+%% If using BibTeX, use the style file elsarticle-num.bst
+
+%% End of ecrc-specific commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+%% \usepackage{lineno}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%
+%% \biboptions{comma,round}
+
+% \biboptions{}
+
+% if you have landscape tables
+\usepackage[figuresright]{rotating}
+
+% put your own definitions here:
+%   \newcommand{\cZ}{\cal{Z}}
+%   \newtheorem{def}{Definition}[section]
+%   ...
+
+% add words to TeX's hyphenation exception list
+%\hyphenation{author another created financial paper re-commend-ed Post-Script}
+
+% declarations for front matter
+\usepackage{import}
+\usepackage{example}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{notations}
+\usepackage{listings}
+\usepackage{multicol}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{property}[theorem]{Property}
+\newtheorem{development}[theorem]{Development}
+
+
+\newcommand\bodyEul{\Omega_t}
+\newcommand\bodyLag{\Omega}
+\newcommand\dBodyEul{\partial \Omega_t}
+\newcommand\dBodyLag{\partial \Omega}
+\newcommand\dirichletBodyEul{\partial_d \Omega_t}
+\newcommand\neumannBodyEul{\partial_n \Omega_t}
+\newcommand\dirichletBodyLag{\partial_D \Omega}
+\newcommand\neumannBodyLag{\partial_N \Omega}
+
+\newcommand\mecPotential{\psi}
+
+
+\newcommand\CAset{U}
+
+\newcommand\cell{T}
+\newcommand\dCell{\partial T}
+\newcommand\dirichletCell{\partial_D T}
+\newcommand\neumannCell{\partial_N T}
+\newcommand\neumannCellLoad{\tensori{t}{}_{\partial_N T}}
+
+% \newcommand\matA{K}
+% \newcommand\dMatA{\partial K}
+% \newcommand\dirichletMatA{\partial_D K}
+% \newcommand\neumannMatA{\partial_N K}
+% \newcommand\neumannMatALoad{\tensori{t}{}_{\partial_N K}}
+
+\newcommand\matI{T_i}
+\newcommand\dMatI{\partial T_i}
+\newcommand\dirichletMatI{\partial_D T_i}
+\newcommand\neumannMatI{\partial_N T_i}
+\newcommand\neumannMatILoad{\tensori{t}{}_{\partial_N T_i}}
+
+% \newcommand\matB{H}
+% \newcommand\dMatB{\partial H}
+% \newcommand\dirichletMatB{\partial_D H}
+% \newcommand\neumannMatB{\partial_N H}
+% \newcommand\neumannMatBLoad{\tensori{t}{}_{\partial_N H}}
+
+\newcommand\Bulk{K}
+\newcommand\dBulk{\partial K}
+\newcommand\Crown{I}
+\newcommand\dCrown{\partial I}
+
+% \newcommand\bound{\partial{}^{\text{e}} T}
+% \newcommand\neumannBound{\partial{}^{\text{e}}{}_N T}
+% \newcommand\dirichletBound{\partial{}^{\text{e}}{}_D T}
+% \newcommand\neumannBoundLoad{\tensori{t}{}_{\partial{}^{\text{e}}{}_N T}}
+
+\newcommand\bound{\partial T}
+\newcommand\neumannBound{\partial_N T}
+\newcommand\dirichletBound{\partial_D T}
+\newcommand\neumannBoundLoad{\tensori{t}{}_{\partial_N T}}
+
+\newcommand\loadLag{\tensori{f}{}_V}
+\newcommand\loadEul{\tensori{f}{}_v}
+\newcommand\neumannLag{\tensori{t}{}_N}
+\newcommand\neumannEul{\tensori{t}{}_n}
+\newcommand\dirichletLag{\tensori{u}{}_D}
+\newcommand\dirichletEul{\tensori{u}{}_d}
+
+\newcommand\internaleStateVariables{v_{int}}
+
+\newcommand\PK{\tensorii{P}}
+\newcommand\G{\tensorii{G}}
+\newcommand\F{\tensorii{F}}
+
+\newcommand\gradSpaceMatI{GRA(\matI)}
+\newcommand\stressSpaceMatI{STR(\matI)}
+\newcommand\displacementSpaceMatI{DIS(\matI)}
+\newcommand\displacementSpaceDMatI{\partial DIS(\dMatI)}
+
+\newcommand\gradSpaceCell{GRA(\cell)}
+\newcommand\stressSpaceCell{STR(\cell)}
+\newcommand\displacementSpaceCell{DIS(\cell)}
+\newcommand\displacementSpaceDCell{\partial DIS(\dCell)}
+
+\newcommand\discreteGradSpaceCell{G^k(\cell)}
+\newcommand\discreteStressSpaceCell{S^k(\cell)}
+\newcommand\discreteDisplacementSpaceCell{U^k(\cell)}
+\newcommand\discreteDisplacementSpaceDCell{\partial U^k(\dCell)}
+
+\newcommand\gradSpaceBulk{GRA(\Bulk)}
+\newcommand\stressSpaceBulk{STR(\Bulk)}
+\newcommand\displacementSpaceBulk{DIS(\Bulk)}
+\newcommand\displacementSpaceDBulk{\partial DIS(\dBulk)}
+
+\newcommand\gradSpaceCrown{GRA(\Crown)}
+\newcommand\stressSpaceCrown{STR(\Crown)}
+\newcommand\displacementSpaceCrown{DIS(\Crown)}
+\newcommand\displacementSpaceDCrown{\partial DIS(\dCrown)}
+
+\begin{document}
+
+% \begin{multicols}{0}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+\dochead{}
+%% Use \dochead if there is an article header, e.g. \dochead{Short communication}
+%% \dochead can also be used to include a conference title, if directed by the editors
+%% e.g. \dochead{17th International Conference on Dynamical Processes in Excited States of Solids}
+
+\title{}
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
+
+\author{}
+
+\address{}
+
+\begin{abstract}
+%% Text of abstract
+\end{abstract}
+
+\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword
+
+%% PACS codes here, in the form: \PACS code \sep code
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+
+\end{keyword}
+
+\end{frontmatter}
+
+%%
+%% Start line numbering here if you want
+%%
+% \linenumbers
+
+%% main text
+
+\section{Introduction}
+\label{sec_introduction}
+
+The Hybird High Order method (HHO) is a discontinuous discretization
+method, that takes root in the Discontinuous Galerkin method (DG). From
+the physical standpoint, DG methods ensure the continuity of the flux
+across interfaces, by seeking the solution element-wise, hence allowing
+jumps of the potential across elements. They can be seen as a
+generalization of Finite Volume methods, and are able to capture
+physically relevant discontinuities without producing spurious
+oscillations.
+
+The origin of DG methods dates back to the pioneering work of
+\cite{reed_triangular_1973}, where an hyperbolic formualtion is used to
+solve the neutron transport equation. The first application of the
+method to elliptic problems originates in \cite{babuska_finite_1973}
+where Nitsche's method \cite{nitsche_uber_1970} is used to weakly impose
+continuity of the flux across interfaces. \textcolor{blue} { In 2002,
+  Hansbo and Larson \cite{hansbo_discontinuous_2002-1} were the first to
+  consider the Nitsche's classical DG method for nearly incompressible
+  elasticity. They showed, theoretically and numerically, that this
+  method is free from volumetric locking. } However, the bilinear form
+arising from this formulation is not symmetric. A so called interior
+penalty term has been introduced in \cite{wheeler_elliptic_1978},
+leading to the Symmetric Interior Penalty (SIP) DG method. A first study
+of the method to linear elasticity has been devised by
+\cite{riviere_optimal_2000}, where optimal error estimate has been
+proved. \textcolor{blue} { \cite{lew_optimal_2004} generalized the
+  Symmetric Interior Penalty method to linear elasticity. }
+\textcolor{blue} {
+  % In 2002, Hansbo and Larson \cite{hansbo_discontinuous_2002-1} were the first to
+ % consider the Nitsche's classical DG method for nearly incompressible
+  % elasticity. They showed, theoretically and numerically, that this method
+ % is free from volumetric locking. % \cite{lew_optimal_2004}
+  % generalized the Symmetric
+  % Interior Penalty method to linear elasticity. In about the same
+  period of time, DG methods were proposed for other linear problems in
+  solid mechanics, such as Timoshenko beams
+  \cite{celiker_locking-free_2006}, Bernoulli-Euler beam and the
+  Poisson-Kirchhoff plate \cite{brenner_balancing_1999,
+    engel_continuousdiscontinuous_2002} and Reissner-Mindlin plates
+  \cite{arnold_family_2005}. In the mid 2000's, the first applications
+  of DG methods to nonlinear elasticity problems was undertaken by
+  \cite{ten_eyck_discontinuous_2006, noels_general_2006}, and in 2007,
+  Ortner and Süli \cite{ortner_discontinuous_2007} carried out the a
+  priori error analysis of DG methods for nonlinear elasticity.
+  % This pioneering work
+  % shed light on how to calculate a lower bound on the stability parameters.
+ }
+
+DG methods then sollicitated a vigourus interest, mostly in fluid dynamics \cite{shahbazi_high-order_2007, persson_discontinuous_2009} due to their local conservative property and stability in convection domniated problems. However, except some applications for instance in fracture mechanics using XFEM methods \cite{gracie_blending_2008, shen_stability_2010}, or gradient plasticity \cite{djoko_discontinuous_2007,djoko_discontinuous_2007-1} DG methods did not break through in computational solid mechanics because of their numerical cost, since nodal unknowns need be duplicated to define local basis functions in each element.
+
+To adress this problem, in the early 2010's, \cite{cockburn_unified_2009, soon_hybridizable_2009} introduced additional faces unknowns on element interfaces for linear elastic problem, hence leading to the hybridization of DG methods, or Hybridizable Discontinuous Galerkin method (HDG). By adding supplementary boundary unknowns, the authors actually allowed to eliminate original cell unknowns by a static condensation process, in order to express the global problem on faces ones only. Extension of HDG methods to non-linear elasticity were first undertaken in \cite{soon_hybridizable_2008} and have then fueled intense reaserch works for various applications such as linear and non-linear convection-diffusion problems \cite{nguyen_implicit_2009,nguyen_implicit_2009-1,nguyen_hybridizable_2010}, incompressible stokes flows \cite{nguyen_hybridizable_2010, nguyen_implicit_2011} and non-linear mechanics \cite{nguyen_hybridizable_2012}.
+
+In \cite{di_pietro_hybrid_2015, di_pietro_arbitrary-order_2014}, the authors introduced a higher order potential reconstruction operator in the classical HDG formulation for elliptic problems, providing a $h^{k+1} H^1$-norm convergence rate as compared to the ususal $h^k$-rate. This higher order term coined the name for the so called HHO method.
+Recent developments of HHO methods in
+computational mechanics include the incompressible Stokes
+equations (with possibly large irrotational forces) \cite{di_pietro_discontinuous_2016}, the
+incompressible Navier–Stokes equations \cite{di_pietro_hybrid_2018}, Biot’s consolidation problem \cite{boffi_nonconforming_2016}, and nonlinear elasticity with small
+deformations \cite{botti_hybrid_2017}
+
+\textcolor{red}{
+    The difference
+    between HHO and HDG methods is twofold: (1) the HHO
+    reconstruction operator replaces the discrete HDG flux (a
+    similar rewriting of an HDG method for nonlinear elastic-
+    ity can be found in [29]), and, more importantly, (2) both
+    HHO and HDG penalize in a least-squares sense the differ-
+    ence between the discrete trace unknown and the trace of the
+    discrete primal unknown (with a possibly mesh-dependent
+    weight), but HHO uses a non-local operator over each mesh
+    cell boundary that delivers one-order higher approximation
+    than just penalizing pointwise the difference as in HDG.
+    Discretization methods for linear and nonlinear elastic-
+    ity have undergone a vigorous development over the last
+    decade. For discontinuous Galerkin (dG) methods, we men-
+    tion in particular [14,26,32] for linear elasticity, and [35,41]
+    for nonlinear elasticity. HDG methods for linear elasticity
+    have been coined in [38] (see also [13] for incompressible
+    Stokes flows), and extensions to nonlinear elasticity can be
+    found in [29,34,37]. Other recent developments in the last few
+    years include, among others, Gradient Schemes for nonlinear
+    elasticity with small deformations [22], the Virtual Element
+    Method (VEM) for linear and nonlinear elasticity with small
+    [3] and finite deformations [8,43], the (low-order) hybrid dG
+    method with conforming traces for nonlinear elasticity [44],
+    the hybridizable weakly conforming Galerkin method with
+    nonconforming traces for linear elasticity [30], the Weak
+    Galerkin method for linear elasticity [42], and the discon-
+    tinuous Petrov–Galerkin method for linear elasticity [7]. 
+}
+
+Contrary to the standard (\textit{i.e.} the Lagrange) Finite Element method, non-conformal methods (among which the Hybrid High Order one) postulate the discontinuity of the displacement field across elements. Hence, each element is \textit{a priori} free to move independently from others; in order to restore a weak form of continuity on the mesh, a \textit{stabilization} term is computed, to penalize in a least square sense the displacement jump between two neighbouring cells.
+The displacement jump between elements is exploited to define discrete operators in each element, that provide conservation of physcial properties.
+Moreover, the Hybrid High Order method is hybrid, hence introducing faces unknowns in addition to the regular cells ones.
+Morover, cell unknowns are expressed in terms of coefficients in a polynomial basis, that have no physcial meaning, as opposed to the ususal nodal unknowns of Lagrange finite elements.
+This feature allows to equivalently express shape functions on any generic polygonal element, as opposed to the Lagrange Finite Element method that needs particlaur shape function for each element geometry.
+
+All these differences with the wide spread Lagrange Finite Element method make the Hybrid High Order one more \textcolor{blue}{ununderstandable} to a computational mechanics public.
+Discontinuous methods were developed by the mathematical community, such that they are put forward in the literature through a possibly arid way for the computational mechanics reader. Therefore, in the present document, we propose an introduction to these methods, based on mechanical arguments, by considering the ususal continuous framework proper to the standard Finite Element method, and using a limit case to meet the discontinous setting in which lies the HHO method.
+
+In a second part, we propose and devise a Hybrid High Order method for axisymetrical configurations.
+
+\section{The Hybrid High Order method}
+\label{sec_1}
+
+\subsection{Description of the model problem}
+\label{sec_model_problem}
+
+Let $d \in  \{1, 2, 3\}$ the euclidean dimension of the cartesian space $\mathbb{R}{}^{d}$.
+Let $\bodyEul \subset \mathbb{R}{}^{d}$ a solid body with boundary $\dBodyEul \subset \mathbb{R}{}^{d - 1}$, that deforms in the current configuration at some time $t > 0$ under the body forces $\loadEul$. It is subjected to a prescribed displacement $\dirichletEul$ on the Dirichlet boundary $\dirichletBodyEul$, and to a contact load $\neumannEul{}$ on the Neumann boundary $\neumannBodyEul$, such that $\dBodyEul = \dirichletBodyEul \cup \neumannBodyEul$ and $\dirichletBodyEul{} \cap \neumannBodyEul = \emptyset$.
+
+The initial configuration of the body at time $t = 0$ (see Figure \ref{fig_setting}) is denoted $\bodyLag \subset \mathbb{R}{}^{d}$ with respective Dirichlet and Neumann boundaries $\dirichletBodyLag$ and $\neumannBodyLag$.
+It is subjected to body forces $\loadLag$,
+% Let $\loadLag$ the body forces acting in $\bodyLag$.
+an imposed displacement $\dirichletLag$ on $\dirichletBodyLag$ and contact force $\neumannLag$ on $\neumannBodyLag$.
+%
+The transformation mapping $\tensori{\Phi}$ takes a point $\tensori{x} \in \bodyLag$ from the initial configuration to $\tensori{x}{}_t \in \bodyEul$ in the current configuration.
+
+Let $\cell \subset \bodyLag$ an arbitrary open subset of the solid body, with boundary $\dCell \subset \mathbb{R}^{d - 1}$
+which is split into an eventual Dirichlet boundary $\dirichletCell \subset \dirichletBodyLag$ subjected to an imposed displacement $\dirichletLag$ if $\cell$ shares a boundary with $\dirichletBodyLag$ and into the Neumann Boundary $\neumannCell \subset \neumannBodyLag \cup \bodyLag$ with contact load $\neumannCellLoad$ such that :
+%
+\begin{equation}
+    \label{eq_contact_force}
+    \begin{aligned}
+        \neumannCellLoad = 
+        \left\{
+            \begin{array}{ll}
+                \tensori{t}{}_{\bodyLag \backslash \cell \rightarrow \cell} & \mbox{on } \neumannCell \cap \bodyLag \backslash \cell
+                \\
+                \neumannLag & \mbox{on } \neumannCell \cap \neumannBodyLag
+            \end{array}
+        \right.
+    \end{aligned}
+\end{equation}
+%
+with $\tensori{t}{}_{\bodyLag \backslash \cell \rightarrow \cell}$ the contact force applied by the surrounding part of the body $\bodyLag$ onto the subset $\cell$, and $\dirichletCell \cap \neumannCell = \emptyset$.
+%
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5.cm]{img/element_sketch2.png}
+    \caption{schematic representation of the model problem}
+    \label{fig_setting}
+\end{figure}
+%
+
+Let $\tensori{\Phi}{}_{\cell}$ the restriction of $\tensori{\Phi}$ to ${\cell}$, and $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ the displacement field in $\cell$ such that $\tensori{\Phi}{}_{\cell} = \tensori{I}{}_d + \tensori{u}{}_{\cell}{}$ with $\tensori{I}{}_d$ the identity function, where the notation $\displacementSpaceCell$ denotes the space of all kinematically admissible displacement fields in $\cell$.
+%
+Let $\tensorii{G}{}_{\cell} \in \gradSpaceCell$ the displacement gradient field in $\cell$, with $\gradSpaceCell$ the space of all statically admissible displacement gradient fields in $\cell$,
+and $\tensorii{F}{}_{\cell} = \nabla \tensori{\Phi}{}_{\cell} = \tensorii{1} + \tensorii{G}{}_{\cell}$ the transformation gradient, where $\nabla$ denotes the Lagrangian nabla operator.
+%
+Let $\psi_{\cell} (\tensorii{F}{}_{\cell}, \internaleStateVariables)$ the mechanical energy potential in $\cell$ that depends on the transformation gradient $\tensorii{F}{}_{\cell}$ and possibly on a set of internal state variables $\internaleStateVariables$, where $\nabla$ denotes the Lagrangian nabla operator.
+%
+Let $\tensorii{P}{}_{\cell} \in \stressSpaceCell$ the first Piola-Kirchoff stress tensor deriving from the expression of the mechanical energy potential, with $\stressSpaceCell$ the space of all statically admissible stress fields in $\cell$.
+%
+The model problem to solve the equilibrium of the subset $\cell$ reads, find $\tensori{u}{}_{\cell}$ such that:
+%
+\begin{subequations}
+\label{eq_model_problem}
+    \begin{alignat}{2}
+    % \tensorii{F} - \nabla_{X} \tensori{u} & = \tensorii{1} \quad && \text{in } \Omega_{0} \label{eq_model_problem:eq1}
+    \tensorii{G}{}_{\cell} - \nabla \tensori{u}{}_{\cell} & = 0 \quad
+    &&
+    \text{in } \cell
+    \label{eq_model_problem:eq1}
+    \\
+    % \tensorii{P} - \frac{\partial \mecPotential}{\partial \tensorii{F}} & = 0 \quad && \text{in } \Omega_{0} \label{eq_model_problem:eq2}
+    \tensorii{P}{}_{\cell} - \frac{\partial \mecPotential{}_{\cell}}{\partial \tensorii{G}{}_{\cell}} & = 0 \quad
+    &&
+    \text{in } \cell
+    \label{eq_model_problem:eq2}
+    \\
+    \nabla_{X} \cdot \tensorii{P}{}_{\cell} - \loadLag & = 0 \quad
+    &&
+    \text{in } \cell
+    \label{eq_model_problem:eq3}
+    \\
+    \tensori{u}{}_{\cell} \vert_{\dirichletCell} & = \dirichletLag \quad
+    &&
+    \text{on } \dirichletCell
+    \label{eq_model_problem:eq4}
+    \\
+    \tensorii{P}{}_{\cell} \cdot \tensori{n} & = \neumannCellLoad \quad
+    &&
+    \text{on } \neumannCell
+    \label{eq_model_problem:eq5}
+\end{alignat}
+\end{subequations}
+%
+where $\tensori{n}$ denotes the unit ouward normal vector on $\dCell$, and $\cdot \ \vert_{\dCell}$ is the trace operator on $\dCell$.
+The equilibrium of the body $\cell$
+corresponding to problem \eqref{eq_model_problem} where equations \eqref{eq_model_problem:eq1} and \eqref{eq_model_problem:eq2} are enforced strongly
+is reached for the displacement field
+$\tensori{u}{}_{\cell} \in \displacementSpaceCell$
+verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ and
+minimizing the energy functional $J_{\cell}$:
+%
+\begin{equation}
+    \label{eq_virtual_works}
+    \begin{aligned}
+        J_{\cell}
+        % (\tensori{u}{}_{\cell})
+        =
+        \int_{\cell} \mecPotential{}_{\cell}
+        -
+        \int_{\cell} \loadLag \cdot \tensori{u}{}_{\cell}
+        -
+        \int_{\neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\cell}
+    \end{aligned}
+\end{equation}
+%
+The energy functional \eqref{eq_virtual_works} of the equilibrium of $T$ depends on the single displacement unknown, and is the one at the foundation of
+the notorious principle of virtual works; indeed, deriving \eqref{eq_virtual_works} with respect to $\tensori{u}{}_{\cell}$ and using both \eqref{eq_model_problem:eq1} and \eqref{eq_model_problem:eq2} yields :
+%
+\begin{equation}
+    \label{eq_virtual_works_1}
+    \begin{aligned}
+        % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+        d J_{\cell} = \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+        & =
+        \int_{\cell}
+        % \frac{\partial \mecPotential{}_{\cell}}{\partial \nabla \tensori{u}{}_{\cell}} : \nabla \delta \tensori{u}{}_{\cell}
+        \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
+        -
+        \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
+        -
+        \int_{\neumannCell} \neumannCellLoad \cdot \delta \tensori{u}{}_{\cell} \vert_{\dCell{}}
+    \end{aligned}
+\end{equation}
+%
+% \textcolor{blue}{
+% %
+% \begin{development}[Weak equation of the energy functional]
+% %
+% Deriving with respect to $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ :
+% %
+% \begin{equation}
+%     \label{eq_virtual_works_1}
+%     \begin{aligned}
+%         % \frac{\partial \mecPotential}{\partial \tensori{u}{}_{\cell}} \cdot \delta \tensori{u}{}_{\cell}
+%         \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+%         % (\tensori{u}{}_{\cell})
+%         & =
+%         \int_{\cell}
+%         \frac{\partial \mecPotential{}_{\cell}}{\partial \nabla \tensori{u}{}_{\cell}} : \nabla \delta \tensori{u}{}_{\cell}
+%         -
+%         \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
+%         -
+%         \int_{\neumannCell} \neumannCellLoad \cdot \delta \tensori{u}{}_{\cell} \vert_{\dCell{}}
+%     \end{aligned}
+% \end{equation}
+% %
+% using both \eqref{eq_model_problem:eq1} and \eqref{eq_model_problem:eq2} :
+% %
+% \begin{equation}
+%     \begin{aligned}
+%         % \frac{\partial \mecPotential}{\partial \tensori{u}{}_{\cell}} \cdot \delta \tensori{u}{}_{\cell}
+%         \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+%         % (\tensori{u}{}_{\cell})
+%         & =
+%         \int_{\cell}
+%         \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
+%         -
+%         \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
+%         -
+%         \int_{\neumannCell} \neumannCellLoad \cdot \delta \tensori{u}{}_{\cell} \vert_{\dCell{}}
+%     \end{aligned}
+% \end{equation}
+% %
+% Since $\tensori{u}{}_{\cell}$ and its gradient must be integrable, it falls that $\displacementSpaceCell = H^1(\cell, \mathbb{R}^{d})$.
+% %
+% \end{development}
+% }
+%
+with $\displacementSpaceCell{} = H^1(\cell, \mathbb{R}^{d})$. If $\tensorii{G}{}_{\cell}$ and $\tensorii{P}{}_{\cell}$ are unknowns of the problem,
+% \eqref{eq_model_problem:eq1} and \eqref{eq_model_problem:eq2} are considered,
+one obtains the three-field Hu–Washizu functional
+$J_{\cell}$, for the displacement field
+$\tensori{u}{}_{\cell} \in \displacementSpaceCell$
+verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ such that :
+% the displacement gradient field $\tensorii{G}{}_{\cell} \in \gradSpaceCell$
+% and the first Piola-Kirchoff stress field $\tensorii{P}{}_{\cell} \in \stressSpaceCell$:
+%
+\begin{equation}
+\label{eq_hu_washizu}
+    J_{\cell}
+    % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
+    =
+    \int_{\cell} \mecPotential{}_{\cell} + (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
+    -
+    \int_{\cell} \loadLag \cdot \tensori{u}{}_{\cell}
+    -
+    \int_{\neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\cell}
+\end{equation}
+%
+Deriving \eqref{eq_hu_washizu} with respect to all variables of the problem expresses problem \eqref{eq_model_problem} in a weak sense :
+%
+\begin{subequations}
+    \label{eq_hu_washizu_derivative}
+        \begin{alignat}{3}
+            \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+            = & \int_{\cell} (\tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell} - \tensori{f}{}_V \cdot \delta \tensori{u}{}_{\cell})
+            -
+            \int_{\dCell} \tensori{t}{}_{\neumannCell} \cdot \delta \tensori{u}{}_{\cell} \vert_{\dCell}
+            &&
+            \ \ \ \ \ \ \ \ 
+            &&
+            \forall \delta \tensori{u}{}_{\cell}
+            \in \displacementSpaceCell
+        \label{eq_hu_washizu_derivative:eq0}
+        \\
+            \frac{\partial J_{\cell}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
+            = &
+            \int_{\cell} (\frac{\partial \mecPotential_{\cell}}{\partial \tensorii{G}{}_{\cell}} - \tensorii{P}{}_{\cell}) : \delta \tensorii{G}{}_{\cell}
+            &&
+            \ \ \ \ \ \ \ \ 
+            &&
+            \forall \delta \tensorii{G}{}_{\cell}
+            \in \gradSpaceCell
+        \label{eq_hu_washizu_derivative:eq2}
+        \\
+            \frac{\partial J_{\cell}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
+            = & \int_{\cell} (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell} ) : \delta \tensorii{P}{}_{\cell}
+            &&
+            \ \ \ \ \ \ \ \ 
+            &&
+            \forall \delta \tensorii{P}{}_{\cell}
+            \in \stressSpaceCell
+        \label{eq_hu_washizu_derivative:eq3}
+    \end{alignat}
+\end{subequations}
+%
+where the two supplementary equations \eqref{eq_hu_washizu_derivative:eq2} and \eqref{eq_hu_washizu_derivative:eq3}
+account for the weak formulation of \eqref{eq_model_problem:eq1} and \eqref{eq_model_problem:eq2},
+and $\displacementSpaceCell{} = H^1(\cell, \mathbb{R}^{d})$ and $\gradSpaceCell = \stressSpaceCell = L^2(\cell, \mathbb{R}^{d \times d})$.
+% %
+% \textcolor{blue}{
+% %
+% \begin{development}[Weak equations of the Hu–Washizu functional]
+% Deriving with respect to $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ :
+% %
+% \begin{equation}
+%     \label{eq_sub0}
+%     \begin{aligned}
+%         \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+%         % (\tensori{u}{}_{\cell})
+%         & =
+%         \int_{\cell}
+%         \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
+%         -
+%         \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
+%         -
+%         \int_{\neumannCell} \neumannCellLoad \cdot \delta \tensori{u}{}_{\cell} \vert_{\dCell{}}
+%     \end{aligned}
+% \end{equation}
+% %
+% Deriving with respect to $\tensorii{G}{}_{\cell} \in \gradSpaceCell$ :
+% %
+% \begin{equation}
+%     \label{eq_sub1}
+%     \begin{aligned}
+%         \frac{\partial J_{\cell}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
+%         & =
+%         \int_{\cell}
+%         (\frac{\partial \mecPotential}{\partial \tensorii{G}{}_{\cell}}
+%         -
+%         \tensorii{P}{}_{\cell})
+%         : \delta \tensorii{G}{}_{\cell}
+%     \end{aligned}
+% \end{equation}
+% %
+% Deriving with respect to $\tensori{P}{}_{\cell} \in \stressSpaceCell$ :
+% %
+% \begin{equation}
+%     \label{eq_sub2}
+%     \begin{aligned}
+%         \frac{\partial J_{\cell}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
+%         % (\tensori{u}{}_{\cell})
+%         & =
+%         \int_{\cell}
+%         (\nabla_X \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \delta \tensorii{P}{}_{\cell}
+%     \end{aligned}
+% \end{equation}
+% %
+% Since $\tensori{u}{}_{\cell}$ and its gradient must be integrable, it falls that $\displacementSpaceCell = H^1(\cell, \mathbb{R}^{d})$. However, $\tensorii{G}{}_{\cell}$ and $\tensorii{P}{}_{\cell}$ need just belong to $\gradSpaceCell = \stressSpaceCell = L^2(\cell, \mathbb{R}^{d \times d})$.
+% %
+% \end{development}
+% }
+%
+
+In particular, assuming $\cell = \bodyLag$, one obtains the mechanical problem to solve for the whole body $\bodyLag$.
+Furthermore, assuming that $\cell$ is made out of a partition of $N > 0$ distinct media $\matI \subset \cell$ with respective energy potentials $\mecPotential{}_{\matI}$,
+% such that $\cell = \cup_{1 \geq i \geq N} \matI$, the energy $J_{\cell}$ writes as the sum of the contribution in each medium. Extending the notations introduced in Section \ref{sec_model_problem} to any of these media $\matI$,
+the problem writes :
+% $\forall i$,
+% $\in \prod_{1 \leq i \leq N}$
+for each medium $\matI$, find $\tensori{u}{}_{\matI} \in \displacementSpaceMatI$
+verifying $\tensori{u}{}_{\matI} \vert_{\dirichletMatI} = \dirichletLag$ on $\dirichletMatI$,
+the displacement gradient field $\tensorii{G}{}_{\matI} \in \gradSpaceMatI$
+and the first Piola-Kirchoff stress field $\tensorii{P}{}_{\matI} \in \stressSpaceMatI$, that minimize the functional
+%
+\begin{equation}
+\label{eq_hu_washizu_composite}
+\begin{aligned}
+    J_{\cell}
+    = & \sum_{1 \leq i \leq N} \int_{\matI} \mecPotential{}_{\matI} + (\nabla \tensori{u}{}_{\matI} - \tensorii{G}{}_{\matI}) : \tensorii{P}{}_{\matI}
+    -
+    \int_{\matI} \loadLag \cdot \tensori{u}{}_{\matI}
+    -
+    \int_{\neumannMatI \cap \neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\matI}
+\end{aligned}
+\end{equation}
+%
+where for all $1 \leq i \neq j \leq N$, the external forces corresponding to the traction applied by $\matI$ onto $\partial T_j \cap \dMatI$ and to that of $T_j$ onto $\dMatI \cap \partial T_j$ are direclty eliminated by continuity of the traction force across $\partial T_j \cap \dMatI$.
+Assuming the fields to be continuous in $\cell$, one has :
+$
+\tensori{u}{}_{\matI} = \tensori{u}{}_{\cell} \vert_{\matI},
+\tensorii{G}{}_{\matI} = \tensorii{G}{}_{\cell} \vert_{\matI},
+\tensorii{P}{}_{\matI} = \tensorii{P}{}_{\cell} \vert_{\matI}
+$,
+and the problem simplifies in : find $\tensori{u}{}_{\cell} \in \displacementSpaceCell$
+verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$,
+the displacement gradient field $\tensorii{G}{}_{\cell} \in \gradSpaceCell$
+and the first Piola-Kirchoff stress field $\tensorii{P}{}_{\cell} \in \stressSpaceCell$ that minimize
+%
+\begin{equation}
+\label{eq_hu_washizu_composite_continuous}
+\begin{aligned}
+    J_{\cell}
+    = & \sum_{1 \leq i \leq N} \int_{\matI} \mecPotential{}_{\matI} + (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
+    -
+    \int_{\matI} \loadLag \cdot \tensori{u}{}_{\cell}
+    -
+    \int_{\neumannCell{}} \neumannCellLoad \cdot \tensori{u}{}_{\cell} \vert_{\dCell{}}
+\end{aligned}
+\end{equation}
+%
+
+% In particular, assuming $\cell = \bodyLag$, the body $\bodyLag$ is made out of a single medium whose behaviour is fully defined by the mechanical energy potential $\mecPotential_{\bodyLag}$.
+% On the contrary, if $\bodyLag = \cup_{1 \geq i \geq N} \matI$, is made out of a partition of distinct media $\matI \subset \bodyLag$ with respective energy potentials $\mecPotential{}_{\matI}$, the energy $J_{\bodyLag}$ in $\bodyLag$ writes as the sum of the contribution in each medium :
+% %
+% \begin{equation}
+% \label{eq_hu_washizu_composite}
+% \begin{aligned}
+%     J_{\bodyLag}
+%     = & \sum_{1 \leq i \leq N} \int_{\matI} \mecPotential{}_{\matI} + (\nabla \tensori{u}{}_{\matI} - \tensorii{G}{}_{\matI}) : \tensorii{P}{}_{\matI}
+%     -
+%     \int_{\matI} \loadLag \cdot \tensori{u}{}_{\matI}
+%     -
+%     \int_{\neumannMatI \cap \neumannBodyLag} \neumannCellLoad \cdot \tensori{u}{}_{\matI}
+% \end{aligned}
+% \end{equation}
+% %
+% where the external forces corresponding to the traction applied by $\matI$ onto $\partial T_j$ and to that of $T_j$ onto $\dMatI$ are direclty eliminated by continuity of the traction force across $\partial T_j \cap \dMatI$.
+
+%% ----------------------------------------------------------------------------------------------------------------------------------------------------
+%% ----------------------------------------------------------------------------------------------------------------------------------------------------
+%% COMPOSITE ELEMENT
+%% ----------------------------------------------------------------------------------------------------------------------------------------------------
+%% ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+% \textcolor{blue}{}
+
+% \textcolor{blue}{
+%     formulation "generale", avec $\Upsilon$ qui a son propre module Young, puis on précise la forme avec \ell / h_T.
+%     Traiter Hu-Hu–Washizu en 2 parties, cellule puis contour
+% }
+
+\subsection{Composite setting}
+\label{sec_11}
+
+In order to introduce the discontinuous setting in which lies the Hybrid High Order method,
+let consider the body $\bodyLag$ to be made out of some material defined by a mechanical potential $\mecPotential{}_{\bodyLag}$.
+The aim of this section consists in devising the expression of the mechanical energy deriving from the HHO formulation of the mechanical model problem described in Section \ref{sec_model_problem}.
+Following the idea of a composite medium as introduced in \ref{sec_model_problem}, let
+% As introduced in Section \ref{sec_model_problem}, let
+$\cell$ an arbitrary open subset in $\bodyLag$, split into two distinct media;
+% let split the arbitrary region $\cell$ into two parts;
+an open bulk medium $\Bulk \subset \cell$ with boundary $\dBulk \subset \mathbb{R}^{d-1}$, and an open interface medium $\Crown \subset \cell$ between the bulk $\Bulk$ and the boundary $\bound$, with boundary $\dCrown = \dBulk \cup \bound$ and of some width $\ell > 0$ that is supposed to be small compared to $h_{\cell} = \max_{(\tensori{x}{}_a, \tensori{x}{}_b) \in \cell} \lVert \tensori{x}{}_a - \tensori{x}{}_b \rVert$ the diameter of $\cell$.
+%
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12.cm]{img/element_sketch3.png}
+    \caption{schematic representation of the model problem}
+    \label{fig_02}
+\end{figure}
+%
+
+% Let endow the bulk volume $\Bulk$ with a displacement field
+% $\tensori{u}_{\Bulk} \in \displacementSpaceBulk$,
+% such that it is \textit{a priori} free to move independently from
+Let the boundary
+$\bound$ move with a boundary displacement field
+$\tensori{u}{}_{\bound} \in \partial U_{}(\bound)$, where $\partial U_{}(\bound)$ denotes the space of kinematically admissible boundary displacements.
+The displacement at the boundary $\bound$ results from the interactions of $\bound$ with neighbouring media, \textit{i.e.} from the action of $\bodyLag \backslash \cell$ onto $\bound$ or from some boundary condition, but let assume that the
+bulk $\Bulk$ is \textit{a priori} not influenced by the movments of $\bound$; that is, it supposedly only morhphs through the action of the body load $\loadLag$, producing a displacement gradient
+$\tensorii{G}{}_{\Bulk} \in \gradSpaceBulk$ and a stress $\tensorii{P}{}_\Bulk \in \stressSpaceBulk$ under the mechanical potential $\mecPotential{}_{\bodyLag}$, that are free from the influence of $\bound{}$ onto $\Bulk{}$. Hence, the bulk $\Bulk{}$
+is free to move away from the rest of the body $\bodyLag{}$ at no energetical cost, which complitely violates the conservation laws.
+Therefore,
+in order to ensure continuity of the displacement between $\Bulk$ and $\bound$, let $\Crown$ act as a patch, such that
+$\tensori{u}_{\Crown} \in \displacementSpaceCrown$
+the displacement in $\Crown$ links that of $\Bulk$ to that of $\bound$ :
+%
+\begin{subequations}
+    \label{eq_conformity}
+        \begin{alignat}{2}
+        \tensori{u}{}_{\Crown} \vert_{\dBulk} & = \tensori{u}{}_{\Bulk} \vert_{\dBulk}
+        \label{eq_conformity:eq1}
+        \\
+        \tensori{u}{}_{\Crown} \vert_{\bound} & = \tensori{u}{}_{\bound}
+        \label{eq_conformity:eq2}
+    \end{alignat}
+\end{subequations}
+%
+In order to bind the behaviour of $\Bulk{}$ to that of its neighbourhood through $\bound{}$, let endow the interface $\Crown$ with a mechanical potential $\mecPotential{}_{\Crown{}}$ such that it
+behaves like a linear elastic material of Young modulus $\beta (\ell / h_{\cell})$ and a zero Poisson ratio :
+%
+\begin{equation}
+    \label{eq_0009}
+        \mecPotential{}_{\Crown} = \frac{1}{2} \beta \frac{\ell}{h_{\cell}} \nabla \tensori{u}{}_{\Crown} : \nabla \tensori{u}{}_{\Crown}
+\end{equation}
+%
+where the dimensionless ratio $\ell / h_{\cell}$ balances the accumulated energy with the size of the domain $\cell$. Let then $\tensorii{G}{}_{\Crown{}} \in \gradSpaceCrown$ and $\tensorii{P}{}_{\Crown{}} \in \stressSpaceCrown$ the displacement gradient and stress in $\Crown{}$.
+%
+Under such assumptions and using \eqref{eq_hu_washizu_composite}, the Hu–Washizu functional over $\cell$ writes as :
+%
+\begin{equation}
+\label{eq_hu_washizu_split}
+    J_{\cell}
+    % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
+    =
+    \int_{\Bulk} \mecPotential_{\bodyLag{}} + (\nabla_X \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
+    +
+    \int_{\Crown} \mecPotential_{\Crown{}} + (\nabla_X \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
+    -
+    \int_{\Bulk} \loadLag \cdot \tensori{u}{}_{\Bulk}
+    -
+    \int_{\Crown} \loadLag \cdot \tensori{u}{}_{\Crown}
+    -
+    \int_{\neumannBound} \neumannCellLoad \cdot \tensori{u}{}_{\bound}
+\end{equation}
+%
+% with $\tensori{u}{}_{\Bulk} \in U_{\Bulk}, \tensorii{G}{}_{\Bulk} \in G_{\Bulk}, \tensorii{P}{}_{\Bulk} \in P_{\Bulk}$ the displacement, displacement gradient and first Piola-Kirchoff stress tensor in $\Bulk$, and $\tensori{u}{}_{\Crown} \in U_{\Crown}, \tensorii{G}{}_{\Crown} \in G_{\Crown}, \tensorii{P}{}_{\Crown} \in P_{\Crown}$ those in $\Crown$, with respective functional spaces $U_{\Bulk}, G_{\Bulk}, P_{\Bulk}, U_{\Crown}, G_{\Crown}, P_{\Crown}$.
+% where the external forces corresponding to the traction force applied by $\Bulk$ onto $\dCrown$ and to that of $\Crown$ onto $\dBulk$ are direclty eliminated by continuity of the traction force across $\dBulk$.
+
+\subsection{Interface description}
+\label{sec_interface_description}
+
+Let $\tensori{\Xi}{}_{\cell}$ the homotethy of ratio $(1 + \alpha \ell)$ and center $\tensori{x}{}_{\cell}$ the centroid of $\cell$, with $-1 / \ell < \alpha < 0$ such that $\Bulk$ (respectively $\dBulk$) is the image of $\cell$ (respectively $\bound$) by $\tensori{\Xi}{}_{\cell}$. Since $\dBulk$ is an homotethy of $\bound$, any point $\tensori{x}{}_{\bound} \in \bound$ and $\tensori{x}{}_{\dBulk} = \tensori{\Xi}{}_{\cell}(\tensori{x}{}_{\bound}) \in \dBulk$ share the same unit outward normal $\tensori{n}{}$.
+%
+Assuming the interface $\Crown$ to be thin compared to the cell volume $\cell$, let linearize the displacement in $\Crown$ with respect to $\tensori{n}$, such that :
+%
+\begin{equation}
+    \label{eq_crown_displacement}
+    \tensori{u}{}_{\Crown} (\tensori{x})
+    =
+    \frac{\tensori{u}{}_{\bound}(\tensori{x})
+    -
+    \tensori{u}{}_{\Bulk} \vert_{\dBulk} (\tensori{x})}{\ell} \otimes \tensori{n} \cdot (\tensori{x} - \tensori{m}{}_{\dBulk})
+    +
+    \tensori{u}{}_{\Bulk} \vert_{\dBulk}
+\end{equation}
+%
+where $\tensori{m}{}_{\dBulk} = \min_{\tensori{x}{}_{\dBulk}} \lVert \tensori{x}{}_{\dBulk} - \tensori{x} \rVert$.
+%
+Furthermore, let assume that the interface is thin enough such that $\tensorii{P}{}_{\Crown}$ is constant along the $\tensori{n}{}$ direction in $\Crown{}$.
+By continuity of the traction force across $\dBulk$, the following equality holds true :
+%
+\begin{equation}
+    \label{eq_continuity_traction_force}
+    \begin{aligned}
+        (\tensorii{P}{}_{\Crown} - \tensorii{P}{}_{\Bulk} \vert_{\dBulk{}}) \cdot \tensori{n}{} =  0
+        &&
+        \text{in}
+        &&
+        \Crown{}
+    \end{aligned}
+\end{equation}
+%
+Using \eqref{eq_continuity_traction_force} and \eqref{eq_crown_displacement}, one can write the internale contribution in $\Crown{}$ as a term depending on the bulk and boundary displacement :
+%
+\begin{equation}
+    \label{eq22}
+    \begin{aligned}
+        J_{\Crown{}}^{\text{int}}
+        := &
+        \int_{\Crown{}} \mecPotential{}_{\Crown} + (\nabla \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
+        % -
+        % \int_{\Crown{}} \loadLag \cdot \tensori{u}{}_{\Crown}
+        \\
+        = &
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\bound{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2
+        +
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk} (\tensori{u}{}_{\bound{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}}) \otimes \tensori{n}{} : \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}}
+        -
+        \int_{\Crown{}} \tensorii{G}{}_{\Crown{}} : \tensorii{P}{}_{\Crown{}}
+        % -
+        % \int_{\Crown{}} \loadLag \cdot \tensori{u}{}_{\Crown}
+    \end{aligned}
+\end{equation}
+%
+\textcolor{blue}{
+%
+\begin{development}
+%
+Let $C_\Crown = \{ v \in L^2(\Crown) \ \vert \ v \cdot \tensori{n} = \text{cste} \}$ the set of $L^2$-functions which are constant along the normal axis in $\Crown$. For any function in $C_\Crown$, the following equality holds true:
+%
+\begin{equation}
+    \label{eq_virtual_works0}
+        \int_{\Crown} v \ dV
+        =
+        \int_{\dBulk{}} \int_{\epsilon = 0}^{\ell} v (1 - \alpha \epsilon) \ dS d \epsilon
+        =
+        \ell (1 - \frac{\alpha}{2} \ell) \int_{\dBulk{}} v \ dS
+\end{equation}
+%
+One has :
+%
+\begin{equation}
+    \begin{aligned}
+        \int_{\Crown{}} \mecPotential{}_{\Crown}
+        = &
+        \int_{\Crown{}} \frac{1}{2} \beta \frac{\ell}{h_{\cell}} \nabla \tensori{u}{}_{\Crown} : \nabla \tensori{u}{}_{\Crown} \ dV
+        \\
+        = & 
+        \int_{\Crown{}} \frac{1}{2} \beta \frac{\ell}{h_{\cell}}
+        \frac{
+            \tensori{u}{}_{\bound} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}
+        }{
+            \ell
+        }
+        \otimes
+        \tensori{n}
+        :
+        \frac{
+            \tensori{u}{}_{\bound} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}
+        }{
+            \ell
+        }
+        \otimes
+        \tensori{n} \ dV
+        \\
+        = & 
+        \int_{\Crown{}} \frac{\beta}{2 \ell h_{\cell}}
+        \tensori{u}{}_{\bound} - \tensori{u}{}_{\Bulk} \vert_{\dBulk} \otimes \tensori{n}
+        :
+        \tensori{u}{}_{\bound} - \tensori{u}{}_{\Bulk} \vert_{\dBulk} \otimes \tensori{n} \ dV
+        \\
+        = & 
+        \int_{\Crown{}} \frac{\beta}{2 \ell h_{\cell}}
+        \sum_{i, j}
+        ((\tensoro{u}{}_{\bound}{}_{i} - \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}) \tensoro{n}{}_{j})^2 \ dV
+        \\
+        = & 
+        \int_{\Crown{}} \frac{\beta}{2 \ell h_{\cell}}
+        \sum_{j} \tensoro{n}{}_{j}^2
+        \sum_{i} (\tensoro{u}{}_{\bound}{}_{i} - \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk})^2  \ dV
+        \\
+        = & 
+        \int_{\Crown{}} \frac{\beta}{2 \ell h_{\cell}}
+        \sum_{i} (\tensoro{u}{}_{\bound}{}_{i} - \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk})^2  \ dV
+        \\
+        = & 
+        \int_{\Crown{}} \frac{\beta}{2 \ell h_{\cell}}
+        \lVert \tensori{u}{}_{\bound{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2  \ dV
+    \end{aligned}
+\end{equation}
+%
+Noticing that $\lVert \tensori{u}{}_{\bound{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2 \in C_\Crown{}$, one has :
+%
+\begin{equation}
+    \begin{aligned}
+        \int_{\Crown{}} \mecPotential{}_{\Crown}
+        = &
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \lVert \tensori{u}{}_{\bound{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2
+        \\
+        = & 
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\bound{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2
+    \end{aligned}
+\end{equation}
+%
+Moreover :
+%
+\begin{equation}
+    \begin{aligned}
+        \int_{\Crown{}} \nabla \tensori{u}{}_{\Crown} : \tensorii{P}{}_{\Crown}
+        = &
+        \int_{\Crown{}}
+        \frac{
+            \tensori{u}{}_{\bound} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}
+        }{
+            \ell
+        }
+        \otimes
+        \tensori{n}{}
+        :
+        \tensorii{P}{}_{\Crown}
+        \\
+        = &
+        \int_{\Crown{}}
+        \sum_{i,j}
+        \frac{
+            {u}{}_{\bound}{}_i - {u}{}_{\Bulk}{}_i \vert_{\dBulk}
+        }{
+            \ell
+        }
+        {n}{}{}_{j}
+        {P}{}_{\Crown}{}_{ij}
+        \\
+        = &
+        \int_{\Crown{}}
+        \frac{
+            \tensori{u}{}_{\bound} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}
+        }{
+            \ell
+        }
+        \cdot
+        \tensorii{P}{}_{\Crown}
+        \cdot
+        \tensori{n}{}
+        \\
+        = &
+        \int_{\Crown{}}
+        \frac{
+            \tensori{u}{}_{\bound} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}
+        }{
+            \ell
+        }
+        \cdot
+        \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}}
+        \cdot
+        \tensori{n}{}
+    \end{aligned}
+\end{equation}
+%
+Where $\tensori{u}{}_{\bound} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}$ and $\tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}}$ both belong to $C_\Crown{}$ :
+%
+\begin{equation}
+    \begin{aligned}
+        \int_{\Crown{}} \nabla \tensori{u}{}_{\Crown} : \tensorii{P}{}_{\Crown}
+        = &
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}}
+        \frac{
+            \tensori{u}{}_{\bound} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}
+        }{
+            \ell
+        }
+        \otimes
+        \tensori{n}{}
+        :
+        \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}}
+        \\
+        = &
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}}
+        \tensori{u}{}_{\bound} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}
+        \otimes
+        \tensori{n}{}
+        :
+        \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}}
+    \end{aligned}
+\end{equation}
+And Finally :
+%
+\begin{equation}
+    \begin{aligned}
+        J_{\Crown{}}
+        =
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\bound{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2
+        +
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk} (\tensori{u}{}_{\bound{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}}) \otimes \tensori{n}{} : \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}}
+        -
+        \int_{\Crown{}} \tensorii{G}{}_{\Crown{}} : \tensorii{P}{}_{\Crown{}}
+        % -
+        % \int_{\Crown{}} \loadLag \cdot \tensori{u}{}_{\Crown}
+    \end{aligned}
+\end{equation}
+%
+\end{development}
+}
+%
+Injecting \eqref{eq22} in \eqref{eq_hu_washizu_split} :
+%
+\begin{equation}
+    \label{eq_0014}
+    \begin{aligned}
+        J_{\cell}
+        = &
+        \int_{\Bulk} \mecPotential{}_{\bodyLag{}} + (\nabla \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
+        % \\
+        % &
+        +
+        (1 - \frac{\alpha}{2} \ell)
+        % \Biggl(
+        \int_{\dBulk{}} (\tensori{u}{}_{\bound{}} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}) \otimes \tensori{n}{} : \tensorii{P}{}_{\Bulk} \vert_{\dBulk}
+        % \\
+        % &
+        \\
+        &
+        +
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 h_T} \lVert \tensori{u}{}_{\bound{}} - \tensori{u}{}_{\Bulk} \vert_{\dBulk{}} \rVert^2
+        % \Biggr)
+        % \\
+        % &
+        -
+        \int_{\Crown{}} \tensorii{G}{}_{\Crown{}} : \tensorii{P}{}_{\Crown{}}
+        % \\
+        % &
+        -
+        \int_{\Bulk} \loadLag \cdot \tensori{u}{}_{\Bulk}
+        -
+        \int_{\Crown{}} \loadLag \cdot \tensori{u}{}_{\Crown{}}
+        -
+        \int_{\neumannBound{}} \neumannCellLoad{} \cdot \tensori{u}{}_{\bound{}}
+    \end{aligned}
+\end{equation}
+%
+Since $\ell$ is arbitrary, let $\ell \rightarrow 0$,
+the interface region vanishes such that $\Crown{} = \emptyset, \Bulk{} = \cell$ and $\dBulk{} = \bound$, and the expression of the Hu–Washizu functional over the region $\cell$ writes:
+%
+\begin{equation}
+    \label{eq_0015}
+    \begin{aligned}
+        J_{\cell}
+        = &
+        \int_{\cell{}} \mecPotential{}_{\bodyLag{}} + (\nabla \tensori{u}{}_{\cell{}} - \tensorii{G}{}_{\cell{}}) : \tensorii{P}{}_{\cell}
+        % \\
+        % &
+        + \int_{\bound{}} (\tensori{u}{}_{\bound} - \tensori{u}{}_{\cell} \vert_{\bound}) \otimes \tensori{n}{} : \tensorii{P}{}_{\cell} \vert_{\bound{}}
+        % \\
+        % &
+        + \int_{\bound} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\bound{}} - \tensori{u}{}_{\cell{}} \vert_{\bound{}} \rVert^2
+        \\
+        &
+        -
+        \int_{\cell} \loadLag{} \cdot \tensori{u}{}_{\cell{}}
+        -
+        \int_{\neumannBound{}} \neumannCellLoad{} \cdot \tensori{u}{}_{\bound{}}
+    \end{aligned}
+\end{equation}
+%
+Assuming that the displacement is continuous at the boundary $\dCell{}$ such that $\tensori{u}{}_{\dCell{}}$ is the trace of the cell displacement $\tensori{u}{}_{\cell{}}$ on $\dCell{}$ and $\tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\cell{}} \vert_{\dCell{}} = 0$,
+one recovers the usual expression of the Hu–Washizu integral over the element for the three variables $(\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})$. However, if one considers that $\tensori{u}{}_{\dCell}$ and $\tensori{u}{}_{\cell}$ are disticnt variables, \textit{i.e.} that the boundary $\dCell$ is able to move from the cell $\cell$ such that the displacement across $\dCell$ is discontinuous, $J_{\cell}$ writes as a function of the four variables $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})$.
+Differentiating $J_{\cell}$ over each of these variables, and introducing the \textbf{explicit traction force} $\tensori{\theta}{}_{\dCell} = \tensorii{P}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{} + (\beta / h_{\cell}) (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell})$ one obtains the system:
+%
+\begin{subequations}
+    \label{eq_0017}
+        \begin{alignat}{3}
+            \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+            = & \int_{\cell} (\tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell} - \tensori{f}{}_V \cdot \delta \tensori{u}{}_{\cell})
+            -
+            \int_{\dCell} \tensori{\theta}{}_{\dCell} \cdot \delta \tensori{u}{}_{\cell} \vert_{\dCell}
+            &&
+            \ \ \ \ \ \ \ \ 
+            &&
+            \forall \delta \tensori{u}{}_{\cell}
+            \in \displacementSpaceCell
+        \label{eq_0017:eq0}
+        \\
+            \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
+            = &
+            \int_{\dCell} (\tensori{\theta}{}_{\dCell} - \tensori{t}{}_{\neumannCell}) \cdot \delta \tensori{u}{}_{\dCell}
+            &&
+            \ \ \ \ \ \ \ \ 
+            &&
+            \forall \delta \tensori{u}{}_{\dCell}
+            \in \partial \displacementSpaceCell
+        \label{eq_0017:eq1}
+        \\
+            \frac{\partial J_{\cell}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
+            = &
+            \int_{\cell} (\frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{\cell}} - \tensorii{P}{}_{\cell}) : \delta \tensorii{G}{}_{\cell}
+            &&
+            \ \ \ \ \ \ \ \ 
+            &&
+            \forall \delta \tensorii{G}{}_{\cell}
+            \in \gradSpaceCell
+        \label{eq_0017:eq2}
+        \\
+            \frac{\partial J_{\cell}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
+            = & \int_{\cell} (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell} ) : \delta \tensorii{P}{}_{\cell}
+            +
+            \int_{\dCell} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell}) \otimes \tensori{n}{} : \delta \tensorii{P}{}_{\cell} \vert_{\dCell}
+            &&
+            \ \ \ \ \ \ \ \ 
+            &&
+            \forall \delta \tensorii{P}{}_{\cell}
+            \in \stressSpaceCell
+        \label{eq_0017:eq3}
+    \end{alignat}
+\end{subequations}
+%
+% \textcolor{blue}{
+% %
+% \begin{development}[Derivative]
+% %
+% Using the functional derivative for $\tensori{u}{}_{\cell} \in \displacementSpaceCell{}$ :
+% %
+% \begin{equation}
+%     \begin{aligned}
+%         \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+%         % = &
+%         % -
+%         % \int_{\cell}
+%         % \nabla \cdot \tensorii{P}{}_{\cell} \cdot \delta \tensori{u}{}_{\cell}
+%         % +
+%         % \int_{\dCell}
+%         % \tensorii{P}{}_{\cell} \cdot \tensori{n}{} \cdot \delta \tensori{u}{}_{\cell}
+%         % -
+%         % \int_{\dCell}
+%         % \tensorii{P}{}_{\cell} \cdot \tensori{n}{} \cdot \delta \tensori{u}{}_{\cell}
+%         % \\
+%         % & +
+%         % \int_{\dCell{}} \frac{\beta}{h_{\cell}} (\tensori{u}{}_{\bound{}} - \tensori{u}{}_{\cell{}} \vert_{\bound{}}) \cdot \delta \tensori{u}{}_{\cell}
+%         % -
+%         % \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
+%         % % -
+%         % % \int_{\neumannCell} \neumannCellLoad \cdot \delta \tensori{u}{}_{\cell}
+%         % \\
+%         = &
+%         \int_{\cell}
+%         \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
+%         -
+%         \int_{\dCell}
+%         \tensorii{P}{}_{\cell} \cdot \tensori{n}{} \cdot \delta \tensori{u}{}_{\cell}
+%         -
+%         \int_{\dCell{}} \frac{\beta}{h_{\cell}} (\tensori{u}{}_{\bound{}} - \tensori{u}{}_{\cell{}} \vert_{\bound{}}) \cdot \delta \tensori{u}{}_{\cell}
+%         -
+%         \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
+%         \\
+%         = &
+%         \int_{\cell}
+%         \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
+%         -
+%         \int_{\dCell} \tensori{\theta}{}_{\dCell} \cdot \delta \tensori{u}{}_{\cell} \vert_{\dCell}
+%         -
+%         \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
+%     \end{aligned}
+% \end{equation}
+% %
+% Using the functional derivative for $\tensori{u}{}_{\dCell} \in \displacementSpaceDCell{}$ :
+% %
+% \begin{equation}
+%     \begin{aligned}
+%         \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
+%         = &
+%         \int_{\dCell}
+%         \tensorii{P}{}_{\cell} \cdot \tensori{n}{} \cdot \delta \tensori{u}{}_{\dCell}
+%         +
+%         \int_{\dCell{}} \frac{\beta}{h_{\cell}} (\tensori{u}{}_{\bound{}} - \tensori{u}{}_{\cell{}} \vert_{\bound{}}) \cdot \delta \tensori{u}{}_{\dCell}
+%         -
+%         \int_{\neumannCell{}} \neumannCellLoad{} \cdot \delta \tensori{u}{}_{\dCell}
+%         \\
+%         = &
+%         \int_{\dCell} (\tensori{\theta}{}_{\dCell} - \tensori{t}{}_{\neumannCell}) \cdot \delta \tensori{u}{}_{\dCell}
+%     \end{aligned}
+% \end{equation}
+% %
+% Using the functional derivative for $\tensori{G}{}_{\cell} \in \gradSpaceCell{}$ :
+% %
+% \begin{equation}
+%     \begin{aligned}
+%         \frac{\partial J_{\cell}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
+%         = &
+%         \int_{\cell} (\frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{\cell}} - \tensorii{P}{}_{\cell}) : \delta \tensorii{G}{}_{\cell}
+%     \end{aligned}
+% \end{equation}
+% %
+% Using the functional derivative for $\tensori{P}{}_{\cell} \in \stressSpaceCell{}$ :
+% %
+% \begin{equation}
+%     \begin{aligned}
+%         \frac{\partial J_{\cell}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
+%         = & \int_{\cell} (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell} ) : \delta \tensorii{P}{}_{\cell}
+%         +
+%         \int_{\dCell} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell}) \otimes \tensori{n}{} : \delta \tensorii{P}{}_{\cell} \vert_{\dCell}
+%     \end{aligned}
+% \end{equation}
+% %
+% \end{development}
+% }
+%
+In particular, \eqref{eq_0017:eq0} is the expression of the principle of virtual works in $T$, where the explicit traction force $\tensori{\theta}{}_{\dCell}$ replaces the usual expression $\tensorii{P}{}_{\cell} \cdot \tensori{n}{}$ in the external contribution, and \eqref{eq_0017:eq1} denotes a supplementary equation to the usual continuous problem as seen in \eqref{eq_hu_washizu}, to account for the continuity of $\tensori{\theta}{}_{\dCell}$ across the cell boundary. \eqref{eq_0017:eq2} defines the stress-behaviour law relation, and \eqref{eq_0017:eq3} defines a gradient field reconstruction based on a linear problem, whose second term depends on both a body and a boundary term.
+In particular, let $B_T : (\tensori{v}{}_{\dCell}, \tensori{v}{}_{\cell}) \in \displacementSpaceCell \times \displacementSpaceDCell \rightarrow \tensorii{G}{}_{\cell} \in \gradSpaceCell$ the application that gives the displacement gradient $\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ as a function of a displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$.
+\textcolor{red}{Est-ce qu'on peut dire qu'il existe une application en continu ?}
+\eqref{eq_0017:eq2} and \eqref{eq_0017:eq1} are at the foundation of discontinuous Galerkin like methods; indeed, by defining a traction force that does not only depend on the stress, but aslo on the displacement jump, one allows for the latter to act as a Lagrange multiplyier to fulfil the traction force continuity requriement on $\dCell$. The tradeoff for the latter condition to hold true, consists in loosening the displacement continuity condition through the displacement jump at the boundary, though stability is recovered through the interface mechanical energy potential that penalizes displacement jumps in a weak sense.
+%
+\textcolor{blue}{
+%
+\begin{development}[Gradient reconstruction]
+%
+\eqref{eq_0017:eq3} defines
+a linear problem for the bilinear form $A$ on $\gradSpaceCell \times \stressSpaceCell$ and the linear form $L_{u}$ on $\stressSpaceCell$ such that :
+%
+\begin{subequations}
+    \begin{alignat}{2}
+        & A(\tensorii{G}{}_{\cell}, \delta \tensorii{P}{}_{\cell}) = \int_{\cell} \tensorii{G}{}_{\cell} : \delta \tensorii{P}{}_{\cell}
+        &&
+        \ \ \ \ \ \ 
+        \forall \delta \tensorii{P}{}_{\cell} \in \stressSpaceCell
+        \\
+        & L_{u}(\delta \tensorii{P}{}_{\cell}) = \int_{\cell} \nabla \tensori{u}{}_{\cell} : \delta \tensorii{P}{}_{\cell} + \int_{\dCell} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell}) \otimes \tensori{n}{} : \delta \tensorii{P}{}_{\cell} \vert_{\dCell}
+        &&
+        \ \ \ \ \ \ 
+        \forall \delta \tensorii{P}{}_{\cell} \in \stressSpaceCell
+    \end{alignat}
+\end{subequations}
+%
+Since $A$ is the natural linear map on $\gradSpaceCell \times \stressSpaceCell$, by a straightforward application of the Banach Necas Babuska theorem, there is a unique $\tensorii{G}{}_{\cell} \in \gradSpaceCell$ such that :
+%
+\begin{equation}
+    \label{eq_thispb}
+    \begin{aligned}
+        A(\tensorii{G}{}_{\cell}, \delta \tensorii{P}{}_{\cell}) = L_u(\delta \tensorii{P}{}_{\cell})
+        &&
+        \ \ \ \ \ \ 
+        \forall \delta \tensorii{P}{}_{\cell} \in \stressSpaceCell
+    \end{aligned}
+\end{equation}
+%
+Furthemore, assuming $\gradSpaceCell$ and $\stressSpaceCell$ to be finite dimensional spaces, let $B_T : (\tensori{u}{}_{\dCell}, \tensori{u}{}_{\cell}) \rightarrow \tensorii{G}{}_{\cell}$ the linear operator solving \eqref{eq_thispb}.
+%
+\end{development}
+}
+%
+By explicitly enforcing \eqref{eq_0017:eq2} and \eqref{eq_0017:eq3} in the minimization of \eqref{eq_0017}, one obtains the problem in primal form: find the displacement pair $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}) \in \displacementSpaceCell \times \displacementSpaceDCell$,
+such that for all kinematically admissible displacements pairs $(\delta \tensori{u}{}_{T}, \delta \tensori{u}{}_{\partial T}) \in \displacementSpaceCell \times \displacementSpaceDCell$
+%
+\begin{equation}
+    \label{eq_0018}
+    \begin{aligned}
+        d J_{\cell}=
+        \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+        +
+        \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
+        =
+        0
+    \end{aligned}
+\end{equation}
+%
+Defining the displacement jump $\tensori{Z}{}_{\dCell{}}$ such that
+%
+\begin{equation}
+    \label{eq_stabilization}
+    \begin{aligned}
+        \tensori{Z}{}_{\dCell{}}(\tensori{v}{}_{T}, \tensori{v}{}_{\partial T}) := (\tensori{v}{}_{\partial T} - \tensori{v}{}_{T} \vert_{\partial T})
+        &&
+        \forall (\tensori{v}{}_{T}, \tensori{v}{}_{\partial T}) \in \displacementSpaceCell \times \displacementSpaceDCell
+    \end{aligned}
+\end{equation}
+%
+and using both \eqref{eq_0017:eq2} and \eqref{eq_0017:eq3}, \eqref{eq_0018} amounts to find the displacement pair $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}) \in \displacementSpaceCell \times \displacementSpaceDCell$,
+such that for all kinematically admissible displacements pairs $(\delta \tensori{u}{}_{T}, \delta \tensori{u}{}_{\partial T}) \in \displacementSpaceCell \times \displacementSpaceDCell$ :
+%
+\begin{equation}
+    \label{eq_0020}
+    \begin{aligned}
+        \int_{T} \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_T} : \delta \tensorii{G}{}_{T}
+        % \\
+        % &
+        +
+        \int_{\partial T} (\beta / h_T)
+        % (\tensori{u}{}_{\partial T} - \tensori{u}{}_{T} \vert_{\partial T})
+        \tensori{Z}{}_{\dCell{}}
+        \cdot
+        % (\delta \tensori{u}{}_{\partial T} - \delta \tensori{u}{}_{T} \vert_{\partial T})
+        \delta \tensori{Z}{}_{\dCell{}}
+        % \\
+        % &
+        -
+        \int_{\partial T} \tensori{t}{}_N \cdot \delta \tensori{u}{}_{\partial T}
+        -
+        \int_{T} \tensori{f}{}_V \cdot \delta \tensori{u}{}_{T}
+        =
+        0
+    \end{aligned}
+\end{equation}
+%
+where $\delta \tensorii{G}{}_{T}$ (respectively $\tensorii{G}{}_{T}$) solves \eqref{eq_0017:eq3} for the unknowns pair $(\delta \tensori{u}{}_{T}, \delta \tensori{u}{}_{\partial T})$ (respectively $(\tensori{u}{}_{T}, \tensori{u}{}_{\partial T})$).
+In particular, one can readliy see the resemblance of \eqref{eq_0020} with the ususal formulation of the principle of virtual works, where the so called reconstructed displacement gradient $\tensorii{G}{}_{\cell}$ plays the role of the usual displacement Lagrangian gradient $\nabla \tensori{u}{}_{\cell}$, and where an additional term corresponding to a traction energy on the boundary through the action on $\tensori{Z}{}_{\dCell{}}$ has been added to account for the penalization of the displacement jump on $\dCell$. The latter term is discribed in the literature as the stabilization term.
+%
+\textcolor{blue}{
+%
+\begin{development}[Weak form]
+%
+\begin{equation}
+    \label{eq_0018F}
+    \begin{aligned}
+        d J_{T}
+        = &
+        \frac{\partial J_{T}}{\partial \tensori{u}{}_{T}} \delta \tensori{u}{}_{T}
+        +
+        \frac{\partial J_{T}}{\partial \tensori{u}{}_{\partial T}} \delta \tensori{u}{}_{\partial T}
+        =
+        0
+        \\
+        = &
+        \int_{T} \tensorii{P}{}_{T} : \nabla_X \delta \tensori{u}{}_{T}
+        +
+        \int_{\partial T} (\delta \tensori{u}{}_{\partial T} - \delta \tensori{u}{}_{T} \vert_{\partial T}) \otimes \tensori{n} : \tensorii{P}{}_{T} \vert_{\partial T}
+        +
+        \int_{\partial T} (\beta / h_T) (\tensori{u}{}_{\partial T} - \tensori{u}{}_{T} \vert_{\partial T}) \cdot (\delta \tensori{u}{}_{\partial T} - \delta \tensori{u}{}_{T} \vert_{\partial T})
+        \\
+        &
+        -
+        \int_{\partial T} \tensori{t}{}_N \cdot \delta \tensori{u}{}_{\partial T}
+        -
+        \int_{T} \tensori{f}{}_V \cdot \delta \tensori{u}{}_{T}
+        \\
+        = &
+        \int_{T} \tensorii{P}{}_{T} : \tensorii{G}{}_{T}
+        +
+        \int_{\partial T} (\beta / h_T) (\tensori{u}{}_{\partial T} - \tensori{u}{}_{T} \vert_{\partial T}) \cdot (\delta \tensori{u}{}_{\partial T} - \delta \tensori{u}{}_{T} \vert_{\partial T})
+        -
+        \int_{\partial T} \tensori{t}{}_N \cdot \delta \tensori{u}{}_{\partial T}
+        -
+        \int_{T} \tensori{f}{}_V \cdot \delta \tensori{u}{}_{T}
+        \\
+        = &
+        \int_{T} \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{T}} : \tensorii{G}{}_{T}
+        +
+        \int_{\partial T} (\beta / h_T) (\tensori{u}{}_{\partial T} - \tensori{u}{}_{T} \vert_{\partial T}) \cdot (\delta \tensori{u}{}_{\partial T} - \delta \tensori{u}{}_{T} \vert_{\partial T})
+        -
+        \int_{\partial T} \tensori{t}{}_N \cdot \delta \tensori{u}{}_{\partial T}
+        -
+        \int_{T} \tensori{f}{}_V \cdot \delta \tensori{u}{}_{T}
+    \end{aligned}
+\end{equation}
+%
+\end{development}
+}
+%
+The region $\cell$ described 
+
+\subsection{Hybrid mesh}
+\label{sec_1bis}
+
+Since the Hybird High Order method relies on both cell and faces unknowns, a so called hybrid mesh is considered. It consists in a collection of cells, as is the case with the standard Finite Element method, and in the collection of the cell faces, forming the skeleton of the mesh.
+Hence, let $\mathcal{T}_h(\Omega_0)$ the cell collection be a triangulation of the domain $\Omega_0$ into a set of disjoints open polyhedra with planar faces called elements (or cells) $T_i \subset \mathbb{R}^{d}, 1 \leq i \leq N_T$, where $N_T$ denotes the number of elements in the mesh, such that $\Omega_0 = \cup_{1 \leq i \leq N_T} T_i$. For each element $T_i$, let $\partial T_i \subset \mathbb{R}^{d-1}$ its boundary, composed of its faces (if $d = 3$) or edges (if $d = 2$).
+
+Let $\mathcal{F}_h(\Omega_0)$ the skeleton of the mesh, collecting all element faces in the mesh.
+A face $F \subset \mathbb{R}^{d - 1}$ is a closed subset of $\Omega_0$, and either there are two cells $T_1$ and $T_2$ such that $F = \partial T_1 \cap \partial T_2$ ($F$ is then an interior face), or there is a single cell $T$ such that $F = \partial T \cap \partial \Omega_0$ ($F$ is then an exterior face).
+
+Let $\mathcal{F}_h^i(\Omega_0)$ denote the set of interior faces, and $\mathcal{F}_h^e(\Omega_0)$ that of exterior ones.
+$\mathcal{F}_h^e(\Omega_0)$ is partitioned into $\mathcal{F}_{h,D}^e(\Omega_0) = \{ F \in \mathcal{F}_h^e(\Omega_0) \ \vert \ F \subset \partial_D \Omega_0 \}$ the set of exterior faces imposed to prescribed Dirichlet boundary conditions, and into $\mathcal{F}_{h,N}^e(\Omega_0) = \{ F \in \mathcal{F}_h^e(\Omega_0) \ \vert \ F \subset \partial_N \Omega_0 \}$ the set of exterior faces imposed to prescribed Neumann boundary conditions.
+
+\subsection{Discretization}
+\label{sec_21}
+
+% Problem \eqref{eq_0020} describes the continuous problem. The discrete problem consists in seeking the unknown couple $(\tensori{u}{}_{T}, \tensori{u}{}_{\partial T})$ in a .
+
+Problem \eqref{eq_0020} describes a continuous problem, where $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})$ are sought in the inifinte dimensional spaces $\displacementSpaceCell \times \displacementSpaceDCell$.
+The discretization of $\eqref{eq_0020}$ on finite dimensional spaces is performed for th the polynomial unknown $\tensori{u}{}^l_{\cell}$ in the polynomial spaces $\discreteDisplacementSpaceCell{} = P^l(\cell)$.
+The discrete problem consists in seeking the unknown couple $(\tensori{u}{}_{T}, \tensori{u}{}_{\partial T})$ in a .
+
+
+
+Le problème (\ref{eq_hu_washizu_hho}) discrétisé consiste à chercher l'inconnue $(\tensori{u}{}_{{T}}^l, \tensori{u}{}_{\partial T}^k)$ dans l'espace des polynômes $P^l({T}, \mathbb{R}^d) \times P^k(\partial T, \mathbb{R}^d)$ d'ordre respectivement $l$ et $k$ tels que $k > 0$ avec $k - 1 \leq l \leq k + 1$, et les champs de gradients de déplacement $\tensorii{G}{}_T^k$ et de contraintes $\tensorii{P}{}_T^k$ dans $P^k({T}, \mathbb{R}^{d \times d})$. On définit la force de traction discrète $\tensori{\theta}{}_{\partial T}^{HHO} = \tensorii{P}{}_T^k \cdot \tensori{n} + ({\beta_{mec}}/{h_T}) \tensori{S}_{\partial T}^{k*}$ telle que $\tensori{S}_{\partial T}^{k*}$ est l'opérateur adjoint de l'opérateur de stabilisation $\tensori{S}_{\partial T}^{k}$ définit par:
+%
+\begin{equation}
+    \label{eq_stabilisation}
+    \tensori{S}_{\partial T}^{k}(\tensori{v}{}_{T}^l, \tensori{v}{}_{\partial T}^k) = \Pi_{\partial T}^k
+    (
+    \tensori{v}{}_{\partial T}^k - \tensori{v}{}_{T}^l
+    - (\tensori{1}{}-\Pi_{T}^k) \tensori{D}{}_T^{k + 1}
+    )
+\end{equation}
+%
+où $\Pi_{\partial T}^k$ et $\Pi_{T}^k$ sont les projecteurs orthogonaux au sens $L^2$ sur $P^k({\partial T}, \mathbb{R}^d)$ et $P^k({T}, \mathbb{R}^d)$ respectivement, et le champ de déplacement $\tensori{D}{}_T^{k + 1} \in P^{k+1}(T, \mathbb{R}^d)$ est solution du problème (\ref{eq_potential}):
+%
+\begin{equation}
+    \label{eq_potential}
+    \begin{aligned}
+    \int_T (\nabla_X \tensori{D}{}_{T}^{k+1} - \nabla_X \tensori{u}{}_{T}^l) : \nabla_X \tensori{w}{}^{k+1} & = 
+    \int_{\partial T} (\tensori{u}{}_{\partial T}^k - \tensori{u}{}_{T}^l) \cdot \nabla_X \tensori{w}{}^{k+1} \tensori{n}{}
+    &&
+    \forall \tensori{w}{}^{k+1} \in {P}{}^{k+1}(T, \mathbb{R}^d)
+    \\
+    \int_T \tensori{D}{}_{T}^{k+1} & = \int_T \tensori{u}{}_{T}^{l}
+    \end{aligned}
+\end{equation}
+
+D'un point de vue numérique, on calcule dans une étape de pré-traitement l'opérateur de stabilisation ${[S]} : (\tensori{v}{}_{T}^l, \tensori{v}{}_{\partial T}^k) \rightarrow \tensori{S}{}_{\partial T}^{k}$ défini par (\ref{eq_stabilisation}) et l'opérateur de dérivation ${[B]} : (\tensori{v}{}_{T}^l, \tensori{v}{}_{\partial T}^k) \rightarrow \tensorii{G}{}_{T}^{k}$ défini par la formulation discrète de (\ref{eq_hu_washizu_hho_1}), de sorte que le problème discrétisé local (\ref{eq_hu_washizu_hho}) ne dépend plus que de l'inconnue primale $(\tensori{u}{}_{T}^l, \tensori{u}{}_{\partial T}^k)$ vérifiant $\forall (\tensori{v}{}_{{T}}^l, \tensori{v}{}_{\partial T}^k) \in P^l({T}, \mathbb{R}^d) \times P^k(\partial T, \mathbb{R}^d)$:
+%
+\begin{equation}
+    \label{eq_ptv_hho}
+    \int_{T} \tensorii{P}{}_{T}^k : \tensorii{G}{}_{T}^k
+    +
+    \int_{\partial_T} \frac{\beta_{mec}}{h_T}
+    \tensori{S}_{\partial T}^{k}(\tensori{u}_{T}^l, \tensori{u}_{\partial T}^k)
+    \cdot
+    \tensori{S}_{\partial T}^{k}(\tensori{v}_{T}^l, \tensori{v}_{\partial T}^k)
+    =
+    % \sum_{T \in \mathcal{T}(\Omega_0)}
+    \int_{\Omega} \tensori{f}{}_{V} \cdot \tensori{v}{}_{T}^l
+    +
+    % \sum_{\partial T \in \mathcal{F}_N(\Omega_0)}
+    \int_{\partial_T}\tensori{t}{}_{N} \cdot \tensori{v}{}_{\partial T}^k
+\end{equation}
+%
+où les contraintes $\tensorii{P}{}_{T}^k$ sont calculées aux points de quadrature par intégration de la loi de comportement. Le principe des travaux virtuels discret à l'échelle de la structure vérifie donc $\forall (\tensori{v}{}_{\mathcal{T}}^l, \tensori{v}{}_{\mathcal{F}}^k) \in P^l(\mathcal{T}, \mathbb{R}^d) \times P^k(\mathcal{F}, \mathbb{R}^d)$:
+
+\begin{equation}
+    \label{eq_hho2}
+    \begin{aligned}
+        \sum_{T \in \mathcal{T}(\Omega_0)}
+        \int_{T} \tensorii{P}{}_{T}^k : \tensorii{G}{}_{T}^k + \int_{\partial_T} \frac{\beta_{mec}}{h_T}
+        \tensori{S}_{\partial T}^k(\tensori{u}_{T}^l, \tensori{u}_{\partial T}^k) \cdot
+        \tensori{S}_{\partial T}^k(\tensori{v}_{T}^l, \tensori{v}_{\partial T}^k)
+        = &
+        \sum_{T \in \mathcal{T}(\Omega_0)}
+        \int_{\Omega} \tensori{f}{}_{V} \cdot \tensori{v}{}_{T}^l
+        \\
+        & +
+        \sum_{\partial T \in \mathcal{F}_N(\Omega_0)}
+        \int_{\partial_T}\tensori{t}{}_{N} \cdot \tensori{v}{}_{\partial T}^k
+    \end{aligned}
+\end{equation}
+
+
+
+\subsection{Introducing}
+\label{sec_1bis2}
+
+Since the cell displacement field is discontinuous on the mesh, it is sought in the so called broken Sobolev space $H^1(\mathcal{T}_h(\Omega_0), \mathbb{R}^{d}) = \{ \tensori{v} \in L^2(\Omega_0, \mathbb{R}^{d}) \ \vert \  \tensori{v}{}_T \in H^1(T, \mathbb{R}^{d}) , \forall T \in \mathcal{T}_h(\Omega_0)\}$. In addition, the face displacement field over the mesh is sought in
+$L^2(\mathcal{F}_h(\Omega_0), \mathbb{R}^{d}) = \{ \tensori{v} \in L^2(\partial T, \mathbb{R}^{d}), \forall T \in \mathcal{T}_h(\Omega_0)\}$, such that the global displacement field is in
+$U = H^1(\mathcal{T}_h(\Omega_0), \mathbb{R}^{d}) \times L^2(\mathcal{F}_h(\Omega_0), \mathbb{R}^{d})$
+
+\bibliographystyle{elsarticle-num}
+\bibliography{bib}
+
+%% Authors are advised to use a BibTeX database file for their reference list.
+%% The provided style file elsarticle-num.bst formats references in the required Procedia style
+
+%% For references without a BibTeX database:
+
+% \begin{thebibliography}{00}
+
+%% \bibitem must have the following form:
+%%   \bibitem{key}...
+%%
+
+% \bibitem{}
+
+% \end{thebibliography}
+
+% \end{multicols}
+
+\end{document}
+
+%%
+%% End of file `ecrc-template.tex'. 

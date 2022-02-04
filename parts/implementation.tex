@@ -1,0 +1,488 @@
+\begin{equation}
+    \label{hho_incremenaljjjdjkkj}
+    \begin{aligned}
+        \begin{Bmatrix}
+            \tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})
+        \end{Bmatrix}
+        (\tensori{x}{}_q)
+        =
+        \begin{bmatrix}
+            B_{\cell} && B_{\dCell}
+        \end{bmatrix}
+        (\tensori{x}{}_q)
+        \cdot
+        \begin{Bmatrix}
+            \tensori{v}{}_{\cell}
+            \\
+            \tensori{v}{}_{\dCell}
+        \end{Bmatrix}
+        &&
+        \forall (\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \displacementSpaceCell \times \displacementSpaceDCell
+    \end{aligned}
+\end{equation}
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenaljjjdjj}
+    \begin{aligned}
+        % \begin{Bmatrix}
+        %     \tensori{Z}{}_{\dCell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})
+        % \end{Bmatrix}
+        \int_{\dCell} (\beta / h_{\cell})
+        \tensori{Z}{}_{\dCell}^{HHO}(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\dCell}^k)
+        % \tensori{Z}{}_{\dCell{}}
+        \cdot
+        \tensori{Z}{}_{\dCell}^{HHO}(\delta \tensori{u}{}_{\cell}^l, \delta \tensori{u}{}_{\dCell}^k)
+        =
+        \beta
+        \begin{Bmatrix}
+            \tensori{u}{}_{\cell}^l
+            \\
+            \tensori{u}{}_{\dCell}^k
+        \end{Bmatrix}^{\text{t}}
+        \cdot
+        \begin{bmatrix}
+            Z_{\cell \cell} && Z_{\cell \dCell}
+            \\
+            Z_{\dCell \cell} && Z_{\dCell \dCell}
+        \end{bmatrix}
+        \cdot
+        \begin{Bmatrix}
+            \delta \tensori{u}{}_{\cell}^l
+            \\
+            \delta \tensori{u}{}_{\dCell}^k
+        \end{Bmatrix}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenaljjjdjj}
+    \begin{aligned}
+        \begin{Bmatrix}
+            F_{T}^{int}
+            (
+                % \delta
+                \tensori{u}{}_{\cell}^{l,m}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k,m}
+            )
+        \end{Bmatrix}
+        =
+        \sum_Q
+        \begin{bmatrix}
+            B_{\cell} && B_{\dCell}
+        \end{bmatrix}^{\text{t}}(\tensori{x}{}_q)
+        \cdot
+        \begin{Bmatrix}
+            \tensorii{P}{}_{\cell}^k(
+                \tensorii{G}{}_{\cell}^k
+                (
+                    % \delta
+                    \tensori{u}{}_{\cell}^{l,m}
+                    ,
+                    % \delta
+                    \tensori{u}{}_{\dCell}^{k,m}
+                )
+            )
+        \end{Bmatrix}(\tensori{x}{}_q)
+        +
+        \beta
+        \begin{bmatrix}
+            Z_{\cell \cell} && Z_{\cell \dCell}
+            \\
+            Z_{\dCell \cell} && Z_{\dCell \dCell}
+        \end{bmatrix}
+        \cdot
+        \begin{Bmatrix}
+            % \delta
+            \tensori{u}{}_{\cell}^{l,m}
+            \\
+            % \delta
+            \tensori{u}{}_{\dCell}^{k,m}
+        \end{Bmatrix}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenaljjjdjj}
+    \begin{aligned}
+        \begin{Bmatrix}
+            F_{T}^{ext}
+        \end{Bmatrix}
+        =
+        \begin{Bmatrix}
+            \loadLag
+            \\
+            \neumannLag
+        \end{Bmatrix}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenaljdjjjkk}
+    \begin{aligned}
+        \begin{bmatrix}
+            K_{\cell}^{tan}(
+                % \delta
+                \tensori{u}{}_{\cell}^{l,m}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k,m}
+            )
+        \end{bmatrix}
+        =
+        \sum_Q
+        \begin{bmatrix}
+            B_{\cell} && B_{\dCell}
+        \end{bmatrix}^{\text{t}}
+        (\tensori{x}{}_q)
+        \cdot
+        \begin{bmatrix}
+            \tensoriv{A}{}
+            (
+                % \delta
+                \tensori{u}{}_{\cell}^{l,m}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k,m}
+            )
+        \end{bmatrix}
+        (\tensori{x}{}_q)
+        \cdot
+        \begin{bmatrix}
+            B_{\cell} && B_{\dCell}
+        \end{bmatrix}
+        (\tensori{x}{}_q)
+    \end{aligned}
+\end{equation}
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenaljdkkjjjkk}
+    \begin{aligned}
+        \begin{bmatrix}
+            \tensoriv{A}{}
+            (
+                % \delta
+                \tensori{u}{}_{\cell}^{l,m}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k,m}
+            )
+        \end{bmatrix}
+        =
+        \frac{
+            \partial
+            \tensorii{P}{}_{\cell}^k(
+                \tensorii{G}{}_{\cell}^k
+                (
+                    % \delta
+                    \tensori{u}{}_{\cell}^{l,m}
+                    ,
+                    % \delta
+                    \tensori{u}{}_{\dCell}^{k,m}
+                )
+            )
+        }
+        {
+            \partial
+            \tensorii{G}{}_{\cell}^k
+            (
+                % \delta
+                \tensori{u}{}_{\cell}^{l,m}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k,m}
+            )
+        }
+    \end{aligned}
+\end{equation}
+%
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenahhljdjjjkk}
+    \begin{aligned}
+        \begin{bmatrix}
+            K_{\cell}^{tan}(
+                % \delta
+                \tensori{u}{}_{\cell}^{l,m}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k,m}
+            )
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            K_{\cell \cell} (\tensori{u}{}_{\cell}^{l,m}, \tensori{u}{}_{\dCell}^{k,m})
+            &&
+            K_{\cell \dCell} (\tensori{u}{}_{\cell}^{l,m}, \tensori{u}{}_{\dCell}^{k,m})
+            \\
+            K_{\dCell \cell} (\tensori{u}{}_{\cell}^{l,m}, \tensori{u}{}_{\dCell}^{k,m})
+            &&
+            K_{\dCell \dCell} (\tensori{u}{}_{\cell}^{l,m}, \tensori{u}{}_{\dCell}^{k,m})
+        \end{bmatrix}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenahzhjehhljdjjjkk}
+    \begin{aligned}
+        \begin{bmatrix}
+            K_{\cell}^{tan}(
+                % \delta
+                \tensori{u}{}_{\cell}^{l,m}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k,m}
+            )
+        \end{bmatrix}
+        \cdot
+        \begin{Bmatrix}
+            \delta
+            \tensori{u}{}_{\cell}^{l}
+            \\
+            \delta
+            \tensori{u}{}_{\dCell}^{k}
+        \end{Bmatrix}
+        =
+        \begin{Bmatrix}
+            F_T^{int} (\tensori{u}{}_{\cell}^{l,m}, \tensori{u}{}_{\dCell}^{k,m})
+        \end{Bmatrix}
+        -
+        \begin{Bmatrix}
+            F_T^{ext}
+        \end{Bmatrix}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenahzhjjjklehhljdjjjkk}
+    \begin{aligned}
+        \begin{bmatrix}
+            K_{\cell}^{tan}(
+                % \delta
+                \tensori{u}{}_{\cell}^{l,m}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k,m}
+            )
+        \end{bmatrix}_c
+        \cdot
+        \begin{Bmatrix}
+            \delta
+            \tensori{u}{}_{\dCell}^{k}
+        \end{Bmatrix}
+        =
+        \begin{Bmatrix}
+            F_T^{int} (\tensori{u}{}_{\cell}^{l,m}, \tensori{u}{}_{\dCell}^{k,m})
+        \end{Bmatrix}_c
+        -
+        \begin{Bmatrix}
+            F_T^{ext}
+        \end{Bmatrix}_c
+    \end{aligned}
+\end{equation}
+%
+%
+%
+% \begin{equation}
+%     \label{hho_incremenaljdjj}
+%     \begin{aligned}
+%         \begin{bmatrix}
+%             \delta U_{T}
+%             &&
+%             \delta U_{\partial T}
+%         \end{bmatrix}^{\text{t}}
+%         \cdot
+%         \begin{bmatrix}
+%             B_{GT} \\ B_{G \partial T}
+%         \end{bmatrix}^{\text{t}}
+%         \cdot
+%         \begin{bmatrix}
+%             A_{GG}
+%         \end{bmatrix}^{\text{t}}
+%         \cdot
+%         \begin{bmatrix}
+%             B_{GT} && B_{G \partial T}
+%         \end{bmatrix}^{\text{t}}
+%         \cdot
+%         \begin{bmatrix}
+%             \delta U_{T}
+%             \\
+%             \delta U_{\partial T}
+%         \end{bmatrix}
+%         = -
+%         \begin{bmatrix}
+%             R_{T}
+%             \\
+%             R_{\partial T}
+%         \end{bmatrix}
+%         &&
+%         \text{tel que}
+%         &&
+%         \begin{bmatrix}
+%             R_{T}
+%             \\
+%             R_{\partial T}
+%         \end{bmatrix}
+%         =
+%         \begin{bmatrix}
+%             F_{T}^{ext}
+%             \\
+%             F_{\partial T}^{ext}
+%         \end{bmatrix}
+%         -
+%         \begin{bmatrix}
+%             F_{T}^{int}
+%             \\
+%             F_{\partial T}^{int}
+%         \end{bmatrix}
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% La résolution du problème local (\ref{eq_0nonamemeergjj}) sous forme incrémentale s'exprime par le système matriciel (\ref{hho_incremenal}) :
+% %
+% %
+% %
+% \begin{equation}
+%     \label{hho_incremenal}
+%     \begin{aligned}
+%         \begin{bmatrix}
+%             K_{TT} && K_{T \partial T}
+%             \\
+%             K_{\partial T T} && K_{\partial T \partial T}
+%         \end{bmatrix}
+%         \cdot
+%         \begin{bmatrix}
+%             \delta U_{T}
+%             \\
+%             \delta U_{\partial T}
+%         \end{bmatrix}
+%         = -
+%         \begin{bmatrix}
+%             R_{T}
+%             \\
+%             R_{\partial T}
+%         \end{bmatrix}
+%         &&
+%         \text{tel que}
+%         &&
+%         \begin{bmatrix}
+%             R_{T}
+%             \\
+%             R_{\partial T}
+%         \end{bmatrix}
+%         =
+%         \begin{bmatrix}
+%             F_{T}^{ext}
+%             \\
+%             F_{\partial T}^{ext}
+%         \end{bmatrix}
+%         -
+%         \begin{bmatrix}
+%             F_{T}^{int}
+%             \\
+%             F_{\partial T}^{int}
+%         \end{bmatrix}
+%     \end{aligned}
+% \end{equation}
+% %
+% où on définit l'incrément de déplacement $\delta U$ la matrice de raideur $K$, le résidu $R$, les forces internes $F^{int}$ et externes $F^{ext}$, et on décompose le système élémentaire par blocs de faces et de cellule, avec la notation $[\cdot]$ pour désigner une représentation vectorielle ou matricielle; les forces internes vérifient (\ref{hho_algebraic0}):
+% %
+% \begin{equation}
+%     \label{hho_algebraic0}
+%     \begin{aligned}
+%         \begin{bmatrix}
+%             F_{T}^{int}
+%             \\
+%             F_{\partial T}^{int}
+%         \end{bmatrix}
+%         % {}[F_{int}]
+%         & = \sum_{(\tensori{x}{}_Q, w_Q^T)} (w_Q^T \cdot [B(\tensori{x}{}_Q)]^t \cdot [\tensorii{P}{}_T^k(\tensori{x}{}_Q)])
+%         +
+%         \frac{\beta_{mec}}{h_T} ([S]^t \cdot [S]) \cdot 
+%         \begin{bmatrix}
+%             U_{T}
+%             \\
+%             U_{\partial T}
+%         \end{bmatrix}
+%     \end{aligned}
+% \end{equation}
+% %
+% où on note $\tensori{x}{}_Q$ (respectivement $w_Q^T$) un point (respectivement un poids) de quadrature de cellule, et $[U_T, U_{\partial T}]$ le vecteur d'inconnue élémentaire. Comme pour les éléments finis strandards, l'opérateur $[B]$ est la matrice qui à $[U_T, U_{\partial T}]$ assoscie le gradient d'inconnue $[\tensorii{G}{}_T^k]$, et le superscript $t$ désigne l'opérateur de transposition. Les forces externes vérifient (\ref{hho_algebraic1}) :
+% %
+% \begin{equation}
+%     \label{hho_algebraic1}
+%     \begin{aligned}
+%         \begin{bmatrix}
+%             F_{T}^{ext}
+%             \\
+%             F_{\partial T}^{ext}
+%         \end{bmatrix}
+%         & =
+%         \begin{bmatrix}
+%             \sum_{(\tensori{x}{}_Q, w_Q^T)} w_Q^T \cdot [\phi({\tensori{x}{}_Q})]^t \cdot \tensori{f}{}_{V}(\tensori{x}{}_Q)
+%             \\
+%             \sum_{(\tensori{s}{}_Q, w_Q^{\partial T})} w_Q^{\partial T} \cdot [\omega(\tensori{s}{}_Q)]^t \cdot \tensori{t}{}_{N}(\tensori{s}{}_Q)
+%         \end{bmatrix}
+%     \end{aligned}
+% \end{equation}
+% avec $\tensori{s}{}_Q$ (respectivement $w_Q^{\partial T}$) un point (respectivement poids) de quadrature de face, et $\phi$ (respectivement $\omega$) le vecteur de fonctions de bases dans $T$ (respectivement $\partial T$). Finalement la matrice de raideur vérifie (\ref{hho_algebraic2}) :
+% \begin{equation}
+%     \label{hho_algebraic2}
+%     \begin{aligned}
+%         \begin{bmatrix}
+%             K_{TT} && K_{T \partial T}
+%             \\
+%             K_{\partial T T} && K_{\partial T \partial T}
+%         \end{bmatrix}
+%         & = \sum_{(\tensori{x}{}_Q, w_Q^T)} (w_Q^T \cdot [B(\tensori{x}{}_Q)]^t \cdot [\tensoriv{C}{}(\tensori{x}{}_Q)] \cdot [B(\tensori{x}{}_Q)]) + \frac{\beta_{mec}}{h_T} ([S]^t \cdot [S])
+%     \end{aligned}
+% \end{equation}
+% %
+% où on a introduit $\tensoriv{C}{}$ l'opérateur tangent cohérent.
+% En particulier, on peut exprimer (\ref{hho_incremenal}) sous la forme condensée (\ref{hho_incremental_cond}) par réalsation d'un complément de Schur:
+
+% \begin{equation}
+%     \label{hho_incremental_cond}
+%     [K_{cond}] \cdot [\delta U_{\partial T}] = -[R_{cond}]
+% \end{equation}
+
+\subsection{Résolution par condensation statique}
+
+Le problème global incrémental (\ref{eq_hho2}) est alors l'assemblage des systèmes élémentaires condensés (\ref{hho_incremental_cond}), dont la résolution consiste en un algorithme de Newton sur l'incrément des inconnues de faces uniquement. Ce schéma de résolution par condensation statique dont on donne le principe Figure \ref{res_cond0} exploite la relation linéaire entre l'incrément des inconnues de cellules et celui des faces.
+    
+\begin{figure}[H]
+\centering
+\includegraphics[width=14.cm]{img/reso1.png}
+\caption{Description schématique de l'algorithme de condensation statique}
+\label{res_cond0}
+\end{figure}
+
+\subsection{Résolution par équilibre de cellule}
+
+Nous proposons une alternative à l'algorithme de résolution par condensation statique, postulant une relation implicite entre l'incrément des inconnues de cellule est celui des faces et consistant à résoudre localement un système non-linéaire sur l'incrément de cellule à incrément de faces fixé, afin de vérifier l'équilibre de la cellule avec ses faces à chaque itération du problème global. Ce nouveau schéma de résolution est décrit Figure \ref{res_cond}, où on note $i$ une itération de Newton pour la résolution du problème global sur l'ensemble des inconnues de faces, et $j$ une itération de Newton pour la résolution du problème local sur les inconnues de cellule dans un élément $T$:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14.cm]{img/reso0.png}
+\caption{Description schématique de l'algorithme d'équilibre de cellule}
+\label{res_cond}
+\end{figure}

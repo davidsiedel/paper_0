@@ -1,0 +1,85 @@
+The goal of this section is to evaluate the proposed HHO method on two and three-dimensional benchmarks from the
+literature: (i) a necking of a 2D rectangular bar subjected to uniaxial extension, (ii) a quasi-incompressible sphere under internal pressure.
+We compare
+our results to the analytical solution whenever available or to numerical results obtained using the industrial open-source
+FEM software code aster. In this case, we consider a linear, respectively, quadratic, cG formulation, referred to as
+Q1, respectively, T2 or Q2, when full integration is used, or, Q2-RI when reduced integration is used, depending on the
+mesh, and a three-field mixed formulation in which the unknowns are the displacement, the pressure, and the volumetric
+strain fields referred to as UPG 6 ; in the UPG method, the displacement field is quadratic, whereas both the pressure and
+the volumetric strain fields are linear. The conforming Q1, T2, and Q2 methods with full integration, contrary to the
+Q2-RI method with reduced integration in most of the situations, are known to present volumetric locking due to plastic
+incompressibility, whereas the UPG method is known to be robust but costly. Numerical results obtained using the UPG
+method are used as a reference solution whenever an analytical solution is not available.
+The nonlinear isotropic plasticity model with a von Mises yield criterion described in Section ABOVE is used for the test
+cases. For the first three test cases, strain-hardening plasticity is considered with the following material parameters: Young
+modulus E = 206.9 GPa, Poisson ratio nu = 0.29, hardening parameter H = 129.2 MPa, initial yield stress sig = 450 MPa,
+infinite yield stress sigunf = 715 MPa, and saturation parameter $\delta$ = 16.93. For the fourth case, perfect plasticity is considered
+with the following material parameters: Young modulus E = 28.85 MPa, Poisson ratio nu = 0.499, hardening
+parameter H = 0 MPa, initial and infinite yield stresses 6 MPa, and saturation parameter 0. Moreover, for the two-dimensional test cases (i) and (ii), we assume additionally a plane strain condition. In the numerical
+experiments reported in this section, the stabilization parameter is taken to be 1, and all the quadratures
+use positive weights. In particular, for the HHO method, we employ a quadrature of order k Q = 2k for the behavior cell
+integration. We employ the notation HHO(k, l) when using face polynomials of order k and cell polynomials of order l.
+In Section 5, we perform further numerical investigations to test other aspects of HHO methods such as the support of
+general meshes with possibly nonconforming interfaces, the possibility of considering the lowest-order case k = 0, and
+the dependence on the stabilization parameter $\beta$.
+
+\subsection{Necking of a 2D rectangular bar}
+
+In this first benchmark, we consider a 2D rectangular bar with an initial imperfection. The bar is subjected to uniaxial
+extension. This example has been studied previously by many authors as a necking problem 3,5,7,8,22 and can be used to
+test the robustness of the different methods. The bar has a length of 53.334 mm and a variable width from an initial width
+value of 12.826 mm at the top to a width of 12.595 mm at the center of the bar to create a geometric imperfection. A vertical
+displacement u y = 5mm is imposed at both ends, as shown in Figure 2A. For symmetry reasons, only one-quarter of the
+bar is discretized, and the mesh is composed of 400 quadrangles (see Figure 2B). The load-displacement curve is plotted
+in Figure 2C. We observe that, except for Q1, all the other methods give very similar results. Moreover, the equivalent
+plastic strain p, respectively, the trace of the Cauchy stress tensor sigma, are shown in Figure 3, respectively, in Figure 4, at
+the quadrature points on the final configuration. A sign of locking is the presence of strong oscillations in the trace of
+the Cauchy stress tensor sigma. We notice that the cG formulations Q1 and Q2 lock, contrary to the HHO, Q2-RI, and UPG
+methods that deliver similar results. We remark, however, that the results for HHO(1;1), HHO(1;2), and Q2-RI are slightly
+less smooth than for HHO(2;2), HHO(2;3), and UPG. The reason is that, on a fixed mesh, the three former methods have
+less quadrature points than the three latter ones (see Table 1) (HHO(2;2), HHO(2;3), and UPG have the same number of
+quadrature points). Therefore, the stress is evaluated using less points in HHO(1;1), HHO(1;2), and Q2-RI. It is sufficient
+to refine the mesh or to increase the order of the quadrature by two in HHO(1;1) and HHO(1;2) to retrieve similar results
+to those for the three other methods (not shown for brevity).
+%
+%
+%
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10.cm]{img_calcs/ssna_concat.png}
+    \caption{schematic representation of the model problem}
+    \label{fig_ssnaall}
+\end{figure}
+
+\subsection{Quasi-incompressible sphere under internal pressure}
+
+This last benchmark 6 consists of a quasi-incompressible sphere under internal pressure for which an analytical solution
+is known when the entire sphere has reached a plastic state. This benchmark is particularly challenging compared to
+the previous ones since we consider here perfect plasticity. The sphere has an inner radius R in = 0.8 mm and an outer
+radius R out = 1 mm. An internal radial pressure P is imposed. For symmetry reasons, only one-eighth of the sphere is
+discretized, and the mesh is composed of 1580 tetrahedra (see Figure 10A). The simulation is performed until the limit
+load corresponding to an internal pressure 2.54 MPa is reached.
+The equivalent plastic strain p is plotted for
+HHO(1;2) in Figure 10B, and the trace of the Cauchy stress tensor simga is compared for HHO, UPG, and T2 methods in
+Figure 11 at all the quadrature points on the final configuration for the limit load. We notice that the quadratic element T2
+locks, whereas HHO and UPG do not present any sign of locking and produce results that are very close to the analytical
+solution. However, the trace of the Cauchy stress tensor simga is slightly more dispersed around the analytical solution for
+HHO(2;2) and HHO(2;3) than for HHO(1;1) and HHO(1;2) near the outer boundary. For this test case, we do not expect
+that HHO(2;2) and HHO(2;3) will deliver more accurate solutions than HHO(1;1) and HHO(1;2) since the geometry is
+discretized using tetrahedra with planar faces.
+We next investigate the influence of the quadrature order k Q on the accuracy of the solution. The trace of the Cauchy
+stress tensor simga is compared for HHO(1;1), HHO(2;2), and UPG methods in Figure 12 at all the quadrature points on the
+final configuration for the limit load, and for a quadrature order k Q higher than the one employed in Figure 11 (HHO(1;2)
+and HHO(2;3) give similar results and are not shown for brevity). We remark that, when we increase the quadrature
+order, UPG locks for quasi-incompressible finite deformations, whereas HHO does not lock, and the results are (only) a
+bit more dispersed around the analytical solution. Moreover, HHO(2;2) is less sensitive than HHO(1;1) to the choice of
+the quadrature order k Q . Note that this problem is not present for HHO methods with small deformations. Furthermore,
+this sensitivity to the quadrature order seems to be absent for finite deformations when the elastic deformations are
+compressible (the plastic deformations are still incompressible). To illustrate this claim, we perform the same simulations
+as before but for a compressible material. The Poisson ratio is taken now as nu = 0.3 (recall that we used nu = 0.499
+in the quasi-incompressible case), whereas the other material parameters are unchanged. Unfortunately, an analytical
+solution is no longer available in the compressible case. We compare again the trace of the Cauchy stress tensor simga for
+HHO(1;1), HHO(2;2), and UPG methods in Figure 13 at all the quadrature points on the final configuration and for
+different quadrature orders k Q . We observe a quite marginal dependence on the quadrature order for HHO methods (as in
+the quasi-incompressible case), whereas the UPG method still locks if the order of the quadrature is increased. Moreover,
+in the compressible case, HHO(2;2) gives a more accurate solution than HHO(1;1).

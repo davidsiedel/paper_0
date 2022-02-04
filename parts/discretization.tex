@@ -1,0 +1,250 @@
+In the idea of \eqref{eq_hu_washizu_composite}, let consider that $\bodyLag$ is made out of a composition of $N_{\cell}$ distinct open polyhedral subsets with planar faces $\matI \subset \bodyLag$ called cells or elements, collected in the set $\HybridMesh(\bodyLag) = \{ \matI \subset \bodyLag \ \vert \ 1 \leq i \leq N_{\cell} \}$, called a triangulation or a mesh of the domain $\bodyLag$ as is usual with the standard Finite Element method.
+%
+%
+%
+Considering that each of these cells behave like a composite material as defined ABOVE, such that they depend on both a bulk and boundary displacement unknowns, where two elements sharing a boundary also share the same boundary unknown, \textit{i.e.} for any $(\cell, \cell') \in \HybridMesh(\bodyLag)$ such that $\dCell \cap \dCell' \neq \emptyset$, there is $\tensori{u}{}_{\dCell \cap \dCell'} = \tensori{u}{}_{\dCell' \cap \dCell}$, one naturally introduces $\dHybridMesh(\bodyLag) = \{ F_i \subset \bodyLag \ \vert \ 1 \leq i \leq N_{F} \}$ the skeleton of the mesh, collecting all element faces $F_i$ in the mesh, where $N_{F}$ denotes the numfer of faces in the mesh.
+%
+%
+%
+A face $F \subset \mathbb{R}^{d - 1}$ is a closed subset of $\bodyLag$, and either there are two cells $\cell$ and $\cell'$ such that $F = \dCell \cap \dCell'$ ($F$ is then an interior face), or there is a single cell $\cell$ such that $F = \dCell \cap \partial \Omega$ ($F$ is then an exterior face).
+Let $\dHybridMesh{}^i(\bodyLag)$ denote the set of interior faces, and $\dHybridMesh{}^e(\bodyLag)$ that of exterior ones.
+$\dHybridMesh{}^e(\bodyLag)$ is partitioned into $\dHybridMesh{}_{D}^e(\bodyLag) = \{ F \in \dHybridMesh{}^e(\bodyLag) \ \vert \ F \subset \partial_D \bodyLag \}$ the set of exterior faces imposed to prescribed Dirichlet boundary conditions, and into $\dHybridMesh{}_{N}^e(\bodyLag) = \{ F \in \dHybridMesh{}^e(\bodyLag) \ \vert \ F \subset \partial_N \bodyLag \}$ the set of exterior faces imposed to prescribed Neumann boundary conditions.
+%
+%
+%
+Similarily, for any element $\cell \in \mathcal{T}$, let $\mathcal{F}(\cell) = \{ F \in \dHybridMesh \ \vert \ F \subset \dCell \}$ the set of faces composing the boundary of $\cell$.
+%
+The composition of both $\mathcal{T}(\bodyLag)$ and $\dHybridMesh{}(\bodyLag)$ forms the hybrid mesh
+% $\overline{\mathcal{T}}({\bodyLag}) = \{T \subset \bodyLag, F \subset \bodyLag \ \vert \ T \in \mathcal{T}(\bodyLag) \ \vert \ F \in \mathcal{F}(\bodyLag) \}$.
+$\HybridMeshWhole({\bodyLag}) = \{ \mathcal{T}(\bodyLag), \mathcal{F}(\bodyLag) \}$.
+%
+%
+%
+
+Contrary to the standard finite element method that consists in seeking a global solution in a regular enough space over the whole mesh, we consider here a much broader space that consists in $\displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell$ the collection of all regular enough displacements element-wise, such that displacement jumps are actually possible across elements.
+Similarily, we consider $\displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)$ the space of all regular enough displacements face-wise for the skeleton unknown, such that the global solution space $\hybridDisplacementSpaceHybridMesh = \displacementSpaceHybridMesh \times \displacementSpaceDHybridMesh$ for the whole problem is simply the assembly of all element and face spaces in the mesh.
+% The global unknown is then sought in the space $\displacementSpaceHybridMesh \times \displacementSpaceDHybridMesh$
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_space_def}
+%     \begin{aligned}
+%         \displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell
+%         &&
+%         \text{and}
+%         &&
+%         \displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)
+%     \end{aligned}
+% \end{equation}
+
+
+
+
+% , where both cells and faces are considered as part of the support for defining
+The global mechanical problem of $\bodyLag$ reads : find the global displacement unknown pair $(\tensori{u}{}_{\HybridMesh}, \tensori{u}{}_{\dHybridMesh}) \in \displacementSpaceHybridMesh \times \displacementSpaceDHybridMesh$ verifying $\tensori{u}{}_{\dHybridMesh} \vert_{\dirichletBodyLag} = \dirichletLag$ on $\dirichletBodyLag$ such that
+%
+%
+%
+\begin{equation}
+    \label{eq_0018kdk}
+    \begin{aligned}
+        \delta J_{\HybridMesh}^{\text{int}} - \delta J_{\HybridMesh}^{\text{ext}}
+        =
+        0
+    \end{aligned}
+\end{equation}
+%
+%
+%
+with
+%
+%
+%
+\begin{subequations}
+    \label{eq_0nonamemeerg}
+        \begin{alignat}{3}
+            \delta J_{\HybridMesh}^{\text{int}} & = 
+            \sum_{\cell \in \HybridMesh(\bodyLag)}
+            \int_{\cell}
+            \tensorii{P}{}_{\cell}(\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}))
+            :
+            \tensorii{G}{}_{\cell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
+            % \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_\cell} : \delta \tensorii{G}{}_{\cell}
+            +
+            \int_{\dCell} (\beta / h_{\cell})
+            % (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell})
+            % \tensori{Z}{}_{\dCell{}}
+            \tensori{Z}{}_{\dCell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})
+            \cdot
+            % (\delta \tensori{u}{}_{\dCell} - \delta \tensori{u}{}_{\cell} \vert_{\dCell{}})
+            % \delta \tensori{Z}{}_{\dCell{}}
+            \tensori{Z}{}_{\dCell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
+            \\
+            \delta J_{\HybridMesh}^{\text{ext}} & = 
+            \sum_{F \in \dHybridMesh{}_{N}^e(\bodyLag)}
+            \int_{F} \neumannLag \cdot \delta \tensori{u}{}_{F}
+            +
+            \sum_{\cell \in \HybridMesh(\bodyLag)}
+            \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
+    \end{alignat}
+\end{subequations}
+%
+%
+%
+% where $\displacementSpaceHybridMesh$ (respectively $\displacementSpaceDHybridMesh$) denotes the space of all globally kinematically admissible cell (respectively face) displacement fields,
+% and
+where for each element $\cell \in \mathcal{T}$, the boundary displacement field $\tensori{v}{}_{\dCell}$ is such that $\tensori{v}{}_{\dCell} = \tensori{v}{}_{F}$ on $F$ for every $F \in \mathcal{F}(\cell)$, and the displacement space of its boundary $\displacementSpaceDCell$ is the collection of displacement spaces in faces composing it such that $\displacementSpaceDCell = \prod_{F \in \mathcal{F}(\cell)} V(F)$.
+
+% Contrary to the standard finite element method that consists in seeking a global solution in a regular enough space over the whole mesh, we consider here a much broader space that consists in the collection of all regular enough displacements element-wise, such that displacement jumps are actually possible across elements.
+% Similarily, we consider the space of all regular enough displacements face-wise for the skeleton unknown, such that the global unknown space for the whole problem is simply the assembly of all element and face spaces in the mesh :
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_space_def}
+%     \begin{aligned}
+%         \displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell
+%         &&
+%         \text{and}
+%         &&
+%         \displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% Similarily, for each element $\cell \in \mathcal{T}$, the displacement space of its boundary $\displacementSpaceDCell$ is the collection of the face displacement spaces to which it is connected such that $\displacementSpaceDCell = \prod_{F \in \mathcal{F}(\cell)} V(F)$.
+
+A polynomial approximation of the global solution is then sought in a subspace of $\displacementSpaceHybridMesh \times \displacementSpaceDHybridMesh$, and for each element $\cell \in \mathcal{T}$, we denote $\discreteDisplacementSpaceCell \subset \displacementSpaceCell$ the approximation displacement space in the cell, and $\discreteDisplacementSpaceDCell \subset \displacementSpaceDCell$ that on the boundary. Moreover, though they are not primal unknowns of the problem, one need to define $\discreteGradSpaceCell \subset \gradSpaceCell$ the space used to build the discrete reconstructed gradient and $\discreteStressSpaceCell \subset \stressSpaceCell$ that chosen for the discrete stress :
+%
+%
+%
+\begin{equation*}
+    \begin{aligned}
+        \discreteDisplacementSpaceCell & = P^l(\cell, \mathbb{R}^{d})
+        \\
+        \discreteDisplacementSpaceDCell & = P^k(\dCell, \mathbb{R}^{d})
+        \\
+        \discreteGradSpaceCell & = P^k(\cell, \mathbb{R}^{d \times d})
+        \\
+        \discreteStressSpaceCell & = P^k(\cell, \mathbb{R}^{d \times d})
+    \end{aligned}
+\end{equation*}
+%
+%
+%
+where the cell displacement polynomial order $l$ might be chosen different from the face displacement order $k$ such that $k - 1 \leq l \leq k + 1$.
+% The jump function $\tensori{Z}{}_{\dCell}$ can be tweaked in order to act on the convergence order of the approximated solution
+% LES STABILIZATIONS SONT A LORIOGINE DE LORDRE DE CONV
+% Since two polynomial orders are available to define the displacement approximation,
+Accounting for the possible different polynomial order bteween the cell and faces, one can specify a discrete jump function in a natural way such that it delivers the displacement difference pointwise for any displacement pair $(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteDisplacementSpaceCell \times \discreteDisplacementSpaceDCell$ :
+%
+%
+%
+\begin{equation}
+    \begin{aligned}
+        \tensori{Z}{}_{\dCell}^{HDG}(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) = \Pi^k_{\dCell{}} (
+            \tensori{v}{}_{\dCell}^k - \tensori{v}{}_{\cell}^l \vert_{\dCell}
+        )
+    \end{aligned}
+\end{equation}
+%
+%
+%
+Where $\Pi^k_{\dCell{}}$ denotes the orthogonal projector onto $\discreteDisplacementSpaceDCell$.
+This straightforward discrete jump function is at the origin of the Hybrid Discontinuous Galerkin method, and grants a convergence of order $k$ in the energy norm.
+A richer discrete jump function $\tensori{Z}{}_{\dCell}^{HHO}$ prviding a convergence of order $k + 1$ in the energy norm was introduced in \cite{di_pietro_discontinuous-skeletal_2015}, hence giving the method its name, such that :
+%
+%
+%
+\begin{equation}
+    \begin{aligned}
+        \tensori{Z}{}_{\dCell}^{HHO}(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) = \Pi^k_{\dCell{}} (
+            \tensori{v}{}_{\dCell}^k - \tensori{v}{}_{\cell}^l \vert_{\dCell}
+            -
+            (
+                (\tensori{I}{}_{\cell}^{k + 1} - \Pi_{\cell}^k) (
+                    \tensori{D}{}_\cell^{k + 1}
+                )
+            ) \vert_{\dCell{}}
+        )
+    \end{aligned}
+\end{equation}
+%
+%
+%
+where $\Pi_{\cell}^k$ is the projector onto $P^{k}(\cell, \mathbb{R}^{d})$, and $\tensori{D}{}_{\cell}^{k+1} \in \potentialSpaceCell$ denotes a higher order discrete displacement in $\potentialSpaceCell{} = P^{k + 1}(\cell, \mathbb{R}^{d})$ solving the following linear problem with any displacement pair $(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteDisplacementSpaceCell \times \discreteDisplacementSpaceDCell$ :
+%
+%
+%
+\begin{subequations}
+    \label{eq_potential}
+        \begin{alignat}{3}
+            \int_\cell \nabla \tensori{D}{}_{\cell}^{k+1} : \nabla \tensori{w}{}_{\cell}^{k+1}
+            & =
+            \int_\cell \nabla \tensori{v}{}_{\cell}^l : \nabla \tensori{w}{}_{\cell}^{k+1}
+            +
+            \int_{\dCell} (\tensori{v}{}_{\dCell}^k - \tensori{v}{}_{\cell}^l) \cdot \nabla \tensori{w}{}_{\cell}^{k+1} \cdot \tensori{n}{}
+            \ \ \ \ \ \ \ \ 
+            &&
+            \forall \tensori{w}{}_{\cell}^{k+1} \in {P}{}^{k+1}(\cell, \mathbb{R}^d)
+            \label{eq_potential:eq0}
+            \\
+            \int_\cell \tensori{D}{}_{\cell}^{k+1} & = \int_\cell \tensori{v}{}_{\cell}^{l}
+            \label{eq_potential:eq1}
+    \end{alignat}
+\end{subequations}
+%
+%
+%
+
+With obvious notations, let 
+$\discreteDisplacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \discreteDisplacementSpaceCell$ the global discrete cell displacement space,
+$\discreteDisplacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V^h(F)$ the global discrete face displacement space, and
+$\discreteHybridDisplacementSpaceHybridMesh = \discreteDisplacementSpaceHybridMesh \times \discreteDisplacementSpaceDHybridMesh$ the global unknwon approximation space.
+The global problem in discrete form finally writes : find the global displacement unknown pair $(\tensori{u}{}_{\HybridMesh}^l, \tensori{u}{}_{\dHybridMesh}^k) \in \discreteDisplacementSpaceHybridMesh \times \discreteDisplacementSpaceDHybridMesh$ verifying $\tensori{u}{}_{\dHybridMesh}^k \vert_{\dirichletBodyLag} = \dirichletLag$ on $\dirichletBodyLag$ such that
+%
+%
+%
+\begin{equation}
+    \label{eq_0018kdk}
+    \begin{aligned}
+        \delta J_{\HybridMesh}^{\text{int}} - \delta J_{\HybridMesh}^{\text{ext}}
+        =
+        0
+    \end{aligned}
+\end{equation}
+%
+%
+%
+with
+%
+%
+%
+\begin{subequations}
+    \label{eq_0nonamemeergjj}
+        \begin{alignat}{3}
+            \delta J_{\HybridMesh}^{\text{int}} & = 
+            \sum_{\cell \in \HybridMesh(\bodyLag)}
+            \int_{\cell}
+            \tensorii{P}{}_{\cell}^k(\tensorii{G}{}_{\cell}^k(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\dCell}^k))
+            :
+            \tensorii{G}{}_{\cell}^k(\delta \tensori{u}{}_{\cell}^l, \delta \tensori{u}{}_{\dCell}^k)
+            % \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_\cell} : \delta \tensorii{G}{}_{\cell}
+            +
+            \int_{\dCell} (\beta / h_{\cell})
+            \tensori{Z}{}_{\dCell}^{HHO}(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\dCell}^k)
+            % \tensori{Z}{}_{\dCell{}}
+            \cdot
+            \tensori{Z}{}_{\dCell}^{HHO}(\delta \tensori{u}{}_{\cell}^l, \delta \tensori{u}{}_{\dCell}^k)
+            % \delta \tensori{Z}{}_{\dCell{}}
+            \\
+            \delta J_{\HybridMesh}^{\text{ext}} & = 
+            \sum_{F \in \dHybridMesh{}_{N}^e(\bodyLag)}
+            \int_{F} \neumannLag \cdot \delta \tensori{u}{}_{F}^k
+            +
+            \sum_{\cell \in \HybridMesh(\bodyLag)}
+            \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}^l
+    \end{alignat}
+\end{subequations}
