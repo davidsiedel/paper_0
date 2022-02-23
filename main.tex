@@ -141,6 +141,7 @@
 \usepackage{listings}
 \usepackage{multicol}
 \usepackage{import}
+\usepackage{comment}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}{Corollary}[theorem]
@@ -153,8 +154,8 @@
 \newcommand\bodyLag{\Omega}
 \newcommand\dBodyEul{\partial \Omega_t}
 \newcommand\dBodyLag{\partial \Omega}
-\newcommand\dirichletBodyEul{\partial_d \Omega_t}
-\newcommand\neumannBodyEul{\partial_n \Omega_t}
+\newcommand\dirichletBoundaryEul{\partial_d \Omega_t}
+\newcommand\neumannBoundaryEul{\partial_n \Omega_t}
 \newcommand\dirichletBodyLag{\partial_D \Omega}
 \newcommand\neumannBodyLag{\partial_N \Omega}
 
@@ -254,8 +255,13 @@
 \newcommand\displacementSpaceCrown{U(\Crown)}
 \newcommand\displacementSpaceDCrown{V(\dCrown)}
 
+\newcommand{\commentTH}[1]{
+  \textcolor{blue}{\textbf{Commentaire T.H.}~: #1}
+}
+
 \begin{document}
 
+\includecomment{comment_TH}
 % \begin{multicols}{0}
 
 \begin{frontmatter}
@@ -314,25 +320,31 @@
     communities.
 
     This paper derives Hybrid High Order method from the
-    classical Hu–Washizu functional and discusses the implementation of
-    the method using notations closed to the one used in standard finite
-    elements textbooks. From the point of view of numerical
-    performances, the elimination of the cell degrees of freedom is
-    mandory to to reduce the size of the stiffness matrix of the system.
-    The standard static condensation, is presented, as well as a novel
-    strategy called "cell equilibrium". Avantages and disadvantages of
-    both strategies are discussed.
+    classical Hu–Washizu functional.
+
+    Practical implementation of the method is discussed in
+    depth using notations closed to the ones used in standard finite
+    elements textbooks, highlighting the use of polyhedral cells and the
+    use of approximation spaces based on polynomials of abritrary
+    orders.
+
+    From the point of view of numerical performances, the
+    elimination of the cell degrees of freedom is mandory to to reduce
+    the size of the stiffness matrix. The standard static condensation,
+    is presented, as well as a novel strategy called "cell equilibrium".
+    Avantages and disadvantages of both strategies are discussed.
     
     The resolution of axisymmetrical problems, which has seldom,
     if ever, been discussed in the litterature, is then presented.
 
     Numerical examples prove the robustness of the method
-    with regards to volumetric locking.
+    with regards to volumetric locking....
   \end{abstract}
   
   \begin{keyword}
     Computational mechanics \sep Hybrid High Order
-    method \sep Volumetric locking \sep Static condensation \sep
+    method \sep Static condensation \sep Cell equilibrium algorithm \sep
+    Volumetric locking \sep Axisymmetric modelling hypothesis
   \end{keyword}
   
 \end{frontmatter}

@@ -1,31 +1,130 @@
 \label{sec_model_problem}
+ 
+Paragraph~\ref{sec:Hu_Washizu_functional}
+introduces the classical Hu–Washizu functional to describe the
+quasi-static equilibrium of a body submitted to external load and the
+main notations used in this paper. For the sake of simplicity, the body
+is assumed hyper-elastic in this section.
 
-Let $d \in  \{1, 2, 3\}$ the euclidean dimension of the cartesian space $\mathbb{R}{}^{d}$. Let $\bodyEul \subset \mathbb{R}{}^{d}$ a solid body with boundary $\dBodyEul \subset \mathbb{R}{}^{d - 1}$, that deforms in the current configuration at some time $t > 0$ under the body forces $\loadEul$. It is subjected to a prescribed displacement $\dirichletEul$ on the Dirichlet boundary $\dirichletBodyEul$, and to a contact load $\neumannEul{}$ on the Neumann boundary $\neumannBodyEul$, such that $\dBodyEul = \dirichletBodyEul \cup \neumannBodyEul$ and $\dirichletBodyEul{} \cap \neumannBodyEul = \emptyset$.
+Paragraph~\ref{sec:HHO} introduces the key idea
+of the HHO method, which is to divide the domain in arbitrary subdomains
+connected by cohesive interfaces and to apply the Hu–Washizu functional
+to each sub-domains.
 
-The initial configuration of the body at time $t = 0$ (see Figure \ref{fig_setting}) is denoted $\bodyLag \subset \mathbb{R}{}^{d}$ with respective Dirichlet and Neumann boundaries $\dirichletBodyLag$ and $\neumannBodyLag$. It is subjected to body forces $\loadLag$, an imposed displacement $\dirichletLag$ on $\dirichletBodyLag$ and contact force $\neumannLag$ on $\neumannBodyLag$. The transformation mapping $\tensori{\Phi}$ takes a point $\tensori{x} \in \bodyLag$ from the initial configuration to $\tensori{x}{}_t \in \bodyEul$ in the current configuration.
+\subsection{The standard Hu–Washizu functional}
+\label{sec:Hu_Washizu_functional}
 
-Let $\cell \subset \bodyLag$ an arbitrary open subset of the solid body, with boundary $\dCell \subset \mathbb{R}^{d - 1}$
-which is split into an eventual Dirichlet boundary $\dirichletCell \subset \dirichletBodyLag$ subjected to an imposed displacement $\dirichletLag$ if $\cell$ shares a boundary with $\dirichletBodyLag$ and into the Neumann Boundary $\neumannCell \subset \neumannBodyLag \cup \bodyLag$ with contact load $\neumannCellLoad$ such that :
-%
-% 
-% 
+Let us consider the equilibrium of a an hyperelastic solid body. The
+reference and current configurations of the body are denoted
+respectively \(\bodyLag\) and \(\bodyEul\). The reference and current
+boundary of the body are denoted respectively \(\dBodyLag\) and
+\(\dBodyEul\).
+
+The body is subjected to body forces $\loadEul$ in \(\bodyEul\),
+contact loads $\neumannEul{}$ on a boundary $\neumannBoundaryEul$ and
+prescribed displacements $\dirichletEul$ on the boundary
+$\dirichletBoundaryEul$. The boundaries \(\neumannBoundaryEul\) and
+\(\dirichletBoundaryEul\) form a partition of the boundary
+\(\dBodyEul\), i.e. $\dBodyEul = \dirichletBoundaryEul \cup
+\neumannBoundaryEul$ and $\dirichletBoundaryEul{} \cap
+\neumannBoundaryEul = \emptyset$.
+
+The three fields Hu–Washizu principle characterizes the equilibrium
+of the body by the minization of the following functional:
+\[
+J=
+\]
+where:
+\begin{itemize}
+\item \(\vec{u}\) is the displacement field
+\item ....
+\end{itemize}
+
+Petit developpement pour identifier G et du_dX, etc.. Du coup, on retrouve le PTV.
+
+
+
+%, that deforms in the current
+%configuration at some time $t > 0$ under the . It
+%is subjected to a prescribed displacement $\dirichletEul$ on the
+%Dirichlet boundary $\dirichletBoundaryEul$, and to a contact load
+%$\neumannEul{}$ on the Neumann boundary $\neumannBoundaryEul$, such that
+%$\dBodyEul = \dirichletBoundaryEul \cup \neumannBoundaryEul$ and
+%$\dirichletBoundaryEul{} \cap \neumannBoundaryEul = \emptyset$.
+
+\subsection{Introduction of abitrary cohesive interfaces}
+\ref{sec:HHO}
+
+In this section, we divide the solid in arbitrary subdomains and
+introduce between those sub domains a cohesive layer. We then apply the
+Hu–Washizu principle to each individual subdomain and its surrounding
+layer. The size of the layer is then reduce to an interface, introducing
+displacement jumps between the subdomain and the interface.
+
+This procedure introduces naturally the main ingredients of the HHO
+methods:
+
+\begin{itemize}
+  \item new unknows, the displacements at the interface and the
+  displacements jumps between the subdomain and the interface.
+  \item a new definition of the gradient, which is called
+  \textit{reconstructed gradient} in the HDG and HHO litterature
+  \item additional terms to Hu–Washizu functional coined
+  stabilization terms.
+\end{itemize}
+
+\subsubsection{Subdomains, additive layers and local Hu–Washizu principle}
+
+Let $d \in \{1, 2, 3\}$ the euclidean dimension of the cartesian
+space $\mathbb{R}{}^{d}$. Let $\bodyEul \subset \mathbb{R}{}^{d}$ a
+solid body with boundary $\dBodyEul \subset \mathbb{R}{}^{d - 1}$, that
+deforms in the current configuration at some time $t > 0$ under the body
+forces $\loadEul$. It is subjected to a prescribed displacement
+$\dirichletEul$ on the Dirichlet boundary $\dirichletBoundaryEul$, and to a
+contact load $\neumannEul{}$ on the Neumann boundary $\neumannBoundaryEul$,
+such that $\dBodyEul = \dirichletBoundaryEul \cup \neumannBoundaryEul$ and
+$\dirichletBoundaryEul{} \cap \neumannBoundaryEul = \emptyset$.
+
+The initial configuration of the body at time $t = 0$ (see Figure
+\ref{fig_setting}) is denoted $\bodyLag \subset \mathbb{R}{}^{d}$ with
+respective Dirichlet and Neumann boundaries $\dirichletBodyLag$ and
+$\neumannBodyLag$. It is subjected to body forces $\loadLag$, an imposed
+displacement $\dirichletLag$ on $\dirichletBodyLag$ and contact force
+$\neumannLag$ on $\neumannBodyLag$. The transformation mapping
+$\tensori{\Phi}$ takes a point $\tensori{x} \in \bodyLag$ from the
+initial configuration to $\tensori{x}{}_t \in \bodyEul$ in the current
+configuration.
+
+Let $\cell \subset \bodyLag$ an arbitrary open subset of the solid
+body, with boundary $\dCell \subset \mathbb{R}^{d - 1}$ which is split
+into an eventual Dirichlet boundary $\dirichletCell \subset
+\dirichletBodyLag$ subjected to an imposed displacement $\dirichletLag$
+if $\cell$ shares a boundary with $\dirichletBodyLag$ and into the
+Neumann Boundary $\neumannCell \subset \neumannBodyLag \cup \bodyLag$
+with contact load $\neumannCellLoad$ such that : % %  % 
 \begin{equation}
-    \label{eq_contact_force}
-    \begin{aligned}
-        \neumannCellLoad = 
-        \left\{
-            \begin{array}{ll}
-                \tensori{t}{}_{\bodyLag \backslash \cell \rightarrow \cell} & \mbox{on } \neumannCell \cap \bodyLag \backslash \cell
-                \\
-                \neumannLag & \mbox{on } \neumannCell \cap \neumannBodyLag
-            \end{array}
-        \right.
-    \end{aligned}
+  \label{eq_contact_force}
+  \begin{aligned}
+    \neumannCellLoad = \left\{
+    \begin{array}{ll}
+      \tensori{t}{}_{\bodyLag \backslash
+        \cell \rightarrow \cell} & \mbox{on } \neumannCell \cap \bodyLag
+      \backslash \cell \\
+      \neumannLag & \mbox{on } \neumannCell \cap
+      \neumannBodyLag
+    \end{array}
+    \right.
+  \end{aligned}
 \end{equation}
+
 % 
 % 
 %
-with $\tensori{t}{}_{\bodyLag \backslash \cell \rightarrow \cell}$ the contact force applied by the surrounding part of the body $\bodyLag$ onto the subset $\cell$, and $\dirichletCell \cap \neumannCell = \emptyset$.
+with $\tensori{t}{}_{\bodyLag \backslash \cell \rightarrow \cell}$
+the contact force applied by the surrounding part of the body $\bodyLag$
+onto the subset $\cell$, and $\dirichletCell \cap \neumannCell =
+\emptyset$.
+
 %
 % 
 % 
