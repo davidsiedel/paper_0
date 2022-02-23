@@ -259,58 +259,82 @@
 % \begin{multicols}{0}
 
 \begin{frontmatter}
+  
+  %% Title, authors and addresses
+  
+  %% use the tnoteref command within \title for footnotes;
+  %% use the tnotetext command for the associated footnote;
+  %% use the fnref command within \author or \address for footnotes;
+  %% use the fntext command for the associated footnote;
+  %% use the corref command within \author for corresponding author footnotes;
+  %% use the cortext command for the associated footnote;
+  %% use the ead command for the email address,
+  %% and the form \ead[url] for the home page:
+  %%
+  %% \title{Title\tnoteref{label1}}
+  %% \tnotetext[label1]{}
+  %% \author{Name\corref{cor1}\fnref{label2}}
+  %% \ead{email address}
+  %% \ead[url]{home page}
+  %% \fntext[label2]{}
+  %% \cortext[cor1]{}
+  %% \address{Address\fnref{label3}}
+  %% \fntext[label3]{}
+  
+  \dochead{}
+  %% Use \dochead if there is an article header, e.g. \dochead{Short communication}
+  %% \dochead can also be used to include a conference title, if directed by the editors
+  %% e.g. \dochead{17th International Conference on Dynamical Processes in Excited States of Solids}
 
-%% Title, authors and addresses
+  \title{}
+  
+  %% use optional labels to link authors explicitly to addresses:
+  %% \author[label1,label2]{<author name>}
+  %% \address[label1]{<address>}
+  %% \address[label2]{<address>}
+  
+  \author{}
+  
+  \address{}
+  
+  \begin{abstract}
+    The Hybrid High Order (HHO) method is a powerful
+    discretization method which has only been recently applied from to
+    non linear computational mechanics.
 
-%% use the tnoteref command within \title for footnotes;
-%% use the tnotetext command for the associated footnote;
-%% use the fnref command within \author or \address for footnotes;
-%% use the fntext command for the associated footnote;
-%% use the corref command within \author for corresponding author footnotes;
-%% use the cortext command for the associated footnote;
-%% use the ead command for the email address,
-%% and the form \ead[url] for the home page:
-%%
-%% \title{Title\tnoteref{label1}}
-%% \tnotetext[label1]{}
-%% \author{Name\corref{cor1}\fnref{label2}}
-%% \ead{email address}
-%% \ead[url]{home page}
-%% \fntext[label2]{}
-%% \cortext[cor1]{}
-%% \address{Address\fnref{label3}}
-%% \fntext[label3]{}
+    The Hybrid High Order method divides the domain of interest
+    in cells of abitrary polyhedral shape, whose boundaries is called
+    the skeleton, and introduces two kinds of degrees of freedom: the
+    displacements in the cell and the displacements of the skeleton.
 
-\dochead{}
-%% Use \dochead if there is an article header, e.g. \dochead{Short communication}
-%% \dochead can also be used to include a conference title, if directed by the editors
-%% e.g. \dochead{17th International Conference on Dynamical Processes in Excited States of Solids}
+    Most introductory materials to the HHO method is focus on
+    the mathematical aspects of the methods. While those aspects are
+    important, an approach based on physical considerations would help
+    spreading this method to the computational mechanics and engineering
+    communities.
 
-\title{}
+    This paper derives Hybrid High Order method from the
+    classical Hu–Washizu functional and discusses the implementation of
+    the method using notations closed to the one used in standard finite
+    elements textbooks. From the point of view of numerical
+    performances, the elimination of the cell degrees of freedom is
+    mandory to to reduce the size of the stiffness matrix of the system.
+    The standard static condensation, is presented, as well as a novel
+    strategy called "cell equilibrium". Avantages and disadvantages of
+    both strategies are discussed.
+    
+    The resolution of axisymmetrical problems, which has seldom,
+    if ever, been discussed in the litterature, is then presented.
 
-%% use optional labels to link authors explicitly to addresses:
-%% \author[label1,label2]{<author name>}
-%% \address[label1]{<address>}
-%% \address[label2]{<address>}
-
-\author{}
-
-\address{}
-
-\begin{abstract}
-%% Text of abstract
-\end{abstract}
-
-\begin{keyword}
-%% keywords here, in the form: keyword \sep keyword
-
-%% PACS codes here, in the form: \PACS code \sep code
-
-%% MSC codes here, in the form: \MSC code \sep code
-%% or \MSC[2008] code \sep code (2000 is the default)
-
-\end{keyword}
-
+    Numerical examples prove the robustness of the method
+    with regards to volumetric locking.
+  \end{abstract}
+  
+  \begin{keyword}
+    Computational mechanics \sep Hybrid High Order
+    method \sep Volumetric locking \sep Static condensation \sep
+  \end{keyword}
+  
 \end{frontmatter}
 
 %%
@@ -340,8 +364,6 @@
 
 \section{Numerical exemples}
 \input{parts/numerical_exemples.tex}
-
-
 
 \bibliographystyle{elsarticle-num}
 \bibliography{bib}
