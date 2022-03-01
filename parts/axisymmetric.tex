@@ -1,5 +1,5 @@
-In the following section, we devise a Hybrid High order method for an axisymmetric framework. The cartesian space is expressed in cylindrical coordinates and a point $\tensori{x} \in \bodyLag$ has coordinates $\tensori{x} = (r, z, \theta)$ where $r$ denotes the radial component, $z$ the ordonal one, and $\theta$ is the angular componant describing a revolution around the axis $r = 0$. By cylindrical symmetry, the angular displacement $\tensoro{u}{}_{\theta}$ is supposed to be zero, and both components $u_r$ and $u_z$ do not depend on the angular coordinate $\theta$.
-Adopting notations introduced in section ABOVE, let $\cell$ an open subset of $\bodyLag \subset \mathbb{R}^2$ in the $(r,z)$ plane with cell displacement $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ and boundary displacement $\tensori{u}{}_{\dCell} \in \displacementSpaceDCell$. The partial derivatives of $\tensori{u}{}_{\cell}$ with respect to the cylindrical coordinates are given by :
+In the following section, we derive a Hybrid High order method for an axi-symmetric framework. The cartesian space is expressed in cylindrical coordinates and a point $\tensori{x} \in \bodyLag$ has coordinates $\tensori{x} = (r, z, \theta)$ where $r$ denotes the radial component, $z$ the ordinate one, and $\theta$ is the angular component describing a revolution around the axis $r = 0$. By cylindrical symmetry, the angular displacement $\tensoro{u}{}_{\theta}$ is supposed to be zero, and both components $u_r$ and $u_z$ do not depend on the angular coordinate $\theta$.
+Adopting notations introduced in Section \ref{sec_composite_demo}, let $\cell$ an open subset of $\bodyLag \subset \mathbb{R}^2$ in the $(r,z)$ plane with cell displacement $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ and boundary displacement $\tensori{u}{}_{\dCell} \in \displacementSpaceDCell$. The partial derivatives of $\tensori{u}{}_{\cell}$ with respect to the cylindrical coordinates are given by :
 %
 %
 %
@@ -11,8 +11,7 @@ Adopting notations introduced in section ABOVE, let $\cell$ an open subset of $\
 %
 %
 %
-In order to express a Hybrid High Order method in such a framework and owing to the assumtptions on the displacement and its gradient, the definition of the reconstructed gradient \eqref{eq_grad} needs be modified accordingly, and the angular componenent $\tensoro{G}{}_{\cell \theta \theta}$ does not defines by the same equation as those in the other directions. In particular, for any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \displacementSpaceCell \times \displacementSpaceDCell$, the componenent $\tensoro{G}{}_{\cell \theta \theta}(\tensoro{v}{}_{\cell r}, \tensoro{v}{}_{\dCell r})$ solves
-% Dans le contexte axisymmétrique, on suppose $u_{\theta} = v_{\theta} = 0$, de sorte que la composante $G_{\theta \theta}$ du gradient dans $\mathbb{P}^{k}(T, \mathbb{R})$ s'exprime, $\forall \tau_{\theta \theta} \in \mathbb{P}^{k}(T, \mathbb{R})$:
+In order to express a Hybrid High Order method in such a framework and owing to the assumptions on the displacement and its gradient, the definition of the reconstructed gradient \eqref{eq_grad} needs be modified accordingly, and the angular component $\tensoro{G}{}_{\cell \theta \theta}$ does not define by the same equation as those in the other directions. In particular, for any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \displacementSpaceCell \times \displacementSpaceDCell$, the component $\tensoro{G}{}_{\cell \theta \theta}(\tensoro{v}{}_{\cell r}, \tensoro{v}{}_{\dCell r})$ solves
 %
 %
 %
@@ -48,29 +47,28 @@ whereas in the radial and ordonal directions, \textit{i.e.} $\forall i, j \in \{
 %
 %
 %
-As for the reconstructed gradient, the higher order potential term needed to define the HHO jump function nedds also be reconsidered such that $\forall \tensori{w}{}_{\cell} \in \mathbb{P}^{k + 1}(T, \mathbb{R}^2)$, the radial component $w_{\cell r}$ solves
-% En particulier, dans le contexte axisymmétrique, $\forall w_r \in \mathbb{P}^{k + 1}(T, \mathbb{R})$, la composante $D_{\cell r}$ dans $\mathbb{P}^{k + 1}(T, \mathbb{R})$ pour le déplacement reconstruit résoud :
+As for the reconstructed gradient, the higher order potential term needed to define the HHO jump function needs also be reconsidered such that $\forall \tensori{d}{}_{\cell}^{k + 1} \in \discretePotentialSpaceCell$, the radial component $w^{k+1}_{\cell r}$ solves
 %
 %
 %
 \begin{equation}
     \label{axi_symmetric_potential_r}
     \begin{aligned}
-        \int_{\cell} 2 \pi r (\sum_{i \in \{ r,z \}} \frac{\partial D_{\cell r}}{\partial i} \frac{\partial w_{\cell r}}{\partial i} + \frac{D_{\cell r}}{r} \frac{w_{\cell r}}{r})
+        \int_{\cell} 2 \pi r (\sum_{i \in \{ r,z \}} \frac{\partial w^{k+1}_{\cell r}}{\partial i} \frac{\partial d^{k+1}_{\cell r}}{\partial i} + \frac{w^{k+1}_{\cell r}}{r} \frac{d^{k+1}_{\cell r}}{r})
         = &
-        \int_{\cell} 2 \pi r (\sum_{i \in \{ r,z \}} \frac{\partial u_{\cell r}}{\partial i} \frac{\partial w_{\cell r}}{\partial i} + \frac{u_{\cell r}}{r} \frac{w_{\cell r}}{r})
+        \int_{\cell} 2 \pi r (\sum_{i \in \{ r,z \}} \frac{\partial u_{\cell r}}{\partial i} \frac{\partial d^{k+1}_{\cell r}}{\partial i} + \frac{u_{\cell r}}{r} \frac{d^{k+1}_{\cell r}}{r})
         % &&
         % \forall \tensori{w}{}_{\cell} \in \mathbb{P}^{k + 1}(T, \mathbb{R}^2)
         \\
         &
         +
-        \int_{\dCell} 2 \pi r \sum_{i \in \{ r,z \}} (u_{\dCell r} - u_{\cell r} \vert_{\dCell}) \frac{\partial w_{\cell r}}{\partial i} \vert_{\dCell} n_{i}
+        \int_{\dCell} 2 \pi r \sum_{i \in \{ r,z \}} (u_{\dCell r} - u_{\cell r} \vert_{\dCell}) \frac{\partial d^{k+1}_{\cell r}}{\partial i} \vert_{\dCell} n_{i}
     \end{aligned}
 \end{equation}
 %
 %
 %
-and the ordonal component $D_{\cell z}$ solves :
+and the ordinate component $w^{k+1}_{\cell z}$ solves :
 %
 %
 %
@@ -78,12 +76,12 @@ and the ordonal component $D_{\cell z}$ solves :
     \label{axi_symmetric_potential_z}
         \begin{alignat}{3}
             \int_{\cell} 2 \pi r \sum_{i \in \{ r,z \}}
-            \frac{\partial D_{\cell z}}{\partial i} \frac{\partial w_{\cell z}}{\partial i}
+            \frac{\partial w^{k+1}_{\cell z}}{\partial i} \frac{\partial d^{k+1}_{\cell z}}{\partial i}
             = &
-            \int_{\cell} 2 \pi r \sum_{i \in \{ r,z \}} \frac{\partial u_{\cell z}}{\partial i} \frac{\partial w_{\cell z}}{\partial i}
+            \int_{\cell} 2 \pi r \sum_{i \in \{ r,z \}} \frac{\partial u_{\cell z}}{\partial i} \frac{\partial d^{k+1}_{\cell z}}{\partial i}
             -
             \int_{\dCell} 2 \pi r \sum_{i \in \{ r,z \}} (u_{\dCell z} - u_{\cell z} \vert_{\dCell})
-            \frac{\partial w_{\cell z}}{\partial i} \vert_{\dCell} n_{i}
+            \frac{\partial d^{k+1}_{\cell z}}{\partial i} \vert_{\dCell} n_{i}
             % &&
             % \forall \tensori{w}{}_{\cell} \in \mathbb{P}^{k + 1}(T, \mathbb{R}^2)
             % \\
@@ -91,27 +89,29 @@ and the ordonal component $D_{\cell z}$ solves :
             % -
             % \int_{\dCell} 2 \pi r \sum_{i \in \{ r,z \}} (u_{\dCell z} - u_{\cell z} \vert_{\dCell})
             \\
-            \int_{\cell} 2 \pi r D_{\cell z} = & \int_{\cell} 2 \pi r u_{\cell z}
+            \int_{\cell} 2 \pi r w^{k+1}_{\cell z} = & \int_{\cell} 2 \pi r u_{\cell z}
         \end{alignat}
 \end{subequations}
 %
 %
 %
-In particular, one notices that the mean value condition is not needed on the radial componenent of the higher order displacement since the left hand side of the system described by \eqref{axi_symmetric_potential_r} depends direclty on the displacement unknown and not only on itrs gradient as in \eqref{axi_symmetric_potential_z}.
+In particular, one notices that the mean value condition is not needed on the radial component of the higher order displacement since the left hand side of the system described by \eqref{axi_symmetric_potential_r} depends directly on the displacement unknown and not only on its gradient as in \eqref{axi_symmetric_potential_z}.
 %
 % 
 %
 
-Moreover, since in cylindrical coordinates, all integrals depend on the radial componenent $r$, there is a singularity at $r = 0$ for boundary integrals on faces located on the symmetry axis, and from a geometrical standpoint, these faces lose a dimension; a face that is not located on the symmetry axis behaves like a shell by revolution of the $(r,z)$ plane,
+% Quand on dsicrétsie, cette face là n'est pas exitsante et donc supprimer la face linéaire
+
+Moreover, since in cylindrical coordinates, all integrals depend on the radial component $r$, there is a singularity at $r = 0$ for boundary integrals on faces located on the symmetry axis, and from a geometrical standpoint, these faces lose a dimension; a face that is not located on the symmetry axis behaves like a shell by revolution of the $(r,z)$ plane,
 whereas one attached to the axis reduces to a beam that is only allowed to move and morph in the $z$ direction.
 On a more algebraic note, the problem as such is ill-defined, since building the jump function involves inverting a mass matrix in $\discreteDisplacementSpaceDCell$ to define the projector $\Pi_{\dCell}^k$.
-Therefore, a face on the axis is swelled by a small radius $\varrho$ such that it becomes a cylinder with same dimensions as the others (see Figure \ref{fig_axi})
+Therefore, a face on the axis is swelled by a small radius $\varrho $ such that it becomes a cylinder with same dimensions as the others (see Figure \ref{fig_axi})
 %
 %
 %
 \begin{figure}[H]
     \centering
     \includegraphics[width=10.cm]{img/sketch_axi.png}
-    \caption{schematic representation of the model problem}
+    \caption{schematic representation of the modeling of a face located on the symmetry axis}
     \label{fig_axi}
 \end{figure}

@@ -1,0 +1,312 @@
+
+
+%
+% 
+% 
+\begin{equation}
+    \label{eq22}
+    \begin{aligned}
+        J_{\Crown{}, \text{int}}^{HW}
+        := &
+        \int_{\Crown{}} \mecPotential{}_{\Crown} + (\nabla \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
+        % -
+        % \int_{\Crown{}} \loadLag \cdot \tensori{u}{}_{\Crown}
+        \\
+        = &
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2
+        +
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk} (\tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}}) \cdot \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}} \cdot \tensori{n}{}
+        -
+        \int_{\Crown{}} \tensorii{G}{}_{\Crown{}} : \tensorii{P}{}_{\Crown{}}
+        % -
+        % \int_{\Crown{}} \loadLag \cdot \tensori{u}{}_{\Crown}
+    \end{aligned}
+\end{equation}
+%
+% 
+%
+The development of \eqref{eq22} is given in Appendix. Injecting \eqref{eq22} in \eqref{eq_hu_washizu_split} yields
+%
+% 
+% 
+\begin{equation}
+    \label{eq_0014}
+    \begin{aligned}
+        J_{\cell}^{HW}
+        = &
+        \int_{\Bulk} \mecPotential{}_{\bodyLag{}} + (\nabla \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
+        % \\
+        % &
+        +
+        (1 - \frac{\alpha}{2} \ell)
+        % \Biggl(
+        \int_{\dBulk{}} (\tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}) \cdot \tensorii{P}{}_{\Bulk} \vert_{\dBulk} \cdot \tensori{n}{}
+        % \\
+        % &
+        \\
+        &
+        +
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 h_T} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk} \vert_{\dBulk{}} \rVert^2
+        % \Biggr)
+        % \\
+        % &
+        -
+        \int_{\Crown{}} \tensorii{G}{}_{\Crown{}} : \tensorii{P}{}_{\Crown{}}
+        % \\
+        % &
+        -
+        \int_{\Bulk} \loadLag \cdot \tensori{u}{}_{\Bulk}
+        -
+        \int_{\Crown{}} \loadLag \cdot \tensori{u}{}_{\Crown{}}
+        -
+        \int_{\neumannCell{}} \neumannCellLoad{} \cdot \tensori{u}{}_{\dCell{}}
+    \end{aligned}
+\end{equation}
+%
+% 
+% ------------------------------------------------------- DEVELOPMENT
+\textcolor{blue}{
+%
+\begin{development}[Interafce simplification]
+%
+Let $C_\Crown = \{ v \in L^2(\Crown) \ \vert \ v \cdot \tensori{n} = \text{cste} \}$ the set of $L^2$-functions which are constant along the normal axis in $\Crown$. For any function in $C_\Crown$, the following equality holds true:
+%
+% 
+% 
+\begin{equation}
+    \label{eq_virtual_works0}
+        \int_{\Crown} v \ dV
+        =
+        \int_{\dBulk{}} \int_{\epsilon = 0}^{\ell} v (1 - \alpha \epsilon) \ dS d \epsilon
+        =
+        \ell (1 - \frac{\alpha}{2} \ell) \int_{\dBulk{}} v \ dS
+\end{equation}
+%
+% 
+% 
+Noticing that $\nabla \tensori{u}{}_{\Crown} \in C_\Crown$, one has :
+%
+% 
+% 
+\begin{equation}
+    \begin{aligned}
+        \int_{\Crown{}} \mecPotential{}_{\Crown}
+        % = &
+        % \int_{\Crown{}} \frac{1}{2} \beta \frac{\ell}{h_{\cell}} \nabla \tensori{u}{}_{\Crown} : \nabla \tensori{u}{}_{\Crown}
+        % \\
+        = & 
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{1}{2} \beta \frac{\ell}{h_{\cell}} \nabla \tensori{u}{}_{\Crown} : \nabla \tensori{u}{}_{\Crown}
+        \\
+        = & 
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}) \otimes
+        \tensori{n} : (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}) \otimes
+        \tensori{n}
+        \\
+        = & 
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{i,j} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
+        \tensoro{n}_{j}{}^2
+        \\
+        = & 
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{j} \tensoro{n}_{j}{}^2 \sum_{i} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
+        \\
+        = & 
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{i} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
+        \\
+        = & 
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \lVert \tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk} \lVert {}^2
+        \\
+        = & 
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk} \lVert {}^2
+    \end{aligned}
+\end{equation}
+%
+% 
+% 
+Moreover, for $\tensorii{P}{}_{\Crown}$ in $C_\Crown{}$ :
+%
+% 
+% 
+\begin{equation}
+    \begin{aligned}
+        \int_{\Crown{}} \nabla \tensori{u}{}_{\Crown} : \tensorii{P}{}_{\Crown}
+        = &
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \nabla \tensori{u}{}_{\Crown} : \tensorii{P}{}_{\Crown}
+        \\
+        = &
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}}
+        \frac{1}{\ell}
+        (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk}) \otimes \tensori{n} : \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}}
+        \\
+        = &
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}}
+        \frac{1}{\ell}
+        \sum_{i,j}
+        (\tensoro{u}{}_{\dCell}{}_{i} - \tensoro{u}{}_{\Bulk}{}{}_{i} \vert_{\dBulk}) \tensoro{n}{}_{j} \tensoro{P}{}_{\Bulk{}}{}_{ij} \vert_{\dBulk{}}
+        \\
+        = &
+        \ell (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}}
+        \frac{1}{\ell}
+        (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk}) \cdot \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}} \cdot \tensori{n}
+        \\
+        = &
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}}
+        (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk}) \cdot \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}} \cdot \tensori{n}
+    \end{aligned}
+\end{equation}
+% 
+% 
+% 
+And Finally :
+%
+% 
+% 
+\begin{equation}
+    \begin{aligned}
+        J_{\Crown{}, \text{int}}^{HW}
+        =
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk{}} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2
+        +
+        (1 - \frac{\alpha}{2} \ell)
+        \int_{\dBulk} (\tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}}) \cdot \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}} \cdot \tensori{n}{}
+        -
+        \int_{\Crown{}} \tensorii{G}{}_{\Crown{}} : \tensorii{P}{}_{\Crown{}}
+    \end{aligned}
+\end{equation}
+%
+\end{development}
+}
+% ------------------------------------------------------- DEVELOPMENT
+%
+%
+%
+\textcolor{blue}{
+    \begin{development}[Elliptic projection]
+        %
+        %
+        %
+        Let $\discreteDisplacementSpaceCell \subset \displacementSpaceCell$ and $U^\perp(\cell) \subset \displacementSpaceCell$ such that $\displacementSpaceCell = \discreteDisplacementSpaceCell \oplus U^\perp(\cell)$, and set $\tensori{u}{}_{\cell} = \tensori{u}{}_{\cell}^h + \tensori{u}{}_{\cell}^\perp$ with
+        $\tensori{u}{}_{\cell}^h \in U^h(\cell)$ and $\tensori{u}{}_{\cell}^\perp \in U^\perp(\cell)$ the orthogonal projections of $\tensori{u}{}_{\cell}$ onto $U^h(\cell)$ and $U^\perp(\cell)$ respectively.
+        Let $V^h(\dCell) \subset \displacementSpaceDCell$ and $\tensori{u}{}_{\dCell}^h \in V^h(\dCell)$ the orthogonal projection of $\tensori{u}{}_{\cell}$ onto $V^h(\dCell)$.
+        The orthogonal projection of $\tensori{u}{}_{\cell}$ onto $\discreteHybridDisplacementSpaceCell = U^h(\cell) \times V^h(\dCell)$ is then the displacement pair $(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h)$.
+        Let $S^h(\cell) = \{ \tensorii{\tau}{}_{\cell}^h \in \stressSpaceCell \ \ \vert \ \ \nabla \cdot  \tensorii{\tau}{}_{\cell}^h \in U^h(\cell) \ \ \vert \ \  \tensorii{\tau}{}_{\cell}^h \vert_{\dCell} \cdot \tensori{n}{} \in V^h(\dCell) \}$,
+        and $\tensorii{G}{}_{\cell}^h \in S^h(\cell)$ the solution of \eqref{eq_grad} for $(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h)$ such that
+        %
+        %
+        %
+        \begin{equation}
+            \begin{aligned}
+                \int_{\cell} \tensorii{G}{}_{\cell}^h(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h) : \tensorii{\tau}{}_{\cell}^h
+                =
+                \int_{\cell} \nabla \tensori{u}{}_{\cell}^h : \tensorii{\tau}{}_{\cell}^h
+                +
+                \int_{\dCell} (\tensori{u}{}_{\dCell}^h - \tensori{u}{}_{\cell}^h \vert_{\dCell}) \cdot \tensorii{\tau}{}_{\cell}^h \vert_{\dCell} \cdot \tensori{n}{}
+                &&
+                \ \ \ \ \ \ \ \ 
+                &&
+                \forall \tensorii{\tau}{}_{\cell}^h \in S^h(\cell)
+            \end{aligned}
+        \end{equation}
+        %
+        %
+        %
+        using the fact that $\tensori{u}{}_{\dCell}^h$ is the projection of $\tensori{u}{}_{\cell}$ onto $V^h(\dCell)$ and that $\tensorii{\tau}{} \vert_{\dCell} \cdot \tensori{n}{} \in V^h(\dCell)$:
+        %
+        %
+        %
+        \begin{equation}
+            \begin{aligned}
+                \int_{\cell} \tensorii{G}{}_{\cell}^h(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h) : \tensorii{\tau}{}_{\cell}^h
+                = &
+                \int_{\cell} \nabla \tensori{u}{}_{\cell}^h : \tensorii{\tau}{}_{\cell}^h
+                +
+                \int_{\dCell} (\tensori{u}{}_{\cell} \vert_{\dCell} - \tensori{u}{}_{\cell}^h \vert_{\dCell}) \cdot \tensorii{\tau}{}_{\cell}^h \vert_{\dCell} \cdot \tensori{n}{}
+                &&
+                \ \ \ \ \ \ \ \ 
+                &&
+                \forall \tensorii{\tau}{}_{\cell}^h \in S^h(\cell)
+                \\
+                = &
+                \int_{\cell} \nabla \tensori{u}{}_{\cell}^h : \tensorii{\tau}{}_{\cell}^h
+                +
+                \int_{\dCell} \tensori{u}{}_{\cell}^\perp \vert_{\dCell} \cdot \tensorii{\tau}{}_{\cell}^h \vert_{\dCell} \cdot \tensori{n}{}
+                &&
+                \ \ \ \ \ \ \ \ 
+                &&
+                \forall \tensorii{\tau}{}_{\cell}^h \in S^h(\cell)
+            \end{aligned}
+        \end{equation}
+        %
+        %
+        %
+        using the divergence theorem and the fact that $\nabla \cdot  \tensorii{\tau}{}_{\cell}^h \in U^h(\cell)$, one has :
+        %
+        %
+        %
+        \begin{equation}
+            \begin{aligned}
+                \int_{\cell} \nabla \tensori{u}{}_{\cell}^\perp :  \tensorii{\tau}{}_{\cell}^h
+                = &
+                % -
+                % \int_{\cell} \tensori{u}{}_{\cell}^\perp \cdot \nabla \cdot \tensorii{\tau}{}
+                % +
+                % \int_{\dCell} \tensori{u}{}_{\cell}^\perp \vert_{\dCell} \cdot \tensorii{\tau}{} \vert_{\dCell} \cdot \tensori{n}{}
+                % \\
+                % = &
+                \int_{\dCell} \tensori{u}{}_{\cell}^\perp \vert_{\dCell} \cdot  \tensorii{\tau}{}_{\cell}^h \vert_{\dCell} \cdot \tensori{n}{}
+            \end{aligned}
+        \end{equation}
+        %
+        %
+        %
+        such that :
+        %
+        %
+        %
+        \begin{equation}
+            \begin{aligned}
+                \int_{\cell} \tensorii{G}{}_{\cell}^h(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h) : \tensorii{\tau}{}_{\cell}^h
+                = &
+                \int_{\cell} \nabla \tensori{u}{}_{\cell}^h : \tensorii{\tau}{}_{\cell}^h
+                +
+                \int_{\cell} \nabla \tensori{u}{}_{\cell}^\perp : \tensorii{\tau}{}_{\cell}^h
+                &&
+                \ \ \ \ \ \ \ \ 
+                &&
+                \forall \tensorii{\tau}{}_{\cell}^h \in S^h(\cell)
+                \\
+                = &
+                \int_{\cell} \nabla \tensori{u}{}_{\cell} : \tensorii{\tau}{}_{\cell}^h
+                &&
+                \ \ \ \ \ \ \ \ 
+                &&
+                \forall \tensorii{\tau}{}_{\cell}^h \in S^h(\cell)
+            \end{aligned}
+        \end{equation}
+        %
+        %
+        %
+        which states that $\tensorii{G}{}_{\cell}^h(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h)$ is the orthogonal projection of $\nabla \tensori{u}{}_{\cell}$ onto $S^h(\cell)$.
+        % IL FAUDRAIT MONTRER QUE $S^h(\cell)$ EST SUFFISANT POUR EMPECHER LE LOCKING DANS $U^h(\cell) \times V^h(\dCell)$ ??
+        % ET FAIRE LE LIEN ENTRE $S^h(\cell)$ et $G^h(\cell)$.
+        % Trouver aussi une justification pour $\stressSpaceCell \subset \gradSpaceCell$, la contrainte est plus régulière que le gradient, ce qui semble vrai (avec les décompositions sphérique dévaitoriques par exemples, etc)
+        %
+        %
+        %
+    \end{development}
+}

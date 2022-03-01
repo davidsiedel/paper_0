@@ -152,10 +152,10 @@
 \newcommand\bodyLag{\Omega}
 \newcommand\dBodyEul{\partial \Omega_t}
 \newcommand\dBodyLag{\partial \Omega}
-\newcommand\dirichletBodyEul{\partial_d \Omega_t}
-\newcommand\neumannBodyEul{\partial_n \Omega_t}
-\newcommand\dirichletBodyLag{\partial_D \Omega}
-\newcommand\neumannBodyLag{\partial_N \Omega}
+\newcommand\dirichletBoundaryEul{\partial_d \Omega_t}
+\newcommand\neumannBoundaryEul{\partial_n \Omega_t}
+\newcommand\dirichletBoundaryLag{\partial_D \Omega}
+\newcommand\neumannBoundaryLag{\partial_N \Omega}
 
 \newcommand\mecPotential{\psi}
 
@@ -415,17 +415,17 @@ In a second part, we propose and devise a Hybrid High Order method for axisymetr
 \label{sec_model_problem}
 
 Let $d \in  \{1, 2, 3\}$ the euclidean dimension of the cartesian space $\mathbb{R}{}^{d}$.
-Let $\bodyEul \subset \mathbb{R}{}^{d}$ a solid body with boundary $\dBodyEul \subset \mathbb{R}{}^{d - 1}$, that deforms in the current configuration at some time $t > 0$ under the body forces $\loadEul$. It is subjected to a prescribed displacement $\dirichletEul$ on the Dirichlet boundary $\dirichletBodyEul$, and to a contact load $\neumannEul{}$ on the Neumann boundary $\neumannBodyEul$, such that $\dBodyEul = \dirichletBodyEul \cup \neumannBodyEul$ and $\dirichletBodyEul{} \cap \neumannBodyEul = \emptyset$.
+Let $\bodyEul \subset \mathbb{R}{}^{d}$ a solid body with boundary $\dBodyEul \subset \mathbb{R}{}^{d - 1}$, that deforms in the current configuration at some time $t > 0$ under the body forces $\loadEul$. It is subjected to a prescribed displacement $\dirichletEul$ on the Dirichlet boundary $\dirichletBoundaryEul$, and to a contact load $\neumannEul{}$ on the Neumann boundary $\neumannBoundaryEul$, such that $\dBodyEul = \dirichletBoundaryEul \cup \neumannBoundaryEul$ and $\dirichletBoundaryEul{} \cap \neumannBoundaryEul = \emptyset$.
 
-The initial configuration of the body at time $t = 0$ (see Figure \ref{fig_setting}) is denoted $\bodyLag \subset \mathbb{R}{}^{d}$ with respective Dirichlet and Neumann boundaries $\dirichletBodyLag$ and $\neumannBodyLag$.
+The initial configuration of the body at time $t = 0$ (see Figure \ref{fig_setting}) is denoted $\bodyLag \subset \mathbb{R}{}^{d}$ with respective Dirichlet and Neumann boundaries $\dirichletBoundaryLag$ and $\neumannBoundaryLag$.
 It is subjected to body forces $\loadLag$,
 % Let $\loadLag$ the body forces acting in $\bodyLag$.
-an imposed displacement $\dirichletLag$ on $\dirichletBodyLag$ and contact force $\neumannLag$ on $\neumannBodyLag$.
+an imposed displacement $\dirichletLag$ on $\dirichletBoundaryLag$ and contact force $\neumannLag$ on $\neumannBoundaryLag$.
 %
 The transformation mapping $\tensori{\Phi}$ takes a point $\tensori{x} \in \bodyLag$ from the initial configuration to $\tensori{x}{}_t \in \bodyEul$ in the current configuration.
 
 Let $\cell \subset \bodyLag$ an arbitrary open subset of the solid body, with boundary $\dCell \subset \mathbb{R}^{d - 1}$
-which is split into an eventual Dirichlet boundary $\dirichletCell \subset \dirichletBodyLag$ subjected to an imposed displacement $\dirichletLag$ if $\cell$ shares a boundary with $\dirichletBodyLag$ and into the Neumann Boundary $\neumannCell \subset \neumannBodyLag \cup \bodyLag$ with contact load $\neumannCellLoad$ such that :
+which is split into an eventual Dirichlet boundary $\dirichletCell \subset \dirichletBoundaryLag$ subjected to an imposed displacement $\dirichletLag$ if $\cell$ shares a boundary with $\dirichletBoundaryLag$ and into the Neumann Boundary $\neumannCell \subset \neumannBoundaryLag \cup \bodyLag$ with contact load $\neumannCellLoad$ such that :
 %
 \begin{equation}
     \label{eq_contact_force}
@@ -435,7 +435,7 @@ which is split into an eventual Dirichlet boundary $\dirichletCell \subset \diri
             \begin{array}{ll}
                 \tensori{t}{}_{\bodyLag \backslash \cell \rightarrow \cell} & \mbox{on } \neumannCell \cap \bodyLag \backslash \cell
                 \\
-                \neumannLag & \mbox{on } \neumannCell \cap \neumannBodyLag
+                \neumannLag & \mbox{on } \neumannCell \cap \neumannBoundaryLag
             \end{array}
         \right.
     \end{aligned}
@@ -754,7 +754,7 @@ and the first Piola-Kirchoff stress field $\tensorii{P}{}_{\cell} \in \stressSpa
 %     -
 %     \int_{\matI} \loadLag \cdot \tensori{u}{}_{\matI}
 %     -
-%     \int_{\neumannMatI \cap \neumannBodyLag} \neumannCellLoad \cdot \tensori{u}{}_{\matI}
+%     \int_{\neumannMatI \cap \neumannBoundaryLag} \neumannCellLoad \cdot \tensori{u}{}_{\matI}
 % \end{aligned}
 % \end{equation}
 % %

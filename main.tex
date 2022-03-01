@@ -156,8 +156,8 @@
 \newcommand\dBodyLag{\partial \Omega}
 \newcommand\dirichletBoundaryEul{\partial_d \Omega_t}
 \newcommand\neumannBoundaryEul{\partial_n \Omega_t}
-\newcommand\dirichletBodyLag{\partial_D \Omega}
-\newcommand\neumannBodyLag{\partial_N \Omega}
+\newcommand\dirichletBoundaryLag{\partial_D \Omega}
+\newcommand\neumannBoundaryLag{\partial_N \Omega}
 
 \newcommand\mecPotential{\psi}
 
@@ -201,9 +201,16 @@
 \newcommand\displacementSpaceDHybridMesh{V(\mathcal{F})}
 \newcommand\hybridDisplacementSpaceHybridMesh{U(\bar{\mathcal{T}})}
 
+\newcommand\virtualDisplacementSpaceHybridMesh{U_0(\mathcal{T})}
+\newcommand\virtualDisplacementSpaceDHybridMesh{V_0(\mathcal{F})}
+\newcommand\virtualHybridDisplacementSpaceHybridMesh{U_0(\bar{\mathcal{T}})}
+
 \newcommand\discreteDisplacementSpaceHybridMesh{U^h(\mathcal{T})}
 \newcommand\discreteDisplacementSpaceDHybridMesh{V^h(\mathcal{F})}
 \newcommand\discreteHybridDisplacementSpaceHybridMesh{U^h(\bar{\mathcal{T}})}
+\newcommand\discreteVirtualDisplacementSpaceHybridMesh{U_0^h(\mathcal{T})}
+\newcommand\discreteVirtualDisplacementSpaceDHybridMesh{V_0^h(\mathcal{F})}
+\newcommand\discreteVirtualHybridDisplacementSpaceHybridMesh{U_0^h(\bar{\mathcal{T}})}
 
 % \newcommand\bound{\partial{}^{\text{e}} T}
 % \newcommand\neumannBound{\partial{}^{\text{e}}{}_N T}
@@ -238,12 +245,20 @@
 \newcommand\stressSpaceCell{S(\cell)}
 \newcommand\displacementSpaceCell{U(\cell)}
 \newcommand\displacementSpaceDCell{V(\dCell)}
+\newcommand\virtualDisplacementSpaceCell{U_0(\cell)}
+\newcommand\virtualDisplacementSpaceDCell{V_0(\dCell)}
+\newcommand\hybridDisplacementSpaceCell{U(\bar{\cell})}
+\newcommand\virtualHybridDisplacementSpaceCell{U_0(\bar{\cell})}
 
 \newcommand\discretePotentialSpaceCell{D^h(\cell)}
 \newcommand\discreteGradSpaceCell{G^h(\cell)}
 \newcommand\discreteStressSpaceCell{S^h(\cell)}
 \newcommand\discreteDisplacementSpaceCell{U^h(\cell)}
 \newcommand\discreteDisplacementSpaceDCell{V^h(\dCell)}
+\newcommand\discreteVirtualDisplacementSpaceCell{U_0^h(\cell)}
+\newcommand\discreteVirtualDisplacementSpaceDCell{V_0^h(\dCell)}
+\newcommand\discreteHybridDisplacementSpaceCell{U^h(\bar{\cell})}
+\newcommand\discreteVirtualHybridDisplacementSpaceCell{U_0^h(\bar{\cell})}
 
 \newcommand\gradSpaceBulk{G(\Bulk)}
 \newcommand\stressSpaceBulk{S(\Bulk)}
@@ -255,6 +270,7 @@
 \newcommand\displacementSpaceCrown{U(\Crown)}
 \newcommand\displacementSpaceDCrown{V(\dCrown)}
 
+\newcommand\cellQuadrature{Q_T}
 \newcommand{\commentTH}[1]{
   \textcolor{blue}{\textbf{Commentaire T.H.}~: #1}
 }
@@ -265,88 +281,95 @@
 % \begin{multicols}{0}
 
 \begin{frontmatter}
-  
-  %% Title, authors and addresses
-  
-  %% use the tnoteref command within \title for footnotes;
-  %% use the tnotetext command for the associated footnote;
-  %% use the fnref command within \author or \address for footnotes;
-  %% use the fntext command for the associated footnote;
-  %% use the corref command within \author for corresponding author footnotes;
-  %% use the cortext command for the associated footnote;
-  %% use the ead command for the email address,
-  %% and the form \ead[url] for the home page:
-  %%
-  %% \title{Title\tnoteref{label1}}
-  %% \tnotetext[label1]{}
-  %% \author{Name\corref{cor1}\fnref{label2}}
-  %% \ead{email address}
-  %% \ead[url]{home page}
-  %% \fntext[label2]{}
-  %% \cortext[cor1]{}
-  %% \address{Address\fnref{label3}}
-  %% \fntext[label3]{}
-  
-  \dochead{}
-  %% Use \dochead if there is an article header, e.g. \dochead{Short communication}
-  %% \dochead can also be used to include a conference title, if directed by the editors
-  %% e.g. \dochead{17th International Conference on Dynamical Processes in Excited States of Solids}
 
-  \title{}
-  
-  %% use optional labels to link authors explicitly to addresses:
-  %% \author[label1,label2]{<author name>}
-  %% \address[label1]{<address>}
-  %% \address[label2]{<address>}
-  
-  \author{}
-  
-  \address{}
-  
-  \begin{abstract}
-    The Hybrid High Order (HHO) method is a powerful
-    discretization method which has only been recently applied from to
-    non linear computational mechanics.
+%% Title, authors and addresses
 
-    The Hybrid High Order method divides the domain of interest
-    in cells of abitrary polyhedral shape, whose boundaries is called
-    the skeleton, and introduces two kinds of degrees of freedom: the
-    displacements in the cell and the displacements of the skeleton.
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
 
-    Most introductory materials to the HHO method is focus on
-    the mathematical aspects of the methods. While those aspects are
-    important, an approach based on physical considerations would help
-    spreading this method to the computational mechanics and engineering
-    communities.
+\dochead{}
+%% Use \dochead if there is an article header, e.g. \dochead{Short communication}
+%% \dochead can also be used to include a conference title, if directed by the editors
+%% e.g. \dochead{17th International Conference on Dynamical Processes in Excited States of Solids}
 
-    This paper derives Hybrid High Order method from the
-    classical Hu–Washizu functional.
+\title{}
 
-    Practical implementation of the method is discussed in
-    depth using notations closed to the ones used in standard finite
-    elements textbooks, highlighting the use of polyhedral cells and the
-    use of approximation spaces based on polynomials of abritrary
-    orders.
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
 
-    From the point of view of numerical performances, the
-    elimination of the cell degrees of freedom is mandory to to reduce
-    the size of the stiffness matrix. The standard static condensation,
-    is presented, as well as a novel strategy called "cell equilibrium".
-    Avantages and disadvantages of both strategies are discussed.
-    
-    The resolution of axisymmetrical problems, which has seldom,
-    if ever, been discussed in the litterature, is then presented.
+\author{}
 
-    Numerical examples prove the robustness of the method
-    with regards to volumetric locking....
-  \end{abstract}
-  
-  \begin{keyword}
-    Computational mechanics \sep Hybrid High Order
-    method \sep Static condensation \sep Cell equilibrium algorithm \sep
-    Volumetric locking \sep Axisymmetric modelling hypothesis
-  \end{keyword}
-  
+\address{}
+
+\begin{abstract}
+%% Text of abstract
+The Hybrid High Order (HHO) method is a powerful
+discretization method which has only been recently applied from to
+non linear computational mechanics.
+
+The Hybrid High Order method divides the domain of interest
+in cells of arbitrary polyhedral shape, whose boundaries is called
+the skeleton, and introduces two kinds of degrees of freedom: the
+displacements in the cell and the displacements of the skeleton.
+
+Most introductory materials to the HHO method is focus on
+the mathematical aspects of the methods. While those aspects are
+important, an approach based on physical considerations would help
+spreading this method to the computational mechanics and engineering
+communities.
+
+This paper derives Hybrid High Order method from the
+classical Hu–Washizu functional.
+
+Practical implementation of the method is discussed in
+depth using notations closed to the ones used in standard finite
+elements textbooks, highlighting the use of polyhedral cells and the
+use of approximation spaces based on polynomials of arbitrary
+orders.
+
+From the point of view of numerical performances, the
+elimination of the cell degrees of freedom is mandatory to to reduce
+the size of the stiffness matrix. The standard static condensation,
+is presented, as well as a novel strategy called "cell equilibrium".
+Advantages and disadvantages of both strategies are discussed.
+
+The resolution of axi-symmetrical problems, which has seldom,
+if ever, been discussed in the literature, is then presented.
+
+Numerical examples prove the robustness of the method
+with regards to volumetric locking....
+\end{abstract}
+
+\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword
+
+%% PACS codes here, in the form: \PACS code \sep code
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+Computational mechanics \sep Hybrid High Order
+method \sep Static condensation \sep Cell equilibrium algorithm \sep
+Volumetric locking \sep Axi-symmetric modelling hypothesis
+\end{keyword}
+
 \end{frontmatter}
 
 %%
@@ -359,23 +382,29 @@
 \section{Introduction}
 \input{parts/introduction.tex}
 
-\section{Model Problem}
+\section{The model problem}
 \input{parts/model_problem.tex}
+\label{sec_model_problem}
 
-\section{Composite Demo}
-\input{parts/composite_demo.tex}
+\section{Introduction to discontinuous methods through a Hu-Washizu formulation}
+\label{sec_composite_demo}
+\input{parts/composite_demo_1.tex}
 
 \section{Discretization}
 \input{parts/discretization.tex}
 
-\section{Axisymmetric}
+\section{A HHO method for the axi-symmetric framework}
 \input{parts/axisymmetric.tex}
 
 \section{Implementation}
 \input{parts/implementation.tex}
 
-\section{Numerical exemples}
+\section{Numerical examples}
 \input{parts/numerical_exemples.tex}
+
+\section{Appendix}
+\input{parts/appendix.tex}
+\label{sec_appendix}
 
 \bibliographystyle{elsarticle-num}
 \bibliography{bib}
