@@ -1,18 +1,23 @@
 \section{Discretization}
 
-On a décrit section précédente le problème faible pour un élément dit composite, aboutissant à une formulation faisant intervenir le éplcament de l'élement mais aussi celui de son enveloppe, par l'introduction d'une vanishing interface.
-Dans la présente section, on définit le problème gloabl à réésoudre sur l'ensemble de la structure. On la suppose composée de ces éléments composites, de sorte qu'on est amené à définir le squelette du maillage, c'est à dire le support de l'ensemble des déplacement des faces des éléments.
+\paragraph{Mesh}
 
-On considère que $\Omega$ est discrétisé par un maillage composé de cellules convexes, polyhédriques, et à faces planes. Les cellules du maillages sont regroupées dans l'ensemble $\HybridMesh(\bodyLag) = \{ \matI \subset \bodyLag \ \vert \ 1 \leq i \leq N_{\cell} \}$, où $N_T$ désigne le nombre de cellules.
-On introduit ensuite $\dHybridMesh(\bodyLag) = \{ F_i \subset \bodyLag \ \vert \ 1 \leq i \leq N_{F} \}$ the skeleton of the mesh, collecting all element faces $F_i$ in the mesh, where $N_{F}$ denotes the number of faces in the mesh.
-En particulier, two elements sharing a boundary also share the same boundary unknown, \textit{i.e.} for any $(\cell, \cell') \in \HybridMesh(\bodyLag)$ such that $\dCell \cap \dCell' \neq \emptyset$, there is $\tensori{u}{}_{\dCell \cap \dCell'} = \tensori{u}{}_{\dCell' \cap \dCell}$.
+One defines the collection of all cells in the mesh as
+$\HybridMesh(\bodyLag) = \{ \matI \subset \bodyLag \ \vert \ 1 \leq i \leq N_{\cell} \}$, where $N_T$ denotes the total number of cells.
 
-A face $F$ is a subset of $\bodyLag$, and either there are two cells $\cell$ and $\cell'$ such that $F = \dCell \cap \dCell'$ ($F$ is then an interior face), or there is a single cell $\cell$ such that $F = \dCell \cap \partial \Omega$ ($F$ is then an exterior face).
-Let $\dHybridMesh{}^i(\bodyLag)$ denote the set of interior faces, and $\dHybridMesh{}^e(\bodyLag)$ that of exterior ones.
-$\dHybridMesh{}^e(\bodyLag)$ is partitioned into $\dHybridMesh{}_{D}^e(\bodyLag) = \{ F \in \dHybridMesh{}^e(\bodyLag) \ \vert \ F \subset \partial_D \bodyLag \}$ the set of exterior faces imposed to prescribed Dirichlet boundary conditions, and into $\dHybridMesh{}_{N}^e(\bodyLag) = \{ F \in \dHybridMesh{}^e(\bodyLag) \ \vert \ F \subset \partial_N \bodyLag \}$ the set of exterior faces imposed to prescribed Neumann boundary conditions.
-%
-Similarly, for any element $\cell \in \mathcal{T}$, let $\mathcal{F}(\cell) = \{ F \in \dHybridMesh \ \vert \ F \subset \dCell \}$ the set of faces composing the boundary of $\cell$.
-%
+\paragraph{Face}
+
+The boundary $\dCell{}$ of each element is decomposed in faces, such thata face $F$ is a subset of $\bodyLag$, and either there are two cells $\cell$ and $\cell'$ such that $F = \dCell \cap \dCell'$ ($F$ is then an interior face), or there is a single cell $\cell$ such that $F = \dCell \cap \partial \Omega$ ($F$ is then an exterior face).
+
+\paragraph{Faces sets}
+
+% Let $\dHybridMesh{}^i(\bodyLag)$ denote the set of interior faces, and $\dHybridMesh{}^e(\bodyLag)$ that of exterior ones.
+% $\dHybridMesh{}^e(\bodyLag)$ is partitioned into $\dHybridMesh{}_{D}^e(\bodyLag) = \{ F \in \dHybridMesh{}^e(\bodyLag) \ \vert \ F \subset \partial_D \bodyLag \}$ the set of exterior faces imposed to prescribed Dirichlet boundary conditions, and into $\dHybridMesh{}_{N}^e(\bodyLag) = \{ F \in \dHybridMesh{}^e(\bodyLag) \ \vert \ F \subset \partial_N \bodyLag \}$ the set of exterior faces imposed to prescribed Neumann boundary conditions.
+For any element $\cell \in \mathcal{T}$, let $\mathcal{F}(\cell) = \{ F \in \dHybridMesh \ \vert \ F \subset \dCell \}$ the set of faces composing the boundary of $\cell$.
+Let finally $\dHybridMesh(\bodyLag) = \{ F_i \subset \bodyLag \ \vert \ 1 \leq i \leq N_{F} \}$ the skeleton of the mesh, collecting all element faces $F_i$ in the mesh, where $N_{F}$ denotes the number of faces.
+
+\paragraph{Hybird mesh}
+
 The composition of both $\mathcal{T}(\bodyLag)$ and $\dHybridMesh{}(\bodyLag)$ forms the hybrid mesh
 % $\overline{\mathcal{T}}({\bodyLag}) = \{T \subset \bodyLag, F \subset \bodyLag \ \vert \ T \in \mathcal{T}(\bodyLag) \ \vert \ F \in \mathcal{F}(\bodyLag) \}$.
 $\HybridMeshWhole({\bodyLag}) = \{ \mathcal{T}(\bodyLag), \mathcal{F}(\bodyLag) \}$.
@@ -20,14 +25,12 @@ $\HybridMeshWhole({\bodyLag}) = \{ \mathcal{T}(\bodyLag), \mathcal{F}(\bodyLag) 
 %
 %
 
-Contrary to the standard finite element method that consists in seeking a global solution in a regular enough space over the whole mesh, we consider here a much broader space that consists in $\displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell$ the collection of all regular enough displacements element-wise.
-Similarly, we consider $\displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)$ the space of all regular enough displacements face-wise for the skeleton unknown, such that the global solution space $\hybridDisplacementSpaceHybridMesh = \displacementSpaceHybridMesh \times \displacementSpaceDHybridMesh$ for the whole problem is simply the assembly of all element and face spaces in the mesh.
+\paragraph{Global unknown}
 
-Let then $(\tensori{v}{}_{\HybridMesh}, \tensori{v}{}_{\dHybridMesh}) \in \hybridDisplacementSpaceHybridMesh$ a displacement pair in the global functional space such that for each $\cell \in \HybridMesh(\bodyLag), \tensori{v}{}_{\HybridMesh} = \tensori{v}{}_{\cell}$ in $\cell$ and for each $F \in \dHybridMesh(\bodyLag), \tensori{v}{}_{\dHybridMesh} = \tensori{v}{}_{F}$ on $F$, where $\tensori{v}{}_{\cell} \in \displacementSpaceCell$ and $\tensori{v}{}_{F} \in \displacementSpaceDCell$ denote a cell and a face displacement field respectively.
-With obvious notations,
-let $\virtualDisplacementSpaceHybridMesh$ the space of global kinematically admissible virtual cell displacement fields in $\HybridMesh(\bodyLag)$,
-$\virtualDisplacementSpaceDHybridMesh$ that of global kinematically admissible virtual face displacement fields in $\dHybridMesh(\bodyLag)$
-and $\virtualHybridDisplacementSpaceHybridMesh$ that of kinematically admissible virtual global displacement pairs in $\HybridMeshWhole(\bodyLag)$.
+% Contrary to the standard finite element method that consists in seeking a global solution in a regular enough space over the whole mesh, we consider here a much broader space that consists in $\displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell$ the collection of all regular enough displacements element-wise.
+% Similarly, we consider $\displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)$ the space of all regular enough displacements face-wise for the skeleton unknown, such that the global solution space $\hybridDisplacementSpaceHybridMesh = \displacementSpaceHybridMesh \times \displacementSpaceDHybridMesh$ for the whole problem is simply the assembly of all element and face spaces in the mesh.
+
+Let the global unknown $(\tensori{v}{}_{\HybridMesh}, \tensori{v}{}_{\dHybridMesh})$ a displacement pair such that for each $\cell \in \HybridMesh(\bodyLag), \tensori{v}{}_{\HybridMesh} = \tensori{v}{}_{\cell}$ in $\cell$ and for each $F \in \dHybridMesh(\bodyLag), \tensori{v}{}_{\dHybridMesh} = \tensori{v}{}_{F}$ on $F$, where $\tensori{v}{}_{\cell} \in \displacementSpaceCell$ and $\tensori{v}{}_{F} \in \displacementSpaceDCell$ denote a cell and a face displacement field respectively.
 
 % \newcommand\virtualDisplacementSpaceHybridMesh{U_0(\mathcal{T})}
 % \newcommand\virtualDisplacementSpaceDHybridMesh{V_0(\mathcal{F})}
@@ -48,10 +51,11 @@ and $\virtualHybridDisplacementSpaceHybridMesh$ that of kinematically admissible
 % \end{equation}
 
 
+\paragraph{Global weak form}
 
 
 % , where both cells and faces are considered as part of the support for defining
-The weak form of the global mechanical problem of $\bodyLag$ reads : find the global displacement unknown pair $(\tensori{u}{}_{\HybridMesh}, \tensori{u}{}_{\dHybridMesh}) \in \hybridDisplacementSpaceHybridMesh$ verifying $\tensori{u}{}_{\dHybridMesh} \vert_{\dirichletBoundaryLag} = \dirichletLag$ on $\dirichletBoundaryLag$ such that
+The weak form of the global mechanical problem of $\bodyLag$ reads : find the global displacement unknown pair $(\tensori{u}{}_{\HybridMesh}, \tensori{u}{}_{\dHybridMesh})$ verifying $\tensori{u}{}_{\dHybridMesh} \vert_{\dirichletBoundaryLag} = \dirichletLag$ on $\dirichletBoundaryLag$ such that
 $\forall (\delta \tensori{u}{}_{\HybridMesh}, \delta \tensori{u}{}_{\dHybridMesh}) \in \virtualHybridDisplacementSpaceHybridMesh$
 %
 %
@@ -104,7 +108,7 @@ with
 %
 % where $\displacementSpaceHybridMesh$ (respectively $\displacementSpaceDHybridMesh$) denotes the space of all globally kinematically admissible cell (respectively face) displacement fields,
 % and
-where for each element $\cell \in \HybridMesh(\bodyLag)$, the boundary displacement field $\tensori{v}{}_{\dCell}$ is such that $\tensori{v}{}_{\dCell} = \tensori{v}{}_{F}$ on $F$ for every $F \in \mathcal{F}(\cell)$, and the displacement space in the boundary $\displacementSpaceDCell$ is the collection of displacement spaces in faces composing it such that $\displacementSpaceDCell = \prod_{F \in \mathcal{F}(\cell)} V(F)$.
+where for each element $\cell \in \HybridMesh(\bodyLag)$, the boundary displacement field $\tensori{v}{}_{\dCell}$ is such that $\tensori{v}{}_{\dCell} = \tensori{v}{}_{F}$ on $F$ for every $F \in \mathcal{F}(\cell)$
 
 % Contrary to the standard finite element method that consists in seeking a global solution in a regular enough space over the whole mesh, we consider here a much broader space that consists in the collection of all regular enough displacements element-wise, such that displacement jumps are actually possible across elements.
 % Similarily, we consider the space of all regular enough displacements face-wise for the skeleton unknown, such that the global unknown space for the whole problem is simply the assembly of all element and face spaces in the mesh :
@@ -126,7 +130,9 @@ where for each element $\cell \in \HybridMesh(\bodyLag)$, the boundary displacem
 % %
 % Similarily, for each element $\cell \in \mathcal{T}$, the displacement space of its boundary $\displacementSpaceDCell$ is the collection of the face displacement spaces to which it is connected such that $\displacementSpaceDCell = \prod_{F \in \mathcal{F}(\cell)} V(F)$.
 
-A polynomial approximation of the global solution is then sought in a subspace of $\displacementSpaceHybridMesh$, and for each element $\cell \in \HybridMesh(\bodyLag)$, we denote $\discreteDisplacementSpaceCell \subset \displacementSpaceCell$ the approximation displacement space in the cell, and $\discreteDisplacementSpaceDCell \subset \displacementSpaceDCell$ that on the boundary. Moreover, though they are not primal unknowns of the problem, one need to define $\discreteGradSpaceCell \subset \gradSpaceCell$ the space used to build the discrete reconstructed gradient and $\discreteStressSpaceCell \subset \stressSpaceCell$ that chosen for the discrete stress such that
+\paragraph{Discrete functional space}
+
+A polynomial approximation of the global solution is then sought in a subspace of $\displacementSpaceHybridMesh$, and for each element $\cell \in \HybridMesh(\bodyLag)$, we denote $\discreteDisplacementSpaceCell \subset \displacementSpaceCell$ the approximation displacement space in the cell, and $\discreteDisplacementSpaceDCell \subset \displacementSpaceDCell$ that on the boundary. Similarly, let $\discreteGradSpaceCell \subset \gradSpaceCell$ the space used to build the discrete reconstructed gradient and $\discreteStressSpaceCell \subset \stressSpaceCell$ that chosen for the discrete stress such that
 %
 %
 %

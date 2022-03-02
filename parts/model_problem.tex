@@ -31,120 +31,158 @@ numerical implementation of the Hybrid High Order method and in
 Section~\ref{sec_numerical_examples} which provides several examples in
 plasticity.
 
-\subsubsection{Description of the mechanical problem and notations}
+% \subsubsection{Description of the mechanical problem and notations}
+
+\paragraph{Solid body}
 
 Let us consider a solid body whose reference configuration is denoted
-\(\bodyLag\). At a given time $t > 0$, the body is in the current
-configuration \(\bodyEul\).
+$\bodyLag$. At a given time $t > 0$, the body is in the current
+configuration $\bodyEul$.
 
 \paragraph{Mechanical loading}
 
 The body is assumed to be submitted to a body force $\loadEul$ acting
 in $\bodyEul$, a prescribed displacement $\dirichletEul$ on the
-Dirichlet boundary $\dirichletBoundaryEul$, a contact load
+Dirichlet boundary $\dirichletBoundaryEul$, and a contact load
 $\neumannEul{}$ on the Neumann boundary $\neumannBoundaryEul$.
 
-\paragraph{Deformation}  $\tensori{\Phi}$ denotes the deformation
-mapping the reference configuration \(\dBodyLag\) to the current
-configuration\(\dBodyEul\):
-\[
-\tensori{\Phi}\paren{\tensori{X}} = \tensori{x} = \tensori{X}+\tensori{u}\paren{X}
-\]
-where \(\tensori{X}\), \(\tensori{x}\) and \(\tensori{u}\) denote respectively
-the position in the reference configuration \(\dBodyLag\), the position
-in the current configuration \(\dBodyLag\) and the displacement.
+\paragraph{Deformation}
 
-\paragraph{Deformation gradient, gradient of the displacement} The deformation gradient \(\tensorii{F}\) is defined as:
-\[
-\tensorii{F} = \nabla_{\tensori{X}} \tensori{\Phi} = \tensorii{I}+\nabla_{\tensori{X}} \tensori{u} = \tensorii{I} + \tensorii{G}
-\]
-where \(\nabla_{\tensori{X}}\) is the gradient operator in the
-reference configuration and \(\tensorii{G}\) denotes the gradient of the
+The transformation mapping 
+$\tensori{\Phi}$ takes a point from the reference configuration $\bodyLag$ to the current
+configuration $\bodyEul$ such that
+%
+%
+%
+\begin{equation}
+    \tensori{\Phi}\paren{\tensori{X}} = \tensori{x} = \tensori{X}+\tensori{u}\paren{X}
+\end{equation}
+%
+%
+%
+where $\tensori{X}$, $\tensori{x}$ and $\tensori{u}$ denote respectively
+the position in the reference configuration $\bodyLag$, the position
+in the current configuration $\bodyEul$ and the displacement.
+
+\paragraph{Deformation gradient, gradient of the displacement}
+
+The deformation gradient $\tensorii{F}$ is defined as:
+%
+%
+%
+\begin{equation}
+    \tensorii{F} = \nabla \tensori{\Phi} = \tensorii{I} + \tensorii{G}
+\end{equation}
+%
+%
+%
+where $\nabla$ is the gradient operator in the
+reference configuration and $\tensorii{G} = \nabla \tensori{u}$ denotes the gradient of the
 displacement.
 
 \paragraph{Hyperelastic material}
 
 The body is assumed made of an hyperelastic material described by a
-free energy $\mecPotential$ which relates the deformation gradient
-\(\tensorii{F}\) and the first Piola-Kirchhoff \(\) stress as follows:
-\[
-\tensorii{P}=\deriv{\mecPotential}{\tensorii{F}}
-\]
-
-% 
-% \textcolor{blue}{formules de Nanson pour les passages des forces externes en config init}
-% At the time $t = 0$, the solid is in the reference configuration $\bodyLag$ with respective Dirichlet and Neumann boundaries $\dirichletBoundaryLag$ and $\neumannBoundaryLag$.
-% It is subjected to the body force $\loadLag$ in $\bodyLag{}$, the prescribed displacement $\dirichletLag$ on $\dirichletBoundaryLag{}$, and the contact load $\neumannLag{}$ on $\neumannBoundaryLag{}$.
-% Let $\tensori{\Phi}$ the mapping that takes a point $\tensori{x} \in \bodyLag$ from the reference configuration to its coordinates $\tensori{x}{}_t \in \bodyEul$ in the current configuration, and $\tensori{u}$ the displacement field in $\bodyLag{}$ such that $\tensori{\Phi} = \tensori{I}{}_d + \tensori{u}$ where $\tensori{I}{}_d$ denotes the identity function.
-% %
-% %
-% %
-% % From a thermodynamical standpoint
-% The internal energy of the solid $\mecPotential{}$ depends on the gradient of the transformation $\tensorii{F} = \nabla \tensori{\Phi} = \tensorii{1} + \nabla \tensori{u}$ and on a set of state variables $V_{int}$ that relate to the positivity requirement on the dissipation (in the case of an elasto-visco-plastic behaviour for instance). In the absence of dissipative process (\textit{e.g.} for (hyper)-elasticity), there is no internal state variable and $V_{int} = \emptyset$. In the following, in order to simplify developments and without loss of generality, let consider the latter case.
-% \textcolor{blue}{for the sake of simplicty and without loss of generality, let consider a hyperelastic body}
-% 
+free energy $\mecPotential_{\bodyLag{}}$ which relates the deformation gradient
+$\tensorii{F}$ and the first Piola-Kirchhoff stress tensor $\tensorii{P}$ as follows:
 %
 %
 %
-
-\paragraph{Total lagrangian} The total Lagrangian 
-\(L\) of the body is defined as the stored energy minus the work of
-external loadings as follows:
 \begin{equation}
-\label{eq_Lagrangian}
-L\paren{u} = \int_{\Omega}\mecPotential\paren{\tensorii{F}\paren{\tensori{u}}}
-- \int_{\bodyLag} \tensori{f}{}_V \cdot \delta \tensori{u}{}
-- \int_{\neumannBoundaryLag} \neumannLag{} \cdot \delta \tensori{u}{} \vert_{\neumannBoundaryLag}
+\tensorii{P}=\deriv{\mecPotential_{\bodyLag{}}}{\tensorii{F}}
 \end{equation}
 
-where the body forces \(\tensori{f}_{V}\) and conctat tractions
-\(\neumannLag\) in the reference configuration have been obtained from
-their counterparts \(\tensori{f}_{v}\) and \(\neumannEul\) thanks to the
-Nanson formulae, i.e. \(\tensori{f}_{V}=...\) and \(\tensori{f}{}_V=...\)
+\paragraph{Total lagrangian}
 
-\paragraph{Variational characterisation of the
-  mechanical equilibrium} The displacement \(\tensori{u}\) satisfying
-the mechanical equilibrium minimises the Lagragian \(L\):
-\[
+The total Lagrangian 
+$L^{VW}_{\bodyLag{}}$ of the body is defined as the stored energy minus the work of
+external loadings as follows:
+%
+%
+%
+\begin{equation}
+\label{eq_Lagrangian}
+L^{VW}_{\bodyLag{}}
+% \paren{\tensori{u}}
+= \int_{\Omega}\mecPotential_{\bodyLag{}} \paren{\tensorii{F}\paren{\tensori{u}}}
+- \int_{\bodyLag} \tensori{f}{}_V \cdot \delta \tensori{u}{}
+- \int_{\neumannBoundaryLag} \neumannLag{} \cdot \delta \tensori{u}{}
+\vert_{\neumannBoundaryLag}
+\end{equation}
+%
+%
+%
+where the body forces $\tensori{f}_{V}$ and conctat tractions
+$\neumannLag$ in the reference configuration have been obtained from
+their counterparts $\tensori{f}_{v}$ and $\neumannEul$ thanks to the
+Nanson formulae, i.e. $\tensori{f}_{V}=...$ and $\tensori{f}{}_V=...$
+%
+%\paragraph{Variational characterisation of the mechanical equilibrium}
+%
+The displacement $\tensori{u}$ satisfying
+the mechanical equilibrium minimizes the Lagragian $L^{VW}_{\bodyLag{}}$:
+%
+%
+%
+\begin{equation}
 \tensori{u} = \underset{\displaystyle\tensori{u}^{\star}\in U(\bodyLag)}{\argmin}\,
-L\paren{\tensori{u}^{\star}}
-\]
-where \(U(\bodyLag)\) denotes the set of admissible displacements.
+L^{VW}_{\bodyLag{}}\paren{\tensori{u}^{\star}}
+\end{equation}
+%
+%
+%
+where $U(\bodyLag)$ denotes the set of admissible displacements.
 Taking the first order variation of Lagrangian yields the principle of
 virtual work:
+%
+%
+%
+\begin{equation}
+    \label{eq_virtual_works_0}
+    \frac{\partial L^{VW}_{\bodyLag{}}\paren{\tensori{u}}}{\partial \tensori{u}} =
+    \int_{\bodyLag} \tensorii{P} : \nabla \delta \tensori{u} = 
+    \int_{\bodyLag} \tensori{f}_V \cdot \delta \tensori{u} +
+    \int_{\neumannBoundaryLag} \neumannLag{} \cdot \delta \tensori{u}
+    \vert_{\neumannBoundaryLag}
+\end{equation}
 
-\[
-\int_{\bodyLag} \tensorii{P} : \nabla \delta \tensori{u} = 
-\int_{\bodyLag} \tensori{f}_V \cdot \delta \tensori{u} +
-\int_{\neumannBoundaryLag} \neumannLag{} \cdot \delta \tensori{u}
-\]
+\paragraph{Hu-Washizu Lagrangian}
 
-\subsection{Hu-Washizu Lagrangian}
-
-Hu-Washizu generalises the previous variational principle by
-considering that the gradient of the displacement \(\tensorii{G}\) and
-the first Piola-Kirchoff \(\tensorii{P}\) stress are independant
+The Hu-Washizu Lagrangian generalizes the previous variational principle by
+considering that the gradient of the displacement $\tensorii{G}$ and
+the first Piola-Kirchoff $\tensorii{P}$ stress are independent
 unknowns of the problem.
-
-The Hu-Washizu Lagrangian \(L^{HW}\) is then defined as follows:
-\[
+The Hu-Washizu Lagrangian $L^{HW}$ is then defined as follows:
+%
+%
+%
+\begin{equation}
 L^{HW}\paren{\tensori{u},\tensorii{G},
   \tensorii{P}} = \int_{\bodyLag{}}
 \mecPotential\paren{\tensorii{I}+\tensorii{G}} + (\nabla \tensori{u}{} -
 \tensorii{G}{})\,\colon\,\tensorii{P} - \int_{\bodyLag{}} \loadLag \cdot
 \tensori{u}{} - \int_{\neumannBoundaryLag{}} \neumannLag{} \cdot
 \tensori{u}
-\]
-and the solution \(\tensori{u}\), \(\tensorii{G}\) and \(\tensorii{P}\)
-minimize the Hu-Washizu Lagrangian \(L^{HW}\):
-\[
+\vert_{\neumannBoundaryLag}
+\end{equation}
+%
+%
+%
+and the solution $\tensori{u}$, $\tensorii{G}$ and $\tensorii{P}$
+minimize the Hu-Washizu Lagrangian $L^{HW}$:
+%
+%
+%
+\begin{equation}
 \paren{\tensori{u},\, \tensorii{G},\, \tensorii{P}} =
 \underset{\displaystyle\substack{\tensori{u}^{\star}\in U(\bodyLag),\\ \tensorii{G}^{\star},\tensorii{P}^{\star}}}{\argmin}\,
 L\paren{\tensori{u}^{\star}, \tensorii{G}^{\star},\tensorii{P}^{\star}}
-\]
-
+\end{equation}
+%
+%
+%
 The first order variation of the Hu-Washizu Lagragian with respect to
-\(\tensori{u}\), \(\tensorii{G}\), \(\tensorii{P}\) yields:
+$\tensori{u}$, $\tensorii{G}$, $\tensorii{P}$ yields:
 \begin{subequations}
     \label{eq_hu_washizu_derivative_0}
         \begin{alignat}{3}
@@ -154,6 +192,7 @@ The first order variation of the Hu-Washizu Lagragian with respect to
             \int_{\bodyLag} \tensori{f}_V \cdot \delta \tensori{u}
             -
             \int_{\neumannBoundaryLag} \neumannLag \cdot \delta \tensori{u}
+            \vert_{\neumannBoundaryLag}
         \label{eq_hu_washizu_derivative_0:eq0}
         \\
             \variation{L^{HW}}{\tensorii{P}}
@@ -168,571 +207,11 @@ The first order variation of the Hu-Washizu Lagragian with respect to
 \end{subequations}
 
 Equation~\eqref{eq_hu_washizu_derivative_0:eq2}
-shows that \(\tensorii{G}\) is equal to \(\nabla \tensori{u}\) is a weak
+shows that $\tensorii{G}$ is equal to $\nabla \tensori{u}$ is a weak
 sense and Equation~\eqref{eq_hu_washizu_derivative_0:eq3} shows that the
 First Piola Kirchhoff stress is equal to the derivative the free energy
 in a weak sense.
 
 \paragraph{Some words about the importance of the Hu-Washizu principle}
 
-%%
-%% 
-%% 
-%\begin{subequations}
-%\label{eq_model_problem_0}
-%    \begin{alignat}{2}
-%    % \tensorii{F} - \nabla_{X} \tensori{u} & = \tensorii{1} \quad && \text{in } \Omega_{0} \label{eq_model_problem:eq1}
-%    \tensorii{G}{} & = \nabla \tensori{u}{} 
-%    % \quad
-%    % &&
-%    % \text{in } \bodyLag{}
-%    \label{eq_model_problem_0:eq1}
-%    \\
-%    % \tensorii{P} - \frac{\partial \mecPotential}{\partial \tensorii{F}} & = 0 \quad && \text{in } \Omega_{0} \label{eq_model_problem:eq2}
-%    \tensorii{P}{} & = \frac{\partial \mecPotential{}}{\partial \tensorii{G}{}}
-%    % \quad
-%    % &&
-%    % \text{in } \bodyLag{}
-%    \label{eq_model_problem_0:eq2}
-%    \\
-%    \nabla_{X} \cdot \tensorii{P}{} & = - \loadLag
-%    % \quad
-%    % &&
-%    % \text{in } \bodyLag{}
-%    \label{eq_model_problem_0:eq3}
-%    \\
-%    \tensori{u}{} \vert_{\dirichletBoundaryLag{}} & = \dirichletLag
-%    % \quad
-%    % &&
-%    % \text{on } \dirichletBoundaryLag{}
-%    \label{eq_model_problem_0:eq4}
-%    \\
-%    \tensorii{P}{} \vert_{\neumannBoundaryLag{}} \cdot \tensori{n} & = \neumannLag{}
-%    % \quad
-%    % &&
-%    % \text{on } \neumannBoundaryLag{}
-%    \label{eq_model_problem_0:eq5}
-%\end{alignat}
-%\end{subequations}
-%
-%% where $\tensori{n}$ denotes the unit outward normal vector on $\neumannBoundaryLag{}$.
-%One readily identifies \eqref{eq_model_problem_0:eq1} with the displacement strain relation, \eqref{eq_model_problem_0:eq2} with the constitutive equation, \eqref{eq_model_problem_0:eq3} with the conservation of momentum, \eqref{eq_model_problem_0:eq5} with the traction force continuity and \eqref{eq_model_problem_0:eq4} with Dirichlet boundary conditions.
-%
-%\subsection{The Principle of virtual works}
-%\label{sec_Virtual_Works_functional}
-%
-%%
-%%
-%%
-%Considering now that $\tensorii{G}{}$ and $\tensorii{P}{}$ are not unknowns of the problem, \textit{i.e.} by explicitly eliminating both \eqref{eq_hu_washizu_derivative_0:eq2} and \eqref{eq_hu_washizu_derivative_0:eq3} from \eqref{eq_hu_washizu_derivative_0}, \eqref{eq_hu_washizu_0} simplifies as : find the displacement field $\tensori{u}{} \in \displacementSpaceCell$ verifying $\tensori{u}{} \vert_{\dirichletBoundaryLag{}} = \dirichletLag$ that minimizes the energy functional $J_{\bodyLag{}}^{VW}$
-%%
-%%
-%%
-%\begin{equation}
-%    \label{eq_virtual_works_0}
-%    \begin{aligned}
-%        J_{\bodyLag{}}^{VW}
-%        % (\tensori{u}{}_{\cell})
-%        =
-%        \int_{\bodyLag{}} \mecPotential{}
-%        -
-%        \int_{\bodyLag{}} \loadLag \cdot \tensori{u}{}
-%        -
-%        \int_{\neumannBoundaryLag{}} \neumannLag{} \cdot \tensori{u}{}
-%    \end{aligned}
-%\end{equation}
-%%
-%%
-%%
-%Deriving \eqref{eq_virtual_works_0} with respect to the primal unknown $\tensori{u}{}$ yields the weak form \eqref{eq_hu_washizu_derivative_0:eq0}, which is the notorious principle of virtual work
-%%
-%%
-%%
-%% \begin{equation}
-%%     \label{eq_virtual_works_02}
-%%     \begin{aligned}
-%%         % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
-%%         \delta J_{\bodyLag{}}^{VW}
-%%         % =
-%%         % \frac{\partial J_{\cell}^{VW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
-%%         & =
-%%         \int_{\bodyLag{}}
-%%         % \frac{\partial \mecPotential{}_{\cell}}{\partial \nabla \tensori{u}{}_{\cell}} : \nabla \delta \tensori{u}{}_{\cell}
-%%         \tensorii{P}{} : \nabla \delta \tensori{u}{}
-%%         -
-%%         \int_{\bodyLag{}} \loadLag \cdot \delta \tensori{u}{}
-%%         -
-%%         \int_{\neumannBoundaryLag{}} \neumannLag{} \cdot \delta \tensori{u}{} \vert_{\neumannBoundaryLag{}}
-%%         &&
-%%         \ \ \ \ \ \ \ \ 
-%%         &&
-%%         \forall \delta \tensori{u}{}
-%%         \in \virtualDisplacementSpaceCell
-%%     \end{aligned}
-%% \end{equation}
-%%
-%%
-%%
-%that relates to the strong problem defined by equation \eqref{eq_model_problem_0:eq3}, \eqref{eq_model_problem_0:eq4}, \eqref{eq_model_problem_0:eq5} only.
-%
-%%
-%%
-%%
-%% The initial configuration of the body at the time $t = 0$ (see Figure \ref{fig_setting}) is denoted $\bodyLag$ with respective Dirichlet and Neumann boundaries $\dirichletBoundaryLag$ and $\neumannBoundaryLag$. Let the body force $\loadLag$ the expression of $\loadEul$ in $\bodyLag{}$, the prescribed displacement $\dirichletLag$ that of $\dirichletEul$ onto $\dirichletBoundaryLag$ and the contact load $\neumannLag$ that of $\neumannEul$ onto $\dirichletBoundaryLag$.
-%% The transformation mapping $\tensori{\Phi}$ takes a point $\tensori{x} \in \bodyLag$ from the initial configuration to $\tensori{x}{}_t \in \bodyEul$ in the current configuration
-%
-%
-%
-%% Let $\cell \subset \bodyLag$ an arbitrary open subset of the solid body, with boundary $\dCell \subset \mathbb{R}^{d - 1}$
-%% which is split into an eventual Dirichlet boundary $\dirichletCell \subset \dirichletBoundaryLag$ subjected to an imposed displacement $\dirichletLag$ if $\cell$ shares a boundary with $\dirichletBoundaryLag$ and into the Neumann Boundary $\neumannCell \subset \neumannBoundaryLag \cup \bodyLag$ with contact load $\neumannCellLoad$ such that
-%
-%% Let us consider the equilibrium of a an (hyperelastic) solid body. The
-%% reference and current configurations of the body are denoted
-%% respectively $\bodyLag$ and $\bodyEul$ with respective boundaries $\dBodyLag$ and
-%% $\dBodyEul$.
-%% %
-%% %
-%% %
-%% In the reference configuration, the body $\bodyLag$ is subjected to body forces $\loadLag$, to contact loads $\neumannLag{}$ on a the Neumann boundary $\neumannBoundaryLag \subset \dBodyLag{}$ and to prescribed displacements $\dirichletLag$ on the Dirichlet boundary $\dirichletBoundaryLag \subset \dBodyLag{}$, where the Neumann and Dirichlet boundaries form a partition of $\dBodyLag$.
-%% % $\neumannBoundaryEul$ and
-%% % $\dirichletBoundaryEul$ form a partition of
-%% % $\dBodyLag$, i.e.
-%% % $\dBodyLag = \dirichletBoundaryLag \cup
-%% % \neumannBoundaryLag$ and $\dirichletBoundaryLag{} \cap
-%% % \neumannBoundaryLag = \emptyset$.
-%% %
-%% %
-%% %
-%% %
-%% %
-%% %
-%% where $U(\bodyLag{})$ denotes the space of all kinematically admissible displacement fields in $\bodyLag{}$, $G(\bodyLag{})$ that of all statically admissible displacement gradient fields, and $S(\bodyLag{})$ that of all statically admissible stress fields.
-%% %
-%% %
-%% %
-
-% \begin{itemize}
-% \item $\tensori{u}$ is the displacement field
-% \item ....
-% \end{itemize}
-
-% % Petit developpement pour identifier G et du_dX, etc.. Du coup, on retrouve le PTV.
-
-% Let $\bodyEul$ a solid body with boundary $\dBodyEul$, that deforms in the current configuration at some time $t > 0$ under a body force $\loadEul$, a prescribed displacement $\dirichletEul$ on the Dirichlet boundary $\dirichletBoundaryEul \subset \dBodyEul$, and a contact load $\neumannEul{}$ on the Neumann boundary $\neumannBoundaryEul \subset \dBodyEul$.
-% % , such that $\dBodyEul = \dirichletBoundaryEul \cup \neumannBoundaryEul$ and $\dirichletBoundaryEul{} \cap \neumannBoundaryEul = \emptyset$.
-% %
-% %
-% %
-% The initial configuration of the body at time $t = 0$ (see Figure \ref{fig_setting}) is denoted $\bodyLag$ with respective Dirichlet and Neumann boundaries $\dirichletBoundaryLag$ and $\neumannBoundaryLag$, such that the transformation mapping $\tensori{\Phi}$ takes a point $\tensori{x} \in \bodyLag$ from the initial configuration to $\tensori{x}{}_t \in \bodyEul$ in the current configuration. Let the body force $\loadLag$ the expression of $\loadEul$ in $\bodyLag{}$, the prescribed displacement $\dirichletLag$ that of $\dirichletEul$ onto $\dirichletBoundaryLag$ and the contact load $\neumannLag$ that of $\neumannEul$ onto $\dirichletBoundaryLag$.
-
-
-
-% Let $\cell \subset \bodyLag$ an arbitrary open subset of the solid body, with boundary $\dCell$
-% which is split into an eventual Dirichlet boundary $\dirichletCell \subset \dirichletBoundaryLag$ subjected to an imposed displacement $\dirichletLag$ if $\cell$ shares a boundary with $\dirichletBoundaryLag$ and into the Neumann Boundary $\neumannCell \subset \neumannBoundaryLag \cup \bodyLag$ with contact load $\neumannCellLoad$ such that
-% %
-% % 
-% % 
-% \begin{equation}
-%     \label{eq_contact_force}
-%     \begin{aligned}
-%         \neumannCellLoad = 
-%         \left\{
-%             \begin{array}{ll}
-%                 \tensori{t}{}_{\bodyLag \backslash \cell \rightarrow \cell} & \mbox{on } \neumannCell \cap \bodyLag \backslash \cell
-%                 \\
-%                 \neumannLag & \mbox{on } \neumannCell \cap \neumannBoundaryLag
-%             \end{array}
-%         \right.
-%     \end{aligned}
-% \end{equation}
-% % 
-% % 
-% %
-% with $\tensori{t}{}_{\bodyLag \backslash \cell \rightarrow \cell}$ the contact force applied by the surrounding part of the body $\bodyLag$ onto the subset $\cell$, and $\dirichletCell \cap \neumannCell = \emptyset$.
-%
-% 
-% 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=7.cm]{img/setting.png}
-%     \caption{schematic representation of the model problem}
-%     \label{fig_setting}
-% \end{figure}
-%
-% 
-% 
-
-% split into two distinct media; an open bulk medium $\Bulk \subset \cell$ with boundary $\dBulk$, and an open interface medium $\Crown \subset \cell$ between the bulk $\Bulk$ and the boundary $\dCell$, with boundary $\dCrown = \dBulk \cup \dCell$ and of some width $\ell > 0$ that is supposed to be small compared to $h_{\cell} = \max_{(\tensori{x}{}_a, \tensori{x}{}_b) \in \cell} \lVert \tensori{x}{}_a - \tensori{x}{}_b \rVert$ the diameter of $\cell$ (see Figure \ref{fig_02}).
-% %
-% % 
-% % 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=12.cm]{img/hu_washizu.png}
-%     \caption{schematic representation of the composite region}
-%     \label{fig_02}
-% \end{figure}
-% %
-% % 
-% % 
-% The boundary $\dCell$ moves with a boundary displacement field $\tensori{u}{}_{\dCell} \in V_{}(\dCell)$, where $V_{}(\dCell)$ denotes the space of kinematically admissible boundary displacements. The displacement at the boundary $\dCell$ results from the interactions of $\dCell$ with neighbouring media, \textit{i.e.} from the action of $\bodyLag \backslash \cell$ onto $\dCell$ or from some boundary condition.
-% % Assuming the bulk $\Bulk$ is \textit{a priori} not influenced by the movements of $\dCell$, such that it only morphs through the action of the body load $\loadLag$, hence producing a displacement gradient $\tensorii{G}{}_{\Bulk} \in \gradSpaceBulk$ and a stress $\tensorii{P}{}_\Bulk \in \stressSpaceBulk$ under the mechanical potential $\mecPotential{}_{\bodyLag}$, one needs to restrict 
-% The bulk $\Bulk$ is not directly attached to $\dCell$, and morphs by a displacement $\tensori{u}{}_{\Bulk} \in \displacementSpaceBulk$ under the action of the body load $\loadLag$, hence producing a displacement gradient $\tensorii{G}{}_{\Bulk} \in \gradSpaceBulk$ and a stress $\tensorii{P}{}_\Bulk \in \stressSpaceBulk$ depending on the mechanical potential $\mecPotential{}_{\bodyLag}$.
-% % , and communicates with the surrounding medium $\bodyLag \backslash \cell$.
-% It is however bound to the interface $\Crown$ that acts as a patch between the bulk $\Bulk$ and the boundary $\dCell$, such that its displacement $\tensori{u}_{\Crown} \in \displacementSpaceCrown$ verifies
-
-% Let $\tensori{\Phi}{}_{\cell}$ the restriction of $\tensori{\Phi}$ to ${\cell}$, and $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ the displacement field in $\cell$ such that $\tensori{\Phi}{}_{\cell} = \tensori{I}{}_d + \tensori{u}{}_{\cell}{}$ with $\tensori{I}{}_d$ the identity function, where the notation $\displacementSpaceCell$ denotes the space of all kinematically admissible displacement fields in $\cell$.
-% % 
-% Let $\tensorii{G}{}_{\cell}
-% % \in \gradSpaceCell
-% $ the displacement gradient field in $\gradSpaceCell$ the space of all statically admissible displacement gradient fields in $\cell$,
-% and $\tensorii{F}{}_{\cell} := \nabla \tensori{\Phi}{}_{\cell} = \tensorii{1} + \tensorii{G}{}_{\cell}$ the transformation gradient, where $\nabla$ denotes the Lagrangian nabla operator.
-% % and $\tensorii{F}{}_{\cell} := \nabla \tensori{\Phi}{}_{\cell} = \tensorii{1} + \nabla \tensori{u}$ the transformation gradient, where $\nabla$ denotes the Lagrangian nabla operator.
-% %
-% Let $\mecPotential{}_{\cell} (\tensorii{F}{}_{\cell}, \internaleStateVariables)$ the mechanical energy potential in $\cell$ that depends on the transformation gradient $\tensorii{F}{}_{\cell}$ and possibly on a set of internal state variables $\internaleStateVariables$.
-% % where $\nabla$ denotes the Lagrangian nabla operator.
-% %
-% % Let $\tensorii{P}{}_{\cell} \in \stressSpaceCell$ the first Piola-Kirchoff stress tensor deriving from the expression of the mechanical energy potential, with $\stressSpaceCell$ the space of all statically admissible stress fields in $\cell$.
-% Let $\tensorii{P}{}_{\cell}
-% % \in \stressSpaceCell
-% $ the first Piola-Kirchoff stress tensor in $\stressSpaceCell$ the space of all statically admissible stress fields in $\cell$, that depends on
-% % $\mecPotential{}_{\cell, \tensori{F}{}}$
-% the derivative of the mechanical energy potential $\mecPotential{}_{\cell}$ with respect to $\tensorii{F}{}_{\cell}$ (or equivalently, with respect to $\tensorii{G}{}_{\cell}$).
-% % % where
-% % % %
-% % % %
-% % % %
-% % % \begin{equation}
-% % %     \label{eq_stress_def}
-% % %     \begin{aligned}
-% % %         \mecPotential{}_{\cell, \tensori{F}{}}
-% % %         :=
-% % %         \frac{\partial \mecPotential{}_{\cell}}{\partial \tensorii{F}{}_{\cell}}
-% % %         =
-% % %         \frac{\partial \mecPotential{}_{\cell}}{\partial \tensorii{G}{}_{\cell}} 
-% % %         \frac{\partial \tensorii{G}{}_{\cell}}{\partial \tensorii{F}{}_{\cell}}
-% % %         =
-% % %         \frac{\partial \mecPotential{}_{\cell}}{\partial \tensorii{G}{}_{\cell}}
-% % %     \end{aligned}
-% % \end{equation}
-% %
-% %
-% %
-% % 
-% The equilibrium of the body $\cell$ is reached for the displacement gradient field $\tensorii{G}{}_{\cell} \in \gradSpaceCell$, the first Piola-Kirchoff stress field $\tensorii{P}{}_{\cell} \in \stressSpaceCell$ and the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ minimizing the three field Hu–Washizu energy functional $J_{\cell}^{HW}$
-% %
-% %
-% %
-% \begin{equation}
-%     \label{eq_hu_washizu}
-%         J_{\cell}^{HW}
-%         % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
-%         =
-%         \int_{\cell} \mecPotential{}_{\cell} + (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
-%         -
-%         \int_{\cell} \loadLag \cdot \tensori{u}{}_{\cell}
-%         -
-%         \int_{\neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\cell} \vert_{\dCell}
-% \end{equation}
-% %
-% %
-% %
-% Deriving \eqref{eq_hu_washizu} with respect to all variables yields the weak formulation of the problem
-% %
-% % 
-% % 
-% \begin{subequations}
-%     \label{eq_hu_washizu_derivative}
-%         \begin{alignat}{3}
-%             \frac{\partial J_{\cell}^{HW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
-%             = & \int_{\cell} \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
-%             -
-%             \int_{\cell} \tensori{f}{}_V \cdot \delta \tensori{u}{}_{\cell}
-%             -
-%             \int_{\dCell} \tensori{t}{}_{\neumannCell} \cdot \delta \tensori{u}{}_{\cell} \vert_{\dCell}
-%             &&
-%             \ \ \ \ \ \ \ \ 
-%             &&
-%             \forall \delta \tensori{u}{}_{\cell}
-%             \in \virtualDisplacementSpaceCell
-%         \label{eq_hu_washizu_derivative:eq0}
-%         \\
-%             \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
-%             = &
-%             \int_{\cell} (\frac{\partial \mecPotential_{\cell}}{\partial \tensorii{G}{}_{\cell}} - \tensorii{P}{}_{\cell}) : \delta \tensorii{G}{}_{\cell}
-%             &&
-%             \ \ \ \ \ \ \ \ 
-%             &&
-%             \forall \delta \tensorii{G}{}_{\cell}
-%             \in \gradSpaceCell
-%         \label{eq_hu_washizu_derivative:eq2}
-%         \\
-%             \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
-%             = & \int_{\cell} (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell} ) : \delta \tensorii{P}{}_{\cell}
-%             &&
-%             \ \ \ \ \ \ \ \ 
-%             &&
-%             \forall \delta \tensorii{P}{}_{\cell}
-%             \in \stressSpaceCell
-%         \label{eq_hu_washizu_derivative:eq3}
-%     \end{alignat}
-% \end{subequations}
-% %
-% %
-% %
-% where $\cdot \ \vert_{\dCell}$ denotes the trace operator on $\dCell$, and $\virtualDisplacementSpaceCell$ the space of all kinematically admissible virtual displacements in $\cell$.
-% Since the subset $\cell$ is arbitrary, \eqref{eq_hu_washizu_derivative} holds true in a distributional sense, and by applying the divergence theorem on \eqref{eq_hu_washizu_derivative:eq0}, one obtains the strong formulation of problem \eqref{eq_hu_washizu}
-% %
-% % 
-% % 
-% \begin{subequations}
-% \label{eq_model_problem}
-%     \begin{alignat}{2}
-%     % \tensorii{F} - \nabla_{X} \tensori{u} & = \tensorii{1} \quad && \text{in } \Omega_{0} \label{eq_model_problem:eq1}
-%     \tensorii{G}{}_{\cell} - \nabla \tensori{u}{}_{\cell} & = 0 \quad
-%     &&
-%     \text{in } \cell
-%     \label{eq_model_problem:eq1}
-%     \\
-%     % \tensorii{P} - \frac{\partial \mecPotential}{\partial \tensorii{F}} & = 0 \quad && \text{in } \Omega_{0} \label{eq_model_problem:eq2}
-%     \tensorii{P}{}_{\cell} - \frac{\partial \mecPotential{}_{\cell}}{\partial \tensorii{G}{}_{\cell}} & = 0 \quad
-%     &&
-%     \text{in } \cell
-%     \label{eq_model_problem:eq2}
-%     \\
-%     \nabla_{X} \cdot \tensorii{P}{}_{\cell} + \loadLag & = 0 \quad
-%     &&
-%     \text{in } \cell
-%     \label{eq_model_problem:eq3}
-%     \\
-%     \tensori{u}{}_{\cell} \vert_{\dirichletCell} & = \dirichletLag \quad
-%     &&
-%     \text{on } \dirichletCell
-%     \label{eq_model_problem:eq4}
-%     \\
-%     \tensorii{P}{}_{\cell} \cdot \tensori{n} & = \neumannCellLoad \quad
-%     &&
-%     \text{on } \neumannCell
-%     \label{eq_model_problem:eq5}
-% \end{alignat}
-% \end{subequations}
-% %
-% % 
-% % 
-% where $\tensori{n}$ denotes the unit ouward normal vector on $\dCell$.
-% One readily identifies \eqref{eq_model_problem:eq1} with the displacement strain relation, \eqref{eq_model_problem:eq2} with the constitutive equation, \eqref{eq_model_problem:eq3} with the conservation of momentum, \eqref{eq_model_problem:eq5} with the traction force continuity and \eqref{eq_model_problem:eq4} with Dirichlet boundary conditions.
-% %
-% %
-% %
-% Considering now that $\tensorii{G}{}_{\cell}$ and $\tensorii{P}{}_{\cell}$ are not unknowns of the problem, \textit{i.e.} by explicitly eliminating both \eqref{eq_hu_washizu_derivative:eq2} and \eqref{eq_hu_washizu_derivative:eq3} from \eqref{eq_hu_washizu_derivative}, \eqref{eq_hu_washizu} simplifies as : find the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ that minimizes the energy functional $J_{\cell}^{VW}$
-% %
-% %
-% %
-% \begin{equation}
-%     \label{eq_virtual_works}
-%     \begin{aligned}
-%         J_{\cell}^{VW}
-%         % (\tensori{u}{}_{\cell})
-%         =
-%         \int_{\cell} \mecPotential{}_{\cell}
-%         -
-%         \int_{\cell} \loadLag \cdot \tensori{u}{}_{\cell}
-%         -
-%         \int_{\neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\cell}
-%     \end{aligned}
-% \end{equation}
-% %
-% %
-% %
-% Deriving \eqref{eq_virtual_works} with respect to the primal unknown $\tensori{u}{}_{\cell}$ yields the weak form of the problem, which is the notorious principle of virtual work
-% %
-% %
-% %
-% \begin{equation}
-%     \label{eq_virtual_works_1}
-%     \begin{aligned}
-%         % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
-%         \delta J_{\cell}^{VW}
-%         % =
-%         % \frac{\partial J_{\cell}^{VW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
-%         & =
-%         \int_{\cell}
-%         % \frac{\partial \mecPotential{}_{\cell}}{\partial \nabla \tensori{u}{}_{\cell}} : \nabla \delta \tensori{u}{}_{\cell}
-%         \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
-%         -
-%         \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
-%         -
-%         \int_{\neumannCell} \neumannCellLoad \cdot \delta \tensori{u}{}_{\cell} \vert_{\dCell{}}
-%         &&
-%         \forall \delta \tensori{u}{}_{\cell}
-%         \in \virtualDisplacementSpaceCell
-%     \end{aligned}
-% \end{equation}
-% %
-% %
-% %
-% that relates to the strong problem defined by equation \eqref{eq_model_problem:eq3}, \eqref{eq_model_problem:eq4}, \eqref{eq_model_problem:eq5} only, where \eqref{eq_model_problem:eq1}, \eqref{eq_model_problem:eq2} are taken to be granted.
-% %
-% %
-% %
-% % ,and $\cdot \ \vert_{\dCell}$ is the trace operator on $\dCell$.
-% % The equilibrium of the body $\cell$ corresponding to problem \eqref{eq_model_problem} where equations \eqref{eq_model_problem:eq1} and \eqref{eq_model_problem:eq2} are enforced strongly is reached for the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ and minimizing the energy functional $J_{\cell}$:
-% % %
-% % % 
-% % % 
-% % \begin{equation}
-% %     \label{eq_virtual_works}
-% %     \begin{aligned}
-% %         J_{\cell}
-% %         % (\tensori{u}{}_{\cell})
-% %         =
-% %         \int_{\cell} \mecPotential{}_{\cell}
-% %         -
-% %         \int_{\cell} \loadLag \cdot \tensori{u}{}_{\cell}
-% %         -
-% %         \int_{\neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\cell}
-% %     \end{aligned}
-% % \end{equation}
-% % %
-% % % 
-% % % 
-% % The energy functional \eqref{eq_virtual_works} of the equilibrium of $T$ depends on the single displacement unknown, and is the one at the foundation of the notorious principle of virtual works; indeed, deriving \eqref{eq_virtual_works} with respect to $\tensori{u}{}_{\cell}$ and using both \eqref{eq_model_problem:eq1} and \eqref{eq_model_problem:eq2} yields :
-% % %
-% % % 
-% % % 
-% % \begin{equation}
-% %     \label{eq_virtual_works_1}
-% %     \begin{aligned}
-% %         % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
-% %         d J_{\cell} = \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
-% %         & =
-% %         \int_{\cell}
-% %         % \frac{\partial \mecPotential{}_{\cell}}{\partial \nabla \tensori{u}{}_{\cell}} : \nabla \delta \tensori{u}{}_{\cell}
-% %         \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
-% %         -
-% %         \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
-% %         -
-% %         \int_{\neumannCell} \neumannCellLoad \cdot \delta \tensori{u}{}_{\cell} \vert_{\dCell{}}
-% %     \end{aligned}
-% % \end{equation}
-% % %
-% % % 
-% % % 
-% % with $\displacementSpaceCell{} = H^1(\cell, \mathbb{R}^{d})$. If $\tensorii{G}{}_{\cell}$ and $\tensorii{P}{}_{\cell}$ are unknowns of the problem, one obtains the three-field Hu–Washizu functional $J_{\cell}$, for the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ such that :
-% % % 
-% % % 
-% % %
-% % % \begin{equation}
-% % % \label{eq_hu_washizu}
-% % %     J_{\cell}
-% % %     % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
-% % %     =
-% % %     \int_{\cell} \mecPotential{}_{\cell} + (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
-% % %     -
-% % %     \int_{\cell} \loadLag \cdot \tensori{u}{}_{\cell}
-% % %     -
-% % %     \int_{\neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\cell}
-% % % \end{equation}
-% % %
-% % % 
-% % % 
-% % Deriving \eqref{eq_hu_washizu} with respect to all variables of the problem expresses problem \eqref{eq_model_problem} in a weak sense :
-% % %
-% % % 
-% % % 
-% % \begin{subequations}
-% %     \label{eq_hu_washizu_derivative}
-% %         \begin{alignat}{3}
-% %             \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
-% %             = & \int_{\cell} \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
-% %             -
-% %             \int_{\cell} \tensori{f}{}_V \cdot \delta \tensori{u}{}_{\cell}
-% %             -
-% %             \int_{\dCell} \tensori{t}{}_{\neumannCell} \cdot \delta \tensori{u}{}_{\cell} \vert_{\dCell}
-% %             &&
-% %             \ \ \ \ \ \ \ \ 
-% %             &&
-% %             \forall \delta \tensori{u}{}_{\cell}
-% %             \in \displacementSpaceCell
-% %         \label{eq_hu_washizu_derivative:eq0}
-% %         \\
-% %             \frac{\partial J_{\cell}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
-% %             = &
-% %             \int_{\cell} (\frac{\partial \mecPotential_{\cell}}{\partial \tensorii{G}{}_{\cell}} - \tensorii{P}{}_{\cell}) : \delta \tensorii{G}{}_{\cell}
-% %             &&
-% %             \ \ \ \ \ \ \ \ 
-% %             &&
-% %             \forall \delta \tensorii{G}{}_{\cell}
-% %             \in \gradSpaceCell
-% %         \label{eq_hu_washizu_derivative:eq2}
-% %         \\
-% %             \frac{\partial J_{\cell}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
-% %             = & \int_{\cell} (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell} ) : \delta \tensorii{P}{}_{\cell}
-% %             &&
-% %             \ \ \ \ \ \ \ \ 
-% %             &&
-% %             \forall \delta \tensorii{P}{}_{\cell}
-% %             \in \stressSpaceCell
-% %         \label{eq_hu_washizu_derivative:eq3}
-% %     \end{alignat}
-% % \end{subequations}
-% % %
-% % % 
-% % % 
-% % where the two supplementary equations \eqref{eq_hu_washizu_derivative:eq2} and \eqref{eq_hu_washizu_derivative:eq3} account for the weak formulation of \eqref{eq_model_problem:eq1} and \eqref{eq_model_problem:eq2}, and $\displacementSpaceCell{} = H^1(\cell, \mathbb{R}^{d})$ and $\gradSpaceCell = \stressSpaceCell = L^2(\cell, \mathbb{R}^{d \times d})$.
-
-% %
-% %
-% %
-
-% Assuming that $\cell$ is made out of a partition of $N > 0$ distinct media $\matI \subset \cell$ with respective energy potentials $\mecPotential{}_{\matI}$, the problem writes : for each medium $\matI$, find $\tensori{u}{}_{\matI} \in \displacementSpaceMatI$ verifying
-% $\tensori{u}{}_{\matI} \vert_{\dirichletMatI} = \dirichletLag$ on $\dirichletMatI$,
-% the displacement gradient field $\tensorii{G}{}_{\matI} \in \gradSpaceMatI$ and the first Piola-Kirchoff stress field $\tensorii{P}{}_{\matI} \in \stressSpaceMatI$, that minimize the functional
-% % 
-% % 
-% % 
-% \begin{equation}
-% \label{eq_hu_washizu_composite}
-% \begin{aligned}
-%     J_{\cell}^{HW}
-%     = & \sum_{1 \leq i \leq N} \int_{\matI} \mecPotential{}_{\matI} + (\nabla \tensori{u}{}_{\matI} - \tensorii{G}{}_{\matI}) : \tensorii{P}{}_{\matI}
-%     -
-%     \int_{\matI} \loadLag \cdot \tensori{u}{}_{\matI}
-%     -
-%     \int_{\neumannMatI \cap \neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\matI}
-% \end{aligned}
-% \end{equation}
-% %
-% % 
-% % 
-% where for all $1 \leq i \neq j \leq N$, the external forces corresponding to the traction applied by $\matI$ onto $\partial T_j \cap \dMatI$ and to that of $T_j$ onto $\dMatI \cap \partial T_j$ are direclty eliminated by continuity of the traction force across $\partial T_j \cap \dMatI$.
-% %
-% %
-% %
-
-% If the unknown fields are continuous in $\cell$, one has :
-% $
-% \tensori{u}{}_{\matI} = \tensori{u}{}_{\cell} \vert_{\matI},
-% \tensorii{G}{}_{\matI} = \tensorii{G}{}_{\cell} \vert_{\matI},
-% \tensorii{P}{}_{\matI} = \tensorii{P}{}_{\cell} \vert_{\matI}
-% $,
-% and the problem simplifies in : find $\tensori{u}{}_{\cell} \in \displacementSpaceCell$
-% verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$,
-% the displacement gradient field $\tensorii{G}{}_{\cell} \in \gradSpaceCell$
-% and the first Piola-Kirchoff stress field $\tensorii{P}{}_{\cell} \in \stressSpaceCell$ that minimize
-% %
-% % 
-% % 
-% \begin{equation}
-% \label{eq_hu_washizu_composite_continuous}
-% \begin{aligned}
-%     J_{\cell}^{HW}
-%     = & \sum_{1 \leq i \leq N} \int_{\matI} \mecPotential{}_{\matI} + (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
-%     -
-%     \int_{\matI} \loadLag \cdot \tensori{u}{}_{\cell}
-%     -
-%     \int_{\neumannCell{}} \neumannCellLoad \cdot \tensori{u}{}_{\cell} \vert_{\dCell{}}
-% \end{aligned}
-% \end{equation}
-
-% In particular, assuming $\cell = \bodyLag$, one obtains the mechanical problem to solve for the whole body $\bodyLag$.
+...
