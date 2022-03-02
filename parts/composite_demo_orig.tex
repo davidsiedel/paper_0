@@ -1,6 +1,3 @@
-\section{Introduction to discontinuous methods through a Hu-Washizu formulation}
-\label{sec_composite_demo}
-
 In order to introduce the discontinuous setting in which lies the Hybrid High Order method, let consider the body $\bodyLag$ to be made out of some material defined by a mechanical potential $\mecPotential{}_{\bodyLag}$. The aim of this section consists in devising the expression of the weak formulation deriving from the HHO formulation of the mechanical model problem described in Section \ref{sec_model_problem}. Following the idea of a composite medium as introduced in \ref{sec_model_problem}, let $\cell$ an arbitrary open subset in $\bodyLag$, split into two distinct media; an open bulk medium $\Bulk \subset \cell$ with boundary $\dBulk \subset \mathbb{R}^{d-1}$, and an open interface medium $\Crown \subset \cell$ between the bulk $\Bulk$ and the boundary $\dCell$, with boundary $\dCrown = \dBulk \cup \dCell$ and of some width $\ell > 0$ that is supposed to be small compared to $h_{\cell}$ the diameter of $\cell$ (see Figure \ref{fig_02}).
 %
 % 

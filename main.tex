@@ -149,6 +149,10 @@
 \newtheorem{property}[theorem]{Property}
 \newtheorem{development}[theorem]{Development}
 
+\newcommand{\paren}[1]{\left(#1\right)}
+\newcommand{\deriv}[2]{\displaystyle \frac{\displaystyle \partial #1}{\displaystyle \partial #2}}
+\newcommand{\variation}[2]{\displaystyle \frac{\displaystyle \delta #1}{\displaystyle \delta #2}}
+\newcommand{\argmin}{\mathrm{argmin}}
 
 \newcommand\bodyEul{\Omega_t}
 \newcommand\bodyLag{\Omega}
@@ -379,32 +383,16 @@ Volumetric locking \sep Axi-symmetric modelling hypothesis
 
 %% main text
 
-\section{Introduction}
 \input{parts/introduction.tex}
-
-\section{The model problem}
 \input{parts/model_problem.tex}
-\label{sec_model_problem}
-
-\section{Introduction to discontinuous methods through a Hu-Washizu formulation}
-\label{sec_composite_demo}
 \input{parts/composite_demo_1.tex}
-
-\section{Discretization}
 \input{parts/discretization.tex}
-
-\section{A HHO method for the axi-symmetric framework}
 \input{parts/axisymmetric.tex}
-
-\section{Implementation}
 \input{parts/implementation.tex}
-
-\section{Numerical examples}
 \input{parts/numerical_exemples.tex}
 
-\section{Appendix}
 \input{parts/appendix.tex}
-\label{sec_appendix}
+
 
 \bibliographystyle{elsarticle-num}
 \bibliography{bib}
