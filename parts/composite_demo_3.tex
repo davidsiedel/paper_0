@@ -1,16 +1,58 @@
 \section{Introduction to discontinuous methods through a Hu-Washizu formulation}
 \label{sec_composite_demo}
 
-Many numerical methods, including the finite element method,
-consider a partition of the body into elementary subsets called \textit{cells}. Let $\cell$ be
-such a cell and let $\dCell{}$ its boundary.
-% For the sake of
-% simplicity, the intersection of $\dCell{}$ and $\dBodyLag{}$
-% is first assumed empty. This special case is treated later.
+Many numerical methods
+consider a partition of the body into elementary subsets called \textit{cells}.
+% The equilibrium of the body is then expressed in terms of the sum of the mechanical contribution in each of these cells composing it.
+% The equilibrium of the interface between two cells is then of major 
+For the equilibrium of the whole body to hold, each cell must be in equilibrium with its neighbors, which means that they have to interact and pass information from one another.
+Communication between two cells is ensured by knowledge of the displacement field at their shared boundary.
+For \textit{conformal} methods to which belongs the Lagrange (\textit{i.e.} the standard) Finite Element Method, the displacement over the whole body is continuous, which implies that the displacement at a cell boundary is directly equal to that of its neighbors, and a cell has a direct knowledge of the motion of its neighborhood.
+For so-called \textit{non-conformal} methods, among which are \textit{e.g.} Discontinuous Galerkin methods, Hybrid Discontinuous Galerkin methods and Hybrid High Order methods, the displacement continuity at a cell boundary is not explicitly enforced, such that one needs to introduce supplementary ingredients in the formulation to pass information from one cell to another. A straightforward way of doing so consists in introducing an interface between cells, that acts as a membrane pulling them together. One can readily feel that the stiffer the membrane, the closer the cells, and the closer to the \textit{conformal} framework. This technique is the one at the foundation of Discontinuous Galerkin methods. By adding an intermediate structure in the membrane, called a \textit{bone}, one defines the framework of Hybrid Discontinuous Galerkin methods and Hybrid High Order methods; the membrane is split into two parts, one at each side of the bone, and communication between cells transits through the bone, via the membrane. The term hybrid expresses the fact that both cells and bones carry information about the displacement field, hence introducing the \textit{skeleton} of the body.
+In the following section, we show that one recovers the full mathematical framework proper to these non-conformal method, by writing the equilibrium of a cell and its interface with its neighborhood.
+%  cells must stick together in order to pass the mechanical information from one cell to another
 
-In the framework of conforming Galerkin methods, the displacement field is continuous at cells interfaces.
-The displacement continuity is broken for discontinuous Galerkin methods, to ensure the continuity of the flux instead.
-In this section, we show that this change of paradigm amounts to consider that a cell in the continuous framework is surrounded by an infinitely thin elastic interface.
+% Let $\cell$ be
+% such a cell and let $\dCell{}$ its boundary.
+% % For the sake of
+% % simplicity, the intersection of $\dCell{}$ and $\dBodyLag{}$
+% % is first assumed empty. This special case is treated later.
+
+% In the framework of conforming Galerkin methods, the displacement field is continuous at cells interfaces, and the equilibrium is expressed on the whole structure.
+% For discontinuous Galerkin methods, the displacement continuity is broken, to ensure continuity of the flux between cells instead, such that the equilibrium of the whole structure is the sum of the equilibrium expressed within each cell.
+% In this section, we show that this change of paradigm amounts to consider that a cell in the continuous framework is surrounded by an infinitely thin elastic interface.
+
+% Let the equilibrium of a cell $\cell$
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_element}
+%     L_{\cell}^{eq}
+%     % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
+%     =
+%     \int_{\cell} \mecPotential_{\bodyLag{}} + (\nabla_X \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
+%     -
+%     \int_{\cell} \loadLag \cdot \tensori{u}{}_{\cell}
+%     % -
+%     % \int_{\Crown} \loadLag \cdot \tensori{u}{}_{\Crown}
+%     -
+%     \int_{\neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\dCell}
+% \end{equation}
+% %
+% %
+% %
+% One can either choose a suitable functional space such that the displacement is continuous at the interfaces, or 
+
+
+% Je pense vraiment qu'il faut exprimer explicitement l'équilibre d'un élément avec le reste de la structure (tractions normales et continuité des déplacement), préciser que l'on peut imposer les continuités du déplacement au sens fort ou au sens faible et **ensuite** classifier les méthodes ainsi:
+% Les éléments finis standards assurent la continuité des déplacements aux interfaces
+% Les DG relient directement les éléments entre eux et pénalisent les sauts de déplacement entre les éléments
+% Les HDG et HHO relient les éléments à leurs frontières et pénalisent les sauts de déplacement entre l'élément et la frontière
+
+% Puis on indique qu'un moyen pratique de pénaliser les sauts de déplacement est d'introduire une interphase élastique de faible épaisseur et de faire tendre cette épaisseur vers 0.  Dans le cadre de ce papier, seules les méthodes HDG et HHO sont traitées (et donc pas les DG).
+
+% Cette section montre que l'application de Hu-Hashizu à l'élément à son interphase permet de retrouver tous les ingrédients principaux des méthodes HDG et HH0: le gradient reconstruit et l'opérateur de stabilisation.
 
 \subsection{Partie 1}
 
@@ -187,6 +229,14 @@ The displacement of the element $\cell$ hence depends on the pair $(\tensori{u}_
 \paragraph{Discontinuous Galerkin}
 
 By replacing $\tensori{u}{}_{\dCell}$ by $\tensori{u}{}_{\cell'} \vert_{\dCell}$ for any neighbouring cell $\cell'$ to $\cell$ amounts to describe the framework for Discontinuous Galerkin methods, where only the core unknown $\tensori{u}{}_{\cell}$ is considered, and the displacement jump on $\dCell$ depends on the trace of neighbouring cells  displacement, instead of that only defined on the boundary.
+
+\paragraph{Conformal Galerkin formulation}
+
+By enforcing continuity of the displacement across $\dCell{}$ such that $\tensori{u}_{\cell} \vert_{\dCell} = \tensori{u}_{\dCell}$, one recovers the usual expression over 
+
+The displacement is discontinuous across $\dCell{}$ by considering the vanishing interface, that allows for the core part $\cell{}$ to move away from the boundary $\dCell$, thus introducing a possible displacement jump on $\dCell{}$.
+This assumption relates to the concept of hybridization of the displacement unknown, which is at the foundation of Hybrid Discontinuous Galerkin methods.
+The displacement of the element $\cell$ hence depends on the pair $(\tensori{u}_{\cell}, \tensori{u}_{\dCell})$, where the trace of the core unknown $\tensori{u}_{\cell} \vert_{\dCell{}}$ coexists with $\tensori{u}_{\dCell}$ on $\dCell{}$.
 
 \paragraph{Derivative}
 

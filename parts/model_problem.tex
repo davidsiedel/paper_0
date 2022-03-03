@@ -1,22 +1,22 @@
 \section{The model problem}
 \label{sec_model_problem}
 
-Paragraph~\ref{sec:Hu_Washizu_functional}
-introduces the classical Hu–Washizu functional to describe the
-quasi-static equilibrium of a body submitted to external load and the
-main notations used in this paper. For the sake of simplicity, the body
-is assumed hyper-elastic in this section.
+% Paragraph~\ref{sec:Hu_Washizu_functional}
+% introduces the classical Hu–Washizu functional to describe the
+% quasi-static equilibrium of a body submitted to external load and the
+% main notations used in this paper. For the sake of simplicity, the body
+% is assumed hyper-elastic in this section.
 
-Paragraph~\ref{sec:Hu_Washizu_functional}
-introduces the classical Hu–Washizu functional to describe the
-quasi-static equilibrium of a body submitted to external load and the
-main notations used in this paper. For the sake of simplicity, the body
-is assumed hyper-elastic in this section.
+% Paragraph~\ref{sec:Hu_Washizu_functional}
+% introduces the classical Hu–Washizu functional to describe the
+% quasi-static equilibrium of a body submitted to external load and the
+% main notations used in this paper. For the sake of simplicity, the body
+% is assumed hyper-elastic in this section.
 
-Paragraph~\ref{sec:HHO} introduces the key idea
-of the HHO method, which is to divide the domain in arbitrary subdomains
-connected by cohesive interfaces and to apply the Hu–Washizu functional
-to each sub-domains.
+% Paragraph~\ref{sec:HHO} introduces the key idea
+% of the HHO method, which is to divide the domain in arbitrary subdomains
+% connected by cohesive interfaces and to apply the Hu–Washizu functional
+% to each sub-domains.
 
 \subsection{The standard Hu–Washizu lagragian}
 \label{sec_Hu_Washizu_functional}
@@ -31,7 +31,7 @@ numerical implementation of the Hybrid High Order method and in
 Section~\ref{sec_numerical_examples} which provides several examples in
 plasticity.
 
-% \subsubsection{Description of the mechanical problem and notations}
+\subsubsection{Description of the mechanical problem and notations}
 
 \paragraph{Solid body}
 
@@ -55,7 +55,7 @@ configuration $\bodyEul$ such that
 %
 %
 \begin{equation}
-    \tensori{\Phi}\paren{\tensori{X}} = \tensori{x} = \tensori{X}+\tensori{u}\paren{X}
+    \tensori{\Phi}\paren{\tensori{X}} = \tensori{x} = \tensori{X}+\tensori{u}\paren{\tensori{X}}
 \end{equation}
 %
 %
@@ -92,7 +92,9 @@ $\tensorii{F}$ and the first Piola-Kirchhoff stress tensor $\tensorii{P}$ as fol
 \tensorii{P}=\deriv{\mecPotential_{\bodyLag{}}}{\tensorii{F}}
 \end{equation}
 
-\paragraph{Total lagrangian}
+\subsubsection{Primal problem and Principle of Virtual Works}
+
+% \paragraph{Total lagrangian}
 
 The total Lagrangian 
 $L^{VW}_{\bodyLag{}}$ of the body is defined as the stored energy minus the work of
@@ -120,7 +122,7 @@ Nanson formulae, i.e. $\tensori{f}_{V}=...$ and $\tensori{f}{}_V=...$
 %\paragraph{Variational characterisation of the mechanical equilibrium}
 %
 The displacement $\tensori{u}$ satisfying
-the mechanical equilibrium minimizes the Lagragian $L^{VW}_{\bodyLag{}}$:
+the mechanical equilibrium minimizes the Lagragian $L^{VW}_{\bodyLag{}}$
 %
 %
 %
@@ -146,7 +148,9 @@ virtual work:
     \vert_{\neumannBoundaryLag}
 \end{equation}
 
-\paragraph{Hu-Washizu Lagrangian}
+\subsubsection{Mixed problem and Hu-Washizu functional}
+
+% \paragraph{Hu-Washizu Lagrangian}
 
 The Hu-Washizu Lagrangian generalizes the previous variational principle by
 considering that the gradient of the displacement $\tensorii{G}$ and
