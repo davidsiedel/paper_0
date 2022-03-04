@@ -74,12 +74,12 @@ Under such assumptions and by continuity of the traction force across $\dBulk{}$
 % 
 \begin{equation}
 \label{eq_hu_washizu_split}
-    J_{\cell}^{HW}
+    L_{\cell}^{HW}
     % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
     =
-    \int_{\Bulk} \mecPotential_{\bodyLag{}} + (\nabla_X \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
+    \int_{\Bulk} \mecPotential_{\bodyLag{}} + (\nabla \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
     +
-    \int_{\Crown} \mecPotential_{\Crown{}} + (\nabla_X \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
+    \int_{\Crown} \mecPotential_{\Crown{}} + (\nabla \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
     -
     \int_{\Bulk} \loadLag \cdot \tensori{u}{}_{\Bulk}
     -
@@ -141,7 +141,7 @@ On donne en annexe Section \ref{sec_appendix} l'expression de \eqref{eq_hu_washi
 \begin{equation}
     \label{eq_0015}
     \begin{aligned}
-        J_{\cell}^{HW}
+        L_{\cell}^{HW}
         = &
         \int_{\cell{}} \mecPotential{}_{\bodyLag{}} + (\nabla \tensori{u}{}_{\cell{}} - \tensorii{G}{}_{\cell{}}) : \tensorii{P}{}_{\cell}
         % \\
@@ -162,7 +162,7 @@ On donne en annexe Section \ref{sec_appendix} l'expression de \eqref{eq_hu_washi
 % 
 %
 
-One notices that $J_{\cell}^{HW}$ writes as a function of the four variables $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})$. Such an assumption relates to the concept of hybridization of the displacement unknown, which is at the foundation of Hybrid Discontinuous Galerkin methods. Indeed, the displacement of the solid is described by both a bulk and an interface displacement field, that might take different values on $\dCell{}$.
+One notices that $L_{\cell}^{HW}$ writes as a function of the four variables $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})$. Such an assumption relates to the concept of hybridization of the displacement unknown, which is at the foundation of Hybrid Discontinuous Galerkin methods. Indeed, the displacement of the solid is described by both a bulk and an interface displacement field, that might take different values on $\dCell{}$.
 
 En outre, if the displacement is continuous at the boundary $\dCell{}$ such that $\tensori{u}{}_{\dCell{}}$ is the trace of the cell displacement $\tensori{u}{}_{\cell{}}$ on $\dCell{}$ and $\tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\cell{}} \vert_{\dCell{}} = 0$, on retrouve le cadre continu et la fonctionnelle \eqref{eq_hu_washizu_0} for the three variables $(\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})$.
 
@@ -180,7 +180,7 @@ La fonctionelle \eqref{eq_0015} définit le problème mixte sous forme faible, e
 \begin{subequations}
     \label{eq_0017}
         \begin{alignat}{3}
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
             = & \int_{\cell} \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
             -
             \int_{\cell} \tensori{f}{}_V \cdot \delta \tensori{u}{}_{\cell}
@@ -193,7 +193,7 @@ La fonctionelle \eqref{eq_0015} définit le problème mixte sous forme faible, e
             \in \virtualDisplacementSpaceCell
         \label{eq_0017:eq0}
         \\
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
             = &
             \int_{\neumannCell} (\tensori{\theta}{}_{\dCell} - \tensori{t}{}_{\neumannCell}) \cdot \delta \tensori{u}{}_{\dCell}
             &&
@@ -203,7 +203,7 @@ La fonctionelle \eqref{eq_0015} définit le problème mixte sous forme faible, e
             \in \virtualDisplacementSpaceDCell
         \label{eq_0017:eq1}
         \\
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
             = &
             \int_{\cell} (\frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{\cell}} - \tensorii{P}{}_{\cell}) : \delta \tensorii{G}{}_{\cell}
             &&
@@ -213,7 +213,7 @@ La fonctionelle \eqref{eq_0015} définit le problème mixte sous forme faible, e
             \in \gradSpaceCell
         \label{eq_0017:eq2}
         \\
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
             = & \int_{\cell} (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell} ) : \delta \tensorii{P}{}_{\cell}
             +
             \int_{\dCell} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell}) \cdot \delta \tensorii{P}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{}
@@ -252,7 +252,7 @@ Instead of seeking the four fields explicitly, by noticing that minimization of 
 \begin{equation}
     \label{eq_simple}
     \begin{aligned}
-        J_{\cell}^{VW}
+        L_{\cell}^{VW}
         = &
         \int_{\cell{}} \mecPotential{}_{\bodyLag{}}
         % \\
@@ -323,17 +323,17 @@ such that for all kinematically admissible displacements pairs $(\delta \tensori
 \begin{equation}
     \label{eq_0018}
     \begin{aligned}
-        % d J_{\cell}^{\text{HW}}
+        % d L_{\cell}^{\text{HW}}
         % = &
-        % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+        % \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
         % +
-        % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
+        % \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
         % =
-        \delta J_{\cell, \text{int}}^{VW} - \delta J_{\cell, \text{ext}}^{VW}
+        \delta L_{\cell, \text{int}}^{VW} - \delta L_{\cell, \text{ext}}^{VW}
         =
         0
         % \\
-        % = & \delta J_{\cell}^{\text{int}} + \delta J_{\cell}^{\text{ext}}
+        % = & \delta L_{\cell}^{\text{int}} + \delta L_{\cell}^{\text{ext}}
         % \\
         % = & 
         % \int_{T}
@@ -368,7 +368,7 @@ with
 \begin{subequations}
     \label{eq_0nonamemee}
         \begin{alignat}{3}
-            \delta J_{\cell, \text{int}}^{VW} & = 
+            \delta L_{\cell, \text{int}}^{VW} & = 
             \int_{T}
             \tensorii{P}{}_{\cell}(\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}))
             :
@@ -384,7 +384,7 @@ with
             % \delta \tensori{Z}{}_{\dCell{}}
             \tensori{Z}{}_{\dCell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
             \\
-            \delta J_{\cell, \text{ext}}^{VW} & = 
+            \delta L_{\cell, \text{ext}}^{VW} & = 
             \int_{\neumannCell} \neumannCellLoad{} \cdot \delta \tensori{u}{}_{\dCell{}}
             +
             \int_{T} \loadLag \cdot \delta \tensori{u}{}_{\cell}
@@ -422,7 +422,7 @@ La formulation proposée en grandes déformations permet également un passage n
 \begin{equation}
     \label{eq_small_defs}
     \begin{aligned}
-        J_{\cell}^{HW}
+        L_{\cell}^{HW}
         = &
         \int_{\cell{}} \mecPotential{}_{\bodyLag{}} + (\nabla^s \tensori{u}{}_{\cell{}} - \tensorii{\varepsilon}{}_{\cell{}}) : \tensorii{\sigma}{}_{\cell}
         % \\
@@ -449,7 +449,7 @@ En poursuivant le même développement que précédemment, l'énargie à minimis
 % \begin{equation}
 %     \label{eq_simple_ss}
 %     \begin{aligned}
-%         J_{\cell}^{VW}
+%         L_{\cell}^{VW}
 %         = &
 %         \int_{\cell{}} \mecPotential{}_{\bodyLag{}}
 %         % \\

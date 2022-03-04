@@ -52,12 +52,12 @@ Under such assumptions and following \eqref{eq_hu_washizu_composite}, the Hu–W
 % 
 \begin{equation}
 \label{eq_hu_washizu_split}
-    J_{\cell}^{HW}
+    L_{\cell}^{HW}
     % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
     =
-    \int_{\Bulk} \mecPotential_{\bodyLag{}} + (\nabla_X \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
+    \int_{\Bulk} \mecPotential_{\bodyLag{}} + (\nabla \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
     +
-    \int_{\Crown} \mecPotential_{\Crown{}} + (\nabla_X \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
+    \int_{\Crown} \mecPotential_{\Crown{}} + (\nabla \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
     -
     \int_{\Bulk} \loadLag \cdot \tensori{u}{}_{\Bulk}
     -
@@ -113,12 +113,12 @@ Under such assumptions and following \eqref{eq_hu_washizu_composite}, the Hu–W
 % % 
 % \begin{equation}
 % \label{eq_hu_washizu_split}
-%     J_{\cell}^{HW}
+%     L_{\cell}^{HW}
 %     % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
 %     =
-%     \int_{\Bulk} \mecPotential_{\bodyLag{}} + (\nabla_X \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
+%     \int_{\Bulk} \mecPotential_{\bodyLag{}} + (\nabla \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
 %     +
-%     \int_{\Crown} \mecPotential_{\Crown{}} + (\nabla_X \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
+%     \int_{\Crown} \mecPotential_{\Crown{}} + (\nabla \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
 %     -
 %     \int_{\Bulk} \loadLag \cdot \tensori{u}{}_{\Bulk}
 %     -
@@ -172,14 +172,14 @@ where $\tensori{m}{}_{\dBulk} = \min_{\tensori{x}{}_{\dBulk} \in \dBulk} \lVert 
 %
 % 
 % 
-Using \eqref{eq_continuity_traction_force} and \eqref{eq_crown_displacement}, one can write the internal contribution $J_{\Crown{}, \text{int}}^{HW}$ in $\Crown{}$ as a term depending on the bulk and boundary displacement such that
+Using \eqref{eq_continuity_traction_force} and \eqref{eq_crown_displacement}, one can write the internal contribution $L_{\Crown{}, \text{int}}^{HW}$ in $\Crown{}$ as a term depending on the bulk and boundary displacement such that
 %
 % 
 % 
 \begin{equation}
     \label{eq22}
     \begin{aligned}
-        J_{\Crown{}, \text{int}}^{HW}
+        L_{\Crown{}, \text{int}}^{HW}
         := &
         \int_{\Crown{}} \mecPotential{}_{\Crown} + (\nabla \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
         % -
@@ -309,7 +309,7 @@ And Finally :
 % 
 \begin{equation}
     \begin{aligned}
-        J_{\Crown{}, \text{int}}^{HW}
+        L_{\Crown{}, \text{int}}^{HW}
         =
         (1 - \frac{\alpha}{2} \ell)
         \int_{\dBulk{}} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2
@@ -333,7 +333,7 @@ Injecting \eqref{eq22} in \eqref{eq_hu_washizu_split} yields
 \begin{equation}
     \label{eq_0014}
     \begin{aligned}
-        J_{\cell}^{HW}
+        L_{\cell}^{HW}
         = &
         \int_{\Bulk} \mecPotential{}_{\bodyLag{}} + (\nabla \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
         % \\
@@ -375,7 +375,7 @@ the interface region vanishes such that $\Crown{} \rightarrow \emptyset, \Bulk{}
 \begin{equation}
     \label{eq_0015}
     \begin{aligned}
-        J_{\cell}^{HW}
+        L_{\cell}^{HW}
         = &
         \int_{\cell{}} \mecPotential{}_{\bodyLag{}} + (\nabla \tensori{u}{}_{\cell{}} - \tensorii{G}{}_{\cell{}}) : \tensorii{P}{}_{\cell}
         % \\
@@ -395,18 +395,18 @@ the interface region vanishes such that $\Crown{} \rightarrow \emptyset, \Bulk{}
 % 
 % 
 %
-Assuming that the displacement is continuous at the boundary $\dCell{}$ such that $\tensori{u}{}_{\dCell{}}$ is the trace of the cell displacement $\tensori{u}{}_{\cell{}}$ on $\dCell{}$ and $\tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\cell{}} \vert_{\dCell{}} = 0$, one recovers equation \eqref{eq_hu_washizu} over the element for the three variables $(\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})$. However, if one considers that $\tensori{u}{}_{\dCell}$ and $\tensori{u}{}_{\cell}$ are distinct variables, \textit{i.e.} that the cell $\cell$ is able to move from the boundary $\dCell$ such that the displacement across $\dCell$ is discontinuous, $J_{\cell}^{HW}$ writes as a function of the four variables $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})$.
+Assuming that the displacement is continuous at the boundary $\dCell{}$ such that $\tensori{u}{}_{\dCell{}}$ is the trace of the cell displacement $\tensori{u}{}_{\cell{}}$ on $\dCell{}$ and $\tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\cell{}} \vert_{\dCell{}} = 0$, one recovers equation \eqref{eq_hu_washizu} over the element for the three variables $(\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})$. However, if one considers that $\tensori{u}{}_{\dCell}$ and $\tensori{u}{}_{\cell}$ are distinct variables, \textit{i.e.} that the cell $\cell$ is able to move from the boundary $\dCell$ such that the displacement across $\dCell$ is discontinuous, $L_{\cell}^{HW}$ writes as a function of the four variables $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})$.
 Such an assumption relates to the concept of hybridization of the displacement unknown, which is at the foundation of Hybrid Discontinuous Galerkin methods.
 Besides, replacing $\tensori{u}{}_{\dCell}$ by $\tensori{u}{}_{\cell'} \vert_{\dCell}$ for any neighbouring cell $\cell'$ to $\cell$ amounts to describe the framework for Discontinuous Galerkin methods, where only the core unknown $\tensori{u}{}_{\cell}$ is considered, and the displacement jump on $\dCell$ depends on the trace of neighbouring cells  displacement.
 Following the idea of an hybrid bulk-boundary displacement field over the cell, let introduce $\hybridDisplacementSpaceCell = \displacementSpaceCell \times \displacementSpaceDCell$ the space of all kinematically admissible bulk and boundary displacement pairs, and $\virtualHybridDisplacementSpaceCell = \virtualDisplacementSpaceCell \times \virtualDisplacementSpaceDCell$ that of all kinematically admissible bulk and boundary virtual displacement pairs, with $\virtualDisplacementSpaceDCell$ the space of kinematically admissible virtual displacement fields on the boundary $\dCell$.
-Differentiating $J_{\cell}^{HW}$ with respect to each variable, and introducing the \textit{reconstructed traction force} $\tensori{\theta}{}_{\dCell} = \tensorii{P}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{} + (\beta / h_{\cell}) (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell})$ one obtains the system
+Differentiating $L_{\cell}^{HW}$ with respect to each variable, and introducing the \textit{reconstructed traction force} $\tensori{\theta}{}_{\dCell} = \tensorii{P}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{} + (\beta / h_{\cell}) (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell})$ one obtains the system
 % 
 % 
 %
 \begin{subequations}
     \label{eq_0017}
         \begin{alignat}{3}
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
             = & \int_{\cell} \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
             -
             \int_{\cell} \tensori{f}{}_V \cdot \delta \tensori{u}{}_{\cell}
@@ -419,7 +419,7 @@ Differentiating $J_{\cell}^{HW}$ with respect to each variable, and introducing 
             \in \virtualDisplacementSpaceCell
         \label{eq_0017:eq0}
         \\
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
             = &
             \int_{\neumannCell} (\tensori{\theta}{}_{\dCell} - \tensori{t}{}_{\neumannCell}) \cdot \delta \tensori{u}{}_{\dCell}
             &&
@@ -429,7 +429,7 @@ Differentiating $J_{\cell}^{HW}$ with respect to each variable, and introducing 
             \in \virtualDisplacementSpaceDCell
         \label{eq_0017:eq1}
         \\
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
             = &
             \int_{\cell} (\frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{\cell}} - \tensorii{P}{}_{\cell}) : \delta \tensorii{G}{}_{\cell}
             &&
@@ -439,7 +439,7 @@ Differentiating $J_{\cell}^{HW}$ with respect to each variable, and introducing 
             \in \gradSpaceCell
         \label{eq_0017:eq2}
         \\
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
             = & \int_{\cell} (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell} ) : \delta \tensorii{P}{}_{\cell}
             +
             \int_{\dCell} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell}) \cdot \delta \tensorii{P}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{}
@@ -475,7 +475,7 @@ Instead of seeking the four fields explicitly, by noticing that minimization of 
 \begin{equation}
     \label{eq_simple}
     \begin{aligned}
-        J_{\cell}^{VW}
+        L_{\cell}^{VW}
         = &
         \int_{\cell{}} \mecPotential{}_{\bodyLag{}}
         % \\
@@ -663,17 +663,17 @@ such that for all kinematically admissible displacements pairs $(\delta \tensori
 \begin{equation}
     \label{eq_0018}
     \begin{aligned}
-        % d J_{\cell}^{\text{HW}}
+        % d L_{\cell}^{\text{HW}}
         % = &
-        % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+        % \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
         % +
-        % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
+        % \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
         % =
-        \delta J_{\cell, \text{int}}^{VW} - \delta J_{\cell, \text{ext}}^{VW}
+        \delta L_{\cell, \text{int}}^{VW} - \delta L_{\cell, \text{ext}}^{VW}
         =
         0
         % \\
-        % = & \delta J_{\cell}^{\text{int}} + \delta J_{\cell}^{\text{ext}}
+        % = & \delta L_{\cell}^{\text{int}} + \delta L_{\cell}^{\text{ext}}
         % \\
         % = & 
         % \int_{T}
@@ -708,7 +708,7 @@ with
 \begin{subequations}
     \label{eq_0nonamemee}
         \begin{alignat}{3}
-            \delta J_{\cell, \text{int}}^{VW} & = 
+            \delta L_{\cell, \text{int}}^{VW} & = 
             \int_{T}
             \tensorii{P}{}_{\cell}(\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}))
             :
@@ -724,7 +724,7 @@ with
             % \delta \tensori{Z}{}_{\dCell{}}
             \tensori{Z}{}_{\dCell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
             \\
-            \delta J_{\cell, \text{ext}}^{VW} & = 
+            \delta L_{\cell, \text{ext}}^{VW} & = 
             \int_{\neumannCell} \neumannCellLoad{} \cdot \delta \tensori{u}{}_{\dCell{}}
             +
             \int_{T} \loadLag \cdot \delta \tensori{u}{}_{\cell}

@@ -2,177 +2,87 @@
 \label{sec_numerical_examples}
 
 In this section, we evaluate the proposed axi-symmetric HHO method on classical test cases taken from the literature to emphasize robustness to volumetric locking.
-In order to cover a wide scope of applications, we consider both the small and large strains framework, for linear elasticity and elasto-plastic behaviors.
-The first test case is that of a elasto-perfect plastic swelling sphere. The second one consists in the necking of a notched bar,
-and the third one consists in the swelling of an elastic hollow cylinder.
+We consider both the small and large strains framework, and for elasto-plastic behaviors.
+The first test case is that of a elasto-perfect plastic swelling sphere. The second one consists in the necking of a notched bar.
 In this section, we denote by HHO($k,l$) the HHO element of order $k$ on faces, and order $l$ in the cell.
 
-\subsection{Perfect plastic swelling sphere in small strains}
+\paragraph{Stabilization parameter}
 
-In this section, we specify the thermodynamical framework in which falls the considered test case, \textit{i.e.} that of elasto-plasticity under the small strain hypothesis.
-Then we describe the chosen behavior law for the numerical example, as well as the mechanical setting of the test case. Results are finally displayed and discussed at the end of the present section.
+To ensure coercivity of the HHO method, the stabilisation parameter needs be chosen according to the material under study. In the literature \cite{di_pietro_discontinuous-skeletal_2015}, a value of order $2 \mu$ is advocated, where $\mu$ denotes the shear modulus of the material.
+We use this values for all test cases in the present section.
+% where $\mu = \frac{E}{2(1+\nu)}$ with 
 
-\subsubsection{Plastic behavior in small strains}
+% \subsection{Perfect plastic swelling sphere in small strains}
 
-Dans le cadre de la thermodynamique des milieux continus, la combinsaison de l'application des deux premiers principes de la themodynamique donne lieu à l'équation de Clausius-Duhem qui postule la positivité de l'énergie de dissipation
-%
-%
-%
-\begin{equation}
-    \label{eq_clausius_duhem_0}
-    \begin{aligned}
-        \mathcal{D}
-        =
-        (\tensorii{\sigma}{}_{\cell} - \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial \dot{\tensorii{\varepsilon}}{}_{\cell}}) : \dot{\tensorii{\varepsilon}}{}_{\cell}
-        -
-        \rho \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial v_{int}} \dot{v}_{int}
-        \geq
-        0
-        % =
-        % (\tensorii{\sigma}{}_{\cell} - \rho \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial \tensorii{\varepsilon}{}_{\cell}}) : \dot{\tensorii{\varepsilon}}{}_{\cell}
-        % % -
-        % % \rho (s + \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial T}) \dot{T}
-        % -
-        % \rho \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial v_{int}} \dot{v}_{int}
-        % \geq
-        % 0
-    \end{aligned}
-\end{equation}
-%
-%
-%
-en l'absence de dépendence du problème à la température. Dans le cadre de l'hyper-élasticité qui est un processus de transformation réversible, comme évoque Section \ref{sec_model_problem}, l'ensemble $V_{int}$ des variables internes $v_{int}$ est supposé vide, de sorte que l'inégalité \eqref{eq_clausius_duhem_0} revient à l'équation d'égalité \eqref{eq_stress_def}.
-En revanche, pour des comportements dissipatifs de nature élasto-visco-plastique, on introduit un certains nombre de variables internes, qui sont liées à l'expression de l'énergie dissipée et à l'irréversibilité de la transformation.
-Pour des déformations infinitésimales, on suppose la décomposition additive de la déformation
-%
-%
-%
-\begin{equation}
-    \tensorii{\varepsilon}{}_{\cell} = \tensorii{\varepsilon}{}_{\cell}^e + \tensorii{\varepsilon}{}_{\cell}^p
-\end{equation}
-%
-%
-%
-En une partie élastique $\tensorii{\varepsilon}{}_{\cell}^e$ et une partie plastique $\tensorii{\varepsilon}{}_{\cell}^p$.
-En particulier, dans le cadre des matériaux standards généralisés, on suppose l'existence d'un potentiel également décomposable en une partie élastique et en une partie plastique tel que
-%
-%
-%
-\begin{equation}
-    \label{eq_plast_2}
-    \begin{aligned}
-        \mecPotential{}_{\bodyLag{}} = \mecPotential{}_{\bodyLag{}}^e(\tensorii{\varepsilon}{}_{\cell}^e)
-        +
-        \mecPotential{}_{\bodyLag{}}^p(
-            % \tensorii{\varepsilon}{}_{\cell}^p
-            % ,
-            v_{int})
-    \end{aligned}
-\end{equation}
-%
-%
-%
-Comme évoque Section \ref{sec_model_problem}, le potentiel d'énergie libre de Helmoltz $\mecPotential{}_{\bodyLag{}}$ dépend éventuellement d'un ensemble de variables internes $v_{int}$ dans $V_{int}$, qui a été supposé vide jusque là.
-Dans le cadre d'un comportement élasto-visco-plastique, on introduit au moins une variable interne, de manière à assurer la positivité de l'énergie dissipée. Par injection de \eqref{eq_plast_2} dans \eqref{eq_clausius_duhem_0}, il vient que le tenseur des contraintes $\tensorii{\sigma}{}_{\cell}$ est la la force duale assosciées aux défromations élastiques $\tensorii{\varepsilon}{}_{\cell}^e$. On définit également les forces thermodynamiques $V_{\cell}$ duales des variables internes $v_{int}$ telles que
-%
-%
-%
-\begin{equation}
-    \label{eq_plast_1}
-    \begin{aligned}
-        \mathcal{D}
-        =
-        \tensorii{\sigma}{}_{\cell} : \dot{\tensorii{\varepsilon}}{}_{\cell}^p
-        -
-        \rho \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial v_{int}} \dot{v}_{int}
-        =
-        \begin{Bmatrix}
-            \tensorii{\sigma}{}_{\cell}
-            \\
-            % \tensori{V}{}_{\cell}
-            V_{\cell}
-        \end{Bmatrix}
-        \cdot
-        \begin{Bmatrix}
-            \dot{\tensorii{\varepsilon}}{}_{\cell}^p
-            \\
-            \dot{v}_{int}
-        \end{Bmatrix}
-        \geq
-        0
-        &&
-        \text{with}
-        &&
-        V_{\cell} = - \rho \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial v_{int}}
-    \end{aligned}
-\end{equation}
-%
-%
-%
-Par ailleurs, le cadre des matériaux standards généralisés stipule l'existence d'un convex potential $\phi$ containing the origin, together with a threshold function $f$, that define the evolution of the generalized strains such that
-%
-%
-%
-\begin{equation}
-    \label{eq_plast_1}
-    \begin{aligned}
-        \dot{v_{int}} = \frac{\partial \phi}{\partial f} \frac{\partial f}{\partial V_T}
-    \end{aligned}
-\end{equation}
-%
-%
-%
-Le potentiel $\phi$ dépend de la fonction de charge $f$ telle que celle-ci contient l'origine, est différentiable en tout point de ...
-
-En particulier, on introduit l'ensemble des variables internes $V_{int} = \{ \tensorii{\varepsilon}{}_{\cell}^p, p \}$ avec $p$ la déformation plastique cumulée, et le potentiel plastique 
-%
-%
-%
-\begin{equation}
-    \mecPotential{}_{\bodyLag{}}^p(
-        \tensorii{\varepsilon}{}_{\cell}^p
-        ,
-        p
-    )
-    =
-    \frac{K}{2} \tensorii{\varepsilon}{}_{\cell}^p : \tensorii{\varepsilon}{}_{\cell}^p + \frac{K}{2} p^2
-\end{equation}
-%
-%
-%
-où $K$ est le module d'écrouissage cinématique, et $H$ le module d'écrouissage isotrope. Les forces thermodynamiques assosciées aux variables internes $\tensorii{\varepsilon}{}_{\cell}^p$ et $p$ sont respectivement $K \tensorii{\varepsilon}{}_{\cell}^p$ et $Hp$.
-%
-%
-%
-\begin{equation}
-    f(\tensorii{\sigma}{}_{\cell}^p, q) = \sqrt{\frac{3}{2}} 
-\end{equation}
-
-
-%
-%
-%
-We introduce the discrete logarithmic stress tensor $\tensorii{E}{} = 1/2 \text{ln}(\tensorii{F}{}_{\cell}^{\text{t}} \cdot \tensorii{F}{}_{\cell})$
+% In this section, we specify the thermodynamical framework in which falls the considered test case, \textit{i.e.} that of elasto-plasticity under the small strain hypothesis.
+% Then we describe the chosen behavior law for the numerical example, as well as the mechanical setting of the test case. Results are finally displayed and discussed at the end of the present section.
 
 \subsubsection{Perfect plastic swelling sphere}
+\label{sec_swelling_sphere}
+
+\paragraph{Specimen and loading}
 
 This benchmark consists in a quasi-incompressible sphere under uniform internal loading.
 This test case has an analytical solution and the state of the specimen is known when the plastic region has reached the external border of the sphere.
 The sphere has an inner radius $r_{int} = 0.8$ mm and an outer
 radius $r_{ext} = 1$ mm. An internal radial displacement $u$ is imposed. The mesh is composed of XXX quadrangles (see Figure \ref{fig_sphereall}).
 The simulation is performed until the limit load corresponding to an internal displacement of $0.2$ mm is reached.
+
+\paragraph{Behaviour law}
+
+An isotropic hardening energy potential $\mecPotential{}_{\bodyLag{}}^p$ is chosen for the description of the plastic evolution of the material such that
+
+\begin{equation}
+    \mecPotential{}_{\bodyLag{}}^p(
+        % \tensorii{\varepsilon}{}_{\cell}^p
+        % ,
+        p
+    )
+    % =
+    % \frac{K}{2} \tensorii{\varepsilon}{}_{\cell}^p : \tensorii{\varepsilon}{}_{\cell}^p + \frac{K}{2} p^2
+    =
+    \sigma_0 p + \frac{1}{2} H p^2 + (\sigma_{\infty} - \sigma_0)(p - \frac{1 - e^{-\delta p}}{\delta})
+\end{equation}
 %
 %
 %
+where the parameter $p$ denotes the equivalent plastic strain and a Von Mises yields function $f$ describes the flow rule
+%
+%
+%
+\begin{equation}
+    % f(\tensorii{\sigma}{}_{\cell}^p, q) = \sqrt{\frac{3}{2}} \rVert \text{dev} (\tensorii{\sigma} - K \tensorii{\varepsilon}{}^p) \lVert - \sigma_0 - H p
+    f = \sqrt{\frac{3}{2}} \rVert \text{dev} (\tensorii{\sigma}) \lVert - p
+\end{equation}
+%
+%
+%
+Moreover, the small strain hypothesis is assumed for this test case.
+
+\paragraph{Material parameters}
+
+Perfect plasticity is considered for this test case , where the saturation parameter $\delta = 0$, the yield stresses $\sigma_0 = \sigma_{\infty} = 6$ MPa, the hardening parameter $H = 0$ and the elastic potential parameters are the Young modulus $E = 28.85$ MPa and the Poisson ratio $\nu = 0.499$, such that the material is quasi-incompressible.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=12.cm]{img_calcs/sphere_mesh.png}
     \caption{sphere}
     \label{fig_sphereall}
 \end{figure}
-%
-%
-%
+
+\paragraph{Displacement along the radius}
+
+Since an analytical solution is known for this test case, we compare it to the proposed HHO method. The displacement of the section of the sphere at cell nodes
+is plotted in Figure \ref{fig_sphereall}, along with the analytical one, and we observe that the obtained results are in agreement with the analytical response.
+Figure \ref{fig_sphereall} mentions the label HHO without specifying approximation orders for all computations deliver the same result.
+
+\paragraph{Trace of the Cauchy stress}
+
+As for the displacement, the analytical solution for the trace of the Cauchy stress tensor is compared to the one computed using the proposed HHO method for three approximation orders.
+A sign of volumetric locking is the presence of strong oscillations in the trace of the Cauchy stress (or, equivalently, the hyrostatic pressure) within elements.
+We observe that numerical results at quadrature points fit the analytical curve, and display no sign of volumetric locking. The computed solution is however less smooth
+at the borders of the specimen for higher orders, a phenomenon that was pointed out in \cite{abbas_hybrid_2019-1} for the three dimensional case, and attributed to the fact that planar faces are considered.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=15.cm]{img_calcs/sphere_pressures.png}
@@ -291,22 +201,56 @@ The simulation is performed until the limit load corresponding to an internal di
 
 \subsection{Necking of a notched bar}
 
-In this first benchmark, we consider a 2D rectangular bar with an initial imperfection. The bar is subjected to uniaxial
-extension. This example has been studied previously by many authors as a necking problem 3,5,7,8,22 and can be used to
-test the robustness of the different methods. The bar has a length of 53.334 mm and a variable width from an initial width
-value of 12.826 mm at the top to a width of 12.595 mm at the center of the bar to create a geometric imperfection. A vertical
-displacement u y = 5mm is imposed at both ends, as shown in Figure 2A. For symmetry reasons, only one-quarter of the
-bar is discretized, and the mesh is composed of 400 quadrangles (see Figure 2B). The load-displacement curve is plotted
-in Figure 2C. We observe that, except for Q1, all the other methods give very similar results. Moreover, the equivalent
-plastic strain p, respectively, the trace of the Cauchy stress tensor sigma, are shown in Figure 3, respectively, in Figure 4, at
-the quadrature points on the final configuration. A sign of locking is the presence of strong oscillations in the trace of
-the Cauchy stress tensor sigma. We notice that the cG formulations Q1 and Q2 lock, contrary to the HHO, Q2-RI, and UPG
-methods that deliver similar results. We remark, however, that the results for HHO(1;1), HHO(1;2), and Q2-RI are slightly
-less smooth than for HHO(2;2), HHO(2;3), and UPG. The reason is that, on a fixed mesh, the three former methods have
-less quadrature points than the three latter ones (see Table 1) (HHO(2;2), HHO(2;3), and UPG have the same number of
-quadrature points). Therefore, the stress is evaluated using less points in HHO(1;1), HHO(1;2), and Q2-RI. It is sufficient
-to refine the mesh or to increase the order of the quadrature by two in HHO(1;1) and HHO(1;2) to retrieve similar results
-to those for the three other methods (not shown for brevity).
+\paragraph{Specimen and loading}
+
+We consider a notched bar that is subjected to uniaxial
+extension.
+% This example has been studied previously by many authors as a necking problem 3,5,7,8,22 and can be used to
+% test the robustness of the different methods.
+The bar has a length of $30$ mm, a top section of radius $5$ mm and a bottom section of radius $3$ mm.
+A vertical
+displacement $u_z = 0.8$ mm is imposed at the top, as shown in Figure \ref{fig_ssnaallmesh}.
+For symmetry reasons, only one-quarter of the
+bar is discretized, and the mesh is composed of XXX quadrangles.
+
+\paragraph{Behaviour law}
+
+The same behavior law as that in \ref{sec_swelling_sphere} is considered for the present test case. 
+However, the finite strain hypothesis is chosen, based on a logarithmic decomposition of the stress \cite{miehe_anisotropic_2002}.
+
+\paragraph{Material parameters}
+
+Materials parameters are taken as
+$\sigma_0 = 450$ MPa, $\sigma_{\infty} = 715$ MPa with a saturation parameter $\delta = 16.93$. The Young modulus is $E = 206.9$ GPa, and the Poisson ratio is $\nu = 0.29$.
+
+\paragraph{Load deflection curve}
+
+The load-displacement curve is plotted
+in Figure \ref{fig_ssnaallmesh}, and gives similar results to that obtained with quadratic reduced integration elements.
+
+\paragraph{Equivalent plastic strain}
+
+Moreover, the equivalent
+plastic strain $p$ at quadrature points and at the final load is plotted Figure \ref{fig_ssnaallplastic}.
+It has been observed that the equivalent plastic strain might suffer some oscillations at a certain limit load with UPG methods.
+One notices through the present example, that the proposed HHO method displays no oscillations of the equivalent plastic strain.
+
+%
+%
+%
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12.cm]{img_calcs/ssna_plastic.png}
+    \caption{ssna}
+    \label{fig_ssnaallplastic}
+\end{figure}
+
+\paragraph{Hydrostatic pressure}
+
+The hyrostatic pressure map at quadrature points and at the final load is shown Figure \ref{fig_ssnaallmesh} for three HHO element orders (respectively $1, 2$ and $3$).
+As for the swelling sphere test case, one notices that the hydrostatic pressure map is
+fairly smooth over the whole structure at all approximation orders, even at the bottom left corner where plasticity is confined.
+% Though some feeble signs of oscillations are noticed at the bottom right corner of the specimen for HHO(1,1),
 %
 %
 %
@@ -319,42 +263,49 @@ to those for the three other methods (not shown for brevity).
 %
 %
 %
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=12.cm]{img_calcs/ssna_plastic.png}
-    \caption{ssna}
-    \label{fig_ssnaallplastic}
-\end{figure}
 
-\subsection{Quasi-incompressible sphere under internal pressure}
 
-This last benchmark 6 consists of a quasi-incompressible sphere under internal pressure for which an analytical solution
-is known when the entire sphere has reached a plastic state. This benchmark is particularly challenging compared to
-the previous ones since we consider here perfect plasticity. The sphere has an inner radius R in = 0.8 mm and an outer
-radius R out = 1 mm. An internal radial pressure P is imposed. For symmetry reasons, only one-eighth of the sphere is
-discretized, and the mesh is composed of 1580 tetrahedra (see Figure 10A). The simulation is performed until the limit
-load corresponding to an internal pressure 2.54 MPa is reached.
-The equivalent plastic strain p is plotted for
-HHO(1;2) in Figure 10B, and the trace of the Cauchy stress tensor sigma is compared for HHO, UPG, and T2 methods in
-Figure 11 at all the quadrature points on the final configuration for the limit load. We notice that the quadratic element T2
-locks, whereas HHO and UPG do not present any sign of locking and produce results that are very close to the analytical
-solution. However, the trace of the Cauchy stress tensor sigma is slightly more dispersed around the analytical solution for
-HHO(2;2) and HHO(2;3) than for HHO(1;1) and HHO(1;2) near the outer boundary. For this test case, we do not expect
-that HHO(2;2) and HHO(2;3) will deliver more accurate solutions than HHO(1;1) and HHO(1;2) since the geometry is
-discretized using tetrahedra with planar faces.
-We next investigate the influence of the quadrature order k Q on the accuracy of the solution. The trace of the Cauchy
-stress tensor sigma is compared for HHO(1;1), HHO(2;2), and UPG methods in Figure 12 at all the quadrature points on the
-final configuration for the limit load, and for a quadrature order k Q higher than the one employed in Figure 11 (HHO(1;2)
-and HHO(2;3) give similar results and are not shown for brevity). We remark that, when we increase the quadrature
-order, UPG locks for quasi-incompressible finite deformations, whereas HHO does not lock, and the results are (only) a
-bit more dispersed around the analytical solution. Moreover, HHO(2;2) is less sensitive than HHO(1;1) to the choice of
-the quadrature order k Q . Note that this problem is not present for HHO methods with small deformations. Furthermore,
-this sensitivity to the quadrature order seems to be absent for finite deformations when the elastic deformations are
-compressible (the plastic deformations are still incompressible). To illustrate this claim, we perform the same simulations
-as before but for a compressible material. The Poisson ratio is taken now as nu = 0.3 (recall that we used nu = 0.499
-in the quasi-incompressible case), whereas the other material parameters are unchanged. Unfortunately, an analytical
-solution is no longer available in the compressible case. We compare again the trace of the Cauchy stress tensor simga for
-HHO(1;1), HHO(2;2), and UPG methods in Figure 13 at all the quadrature points on the final configuration and for
-different quadrature orders k Q . We observe a quite marginal dependence on the quadrature order for HHO methods (as in
-the quasi-incompressible case), whereas the UPG method still locks if the order of the quadrature is increased. Moreover,
-in the compressible case, HHO(2;2) gives a more accurate solution than HHO(1;1).
+
+% Moreover, the equivalent
+% plastic strain $p$, respectively, the trace of the Cauchy stress tensor sigma, are shown in Figure 3, respectively, in Figure 4, at
+% the quadrature points on the final configuration. A sign of locking is the presence of strong oscillations in the trace of
+% the Cauchy stress tensor sigma. We notice that the cG formulations Q1 and Q2 lock, contrary to the HHO, Q2-RI, and UPG
+% methods that deliver similar results. We remark, however, that the results for HHO(1;1), HHO(1;2), and Q2-RI are slightly
+% less smooth than for HHO(2;2), HHO(2;3), and UPG. The reason is that, on a fixed mesh, the three former methods have
+% less quadrature points than the three latter ones (see Table 1) (HHO(2;2), HHO(2;3), and UPG have the same number of
+% quadrature points). Therefore, the stress is evaluated using less points in HHO(1;1), HHO(1;2), and Q2-RI. It is sufficient
+% to refine the mesh or to increase the order of the quadrature by two in HHO(1;1) and HHO(1;2) to retrieve similar results
+% to those for the three other methods (not shown for brevity).
+
+% \subsection{Quasi-incompressible sphere under internal pressure}
+
+% This last benchmark 6 consists of a quasi-incompressible sphere under internal pressure for which an analytical solution
+% is known when the entire sphere has reached a plastic state. This benchmark is particularly challenging compared to
+% the previous ones since we consider here perfect plasticity. The sphere has an inner radius R in = 0.8 mm and an outer
+% radius R out = 1 mm. An internal radial pressure P is imposed. For symmetry reasons, only one-eighth of the sphere is
+% discretized, and the mesh is composed of 1580 tetrahedra (see Figure 10A). The simulation is performed until the limit
+% load corresponding to an internal pressure 2.54 MPa is reached.
+% The equivalent plastic strain p is plotted for
+% HHO(1;2) in Figure 10B, and the trace of the Cauchy stress tensor sigma is compared for HHO, UPG, and T2 methods in
+% Figure 11 at all the quadrature points on the final configuration for the limit load. We notice that the quadratic element T2
+% locks, whereas HHO and UPG do not present any sign of locking and produce results that are very close to the analytical
+% solution. However, the trace of the Cauchy stress tensor sigma is slightly more dispersed around the analytical solution for
+% HHO(2;2) and HHO(2;3) than for HHO(1;1) and HHO(1;2) near the outer boundary. For this test case, we do not expect
+% that HHO(2;2) and HHO(2;3) will deliver more accurate solutions than HHO(1;1) and HHO(1;2) since the geometry is
+% discretized using tetrahedra with planar faces.
+% We next investigate the influence of the quadrature order k Q on the accuracy of the solution. The trace of the Cauchy
+% stress tensor sigma is compared for HHO(1;1), HHO(2;2), and UPG methods in Figure 12 at all the quadrature points on the
+% final configuration for the limit load, and for a quadrature order k Q higher than the one employed in Figure 11 (HHO(1;2)
+% and HHO(2;3) give similar results and are not shown for brevity). We remark that, when we increase the quadrature
+% order, UPG locks for quasi-incompressible finite deformations, whereas HHO does not lock, and the results are (only) a
+% bit more dispersed around the analytical solution. Moreover, HHO(2;2) is less sensitive than HHO(1;1) to the choice of
+% the quadrature order k Q . Note that this problem is not present for HHO methods with small deformations. Furthermore,
+% this sensitivity to the quadrature order seems to be absent for finite deformations when the elastic deformations are
+% compressible (the plastic deformations are still incompressible). To illustrate this claim, we perform the same simulations
+% as before but for a compressible material. The Poisson ratio is taken now as nu = 0.3 (recall that we used nu = 0.499
+% in the quasi-incompressible case), whereas the other material parameters are unchanged. Unfortunately, an analytical
+% solution is no longer available in the compressible case. We compare again the trace of the Cauchy stress tensor simga for
+% HHO(1;1), HHO(2;2), and UPG methods in Figure 13 at all the quadrature points on the final configuration and for
+% different quadrature orders k Q . We observe a quite marginal dependence on the quadrature order for HHO methods (as in
+% the quasi-incompressible case), whereas the UPG method still locks if the order of the quadrature is increased. Moreover,
+% in the compressible case, HHO(2;2) gives a more accurate solution than HHO(1;1).

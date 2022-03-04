@@ -61,7 +61,7 @@ $\forall (\delta \tensori{u}{}_{\HybridMesh}, \delta \tensori{u}{}_{\dHybridMesh
 \begin{equation}
     \label{eq_0018kdk}
     \begin{aligned}
-        \delta J_{\HybridMesh, \text{int}}^{VW} - \delta J_{\HybridMesh, \text{ext}}^{HW}
+        \delta L_{\HybridMesh, \text{int}}^{VW} - \delta L_{\HybridMesh, \text{ext}}^{HW}
         =
         0
     \end{aligned}
@@ -76,7 +76,7 @@ with
 \begin{subequations}
     \label{eq_0nonamemeerg}
         \begin{alignat}{3}
-            \delta J_{\HybridMesh, \text{int}}^{VW} & = 
+            \delta L_{\HybridMesh, \text{int}}^{VW} & = 
             \sum_{\cell \in \HybridMesh(\bodyLag)}
             \int_{\cell}
             \tensorii{P}{}_{\cell}(\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}))
@@ -93,7 +93,7 @@ with
             % \delta \tensori{Z}{}_{\dCell{}}
             \tensori{Z}{}_{\dCell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
             \\
-            \delta J_{\HybridMesh, \text{ext}}^{HW} & = 
+            \delta L_{\HybridMesh, \text{ext}}^{HW} & = 
             \sum_{F \in \dHybridMesh{}_{N}^e(\bodyLag)}
             \int_{F} \neumannLag \cdot \delta \tensori{u}{}_{F}
             +
@@ -250,7 +250,7 @@ The global problem in discrete form writes : find the pair $(\tensori{u}{}_{\Hyb
 \begin{equation}
     \label{eq_0018kdk}
     \begin{aligned}
-        \delta J_{\HybridMesh, \text{int}}^{HHO} - \delta J_{\HybridMesh, \text{ext}}^{HHO}
+        \delta L_{\HybridMesh, \text{int}}^{HHO} - \delta L_{\HybridMesh, \text{ext}}^{HHO}
         =
         0
     \end{aligned}
@@ -265,7 +265,7 @@ with
 \begin{subequations}
     \label{eq_0nonamemeergjj}
         \begin{alignat}{3}
-            \delta J_{\HybridMesh, \text{int}}^{HHO} & = 
+            \delta L_{\HybridMesh, \text{int}}^{HHO} & = 
             \sum_{\cell \in \HybridMesh(\bodyLag)}
             \int_{\cell}
             \tensorii{P}{}_{\cell}^k(\tensorii{G}{}_{\cell}^k(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\dCell}^k))
@@ -280,7 +280,7 @@ with
             \tensori{Z}{}_{\dCell}^{HHO}(\delta \tensori{u}{}_{\cell}^l, \delta \tensori{u}{}_{\dCell}^k)
             % \delta \tensori{Z}{}_{\dCell{}}
             \\
-            \delta J_{\HybridMesh, \text{ext}}^{HHO} & = 
+            \delta L_{\HybridMesh, \text{ext}}^{HHO} & = 
             \sum_{F \in \dHybridMesh{}_{N}^e(\bodyLag)}
             \int_{F} \neumannLag \cdot \delta \tensori{u}{}_{F}^k
             +

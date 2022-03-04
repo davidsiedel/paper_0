@@ -1,13 +1,23 @@
 \section{Appendix}
 \label{sec_appendix}
 
+\subsection{From the continuous Hu-Washizu Lagrangian to the HDG one}
+
+Let $\tensori{\Psi}(\tensori{X})$ the linear mapping consisting in a change of euclidean frame such that
+%
+%
+%
+\begin{equation}
+    \tensori{\Psi} : \tensori{X} \mapsto \tensori{x} = \tensorii{Q}{} \tensori{X} + \tensori{c}
+\end{equation}
+
 %
 % 
 % 
 \begin{equation}
     \label{eq22}
     \begin{aligned}
-        J_{\Crown{}, \text{int}}^{HW}
+        L_{\Crown{}, \text{int}}^{HW}
         := &
         \int_{\Crown{}} \mecPotential{}_{\Crown} + (\nabla \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
         % -
@@ -35,7 +45,7 @@ The development of \eqref{eq22} is given in Appendix. Injecting \eqref{eq22} in 
 \begin{equation}
     \label{eq_0014}
     \begin{aligned}
-        J_{\cell}^{HW}
+        L_{\cell}^{HW}
         = &
         \int_{\Bulk} \mecPotential{}_{\bodyLag{}} + (\nabla \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
         % \\
@@ -178,7 +188,7 @@ And Finally :
 % 
 \begin{equation}
     \begin{aligned}
-        J_{\Crown{}, \text{int}}^{HW}
+        L_{\Crown{}, \text{int}}^{HW}
         =
         (1 - \frac{\alpha}{2} \ell)
         \int_{\dBulk{}} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2
@@ -400,3 +410,146 @@ The ordinate component $w^{k+1}_{\cell z}$ solves :
             \int_{\cell} 2 \pi r w^{k+1}_{\cell z} = & \int_{\cell} 2 \pi r u_{\cell z}
         \end{alignat}
 \end{subequations}
+
+% \subsubsection{Plastic behavior in small strains}
+
+% Dans le cadre de la thermodynamique des milieux continus, la combinsaison de l'application des deux premiers principes de la themodynamique donne lieu à l'équation de Clausius-Duhem qui postule la positivité de l'énergie de dissipation
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_clausius_duhem_0}
+%     \begin{aligned}
+%         \mathcal{D}
+%         =
+%         (\tensorii{\sigma}{}_{\cell} - \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial \dot{\tensorii{\varepsilon}}{}_{\cell}}) : \dot{\tensorii{\varepsilon}}{}_{\cell}
+%         -
+%         \rho \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial v_{int}} \dot{v}_{int}
+%         \geq
+%         0
+%         % =
+%         % (\tensorii{\sigma}{}_{\cell} - \rho \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial \tensorii{\varepsilon}{}_{\cell}}) : \dot{\tensorii{\varepsilon}}{}_{\cell}
+%         % % -
+%         % % \rho (s + \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial T}) \dot{T}
+%         % -
+%         % \rho \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial v_{int}} \dot{v}_{int}
+%         % \geq
+%         % 0
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% en l'absence de dépendence du problème à la température. Dans le cadre de l'hyper-élasticité qui est un processus de transformation réversible, comme évoque Section \ref{sec_model_problem}, l'ensemble $V_{int}$ des variables internes $v_{int}$ est supposé vide, de sorte que l'inégalité \eqref{eq_clausius_duhem_0} revient à l'équation d'égalité \eqref{eq_stress_def}.
+% En revanche, pour des comportements dissipatifs de nature élasto-visco-plastique, on introduit un certains nombre de variables internes, qui sont liées à l'expression de l'énergie dissipée et à l'irréversibilité de la transformation.
+% Pour des déformations infinitésimales, on suppose la décomposition additive de la déformation
+% %
+% %
+% %
+% \begin{equation}
+%     \tensorii{\varepsilon}{}_{\cell} = \tensorii{\varepsilon}{}_{\cell}^e + \tensorii{\varepsilon}{}_{\cell}^p
+% \end{equation}
+% %
+% %
+% %
+% En une partie élastique $\tensorii{\varepsilon}{}_{\cell}^e$ et une partie plastique $\tensorii{\varepsilon}{}_{\cell}^p$.
+% En particulier, dans le cadre des matériaux standards généralisés, on suppose l'existence d'un potentiel également décomposable en une partie élastique et en une partie plastique tel que
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_plast_2}
+%     \begin{aligned}
+%         \mecPotential{}_{\bodyLag{}} = \mecPotential{}_{\bodyLag{}}^e(\tensorii{\varepsilon}{}_{\cell}^e)
+%         +
+%         \mecPotential{}_{\bodyLag{}}^p(
+%             % \tensorii{\varepsilon}{}_{\cell}^p
+%             % ,
+%             v_{int})
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% Comme évoque Section \ref{sec_model_problem}, le potentiel d'énergie libre de Helmoltz $\mecPotential{}_{\bodyLag{}}$ dépend éventuellement d'un ensemble de variables internes $v_{int}$ dans $V_{int}$, qui a été supposé vide jusque là.
+% Dans le cadre d'un comportement élasto-visco-plastique, on introduit au moins une variable interne, de manière à assurer la positivité de l'énergie dissipée. Par injection de \eqref{eq_plast_2} dans \eqref{eq_clausius_duhem_0}, il vient que le tenseur des contraintes $\tensorii{\sigma}{}_{\cell}$ est la la force duale assosciées aux défromations élastiques $\tensorii{\varepsilon}{}_{\cell}^e$. On définit également les forces thermodynamiques $V_{\cell}$ duales des variables internes $v_{int}$ telles que
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_plast_1}
+%     \begin{aligned}
+%         \mathcal{D}
+%         =
+%         \tensorii{\sigma}{}_{\cell} : \dot{\tensorii{\varepsilon}}{}_{\cell}^p
+%         -
+%         \rho \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial v_{int}} \dot{v}_{int}
+%         =
+%         \begin{Bmatrix}
+%             \tensorii{\sigma}{}_{\cell}
+%             \\
+%             % \tensori{V}{}_{\cell}
+%             V_{\cell}
+%         \end{Bmatrix}
+%         \cdot
+%         \begin{Bmatrix}
+%             \dot{\tensorii{\varepsilon}}{}_{\cell}^p
+%             \\
+%             \dot{v}_{int}
+%         \end{Bmatrix}
+%         \geq
+%         0
+%         &&
+%         \text{with}
+%         &&
+%         V_{\cell} = - \rho \frac{\partial \mecPotential{}_{\bodyLag{}}}{\partial v_{int}}
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% Par ailleurs, le cadre des matériaux standards généralisés stipule l'existence d'un convex potential $\phi$ containing the origin, together with a threshold function $f$, that define the evolution of the generalized strains such that
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_plast_1}
+%     \begin{aligned}
+%         \dot{v_{int}} = \frac{\partial \phi}{\partial f} \frac{\partial f}{\partial V_T}
+%     \end{aligned}
+% \end{equation}
+
+% En particulier, on introduit l'ensemble des variables internes $V_{int} = \{ \tensorii{\varepsilon}{}_{\cell}^p, p \}$ avec $p$ la déformation plastique cumulée, et le potentiel plastique 
+% %
+% %
+% %
+% \begin{equation}
+%     \mecPotential{}_{\bodyLag{}}^p(
+%         % \tensorii{\varepsilon}{}_{\cell}^p
+%         % ,
+%         p
+%     )
+%     % =
+%     % \frac{K}{2} \tensorii{\varepsilon}{}_{\cell}^p : \tensorii{\varepsilon}{}_{\cell}^p + \frac{K}{2} p^2
+%     =
+%     \sigma_0 p + \frac{1}{2} H p^2 + (\sigma_{\infty} - \sigma_0)(p - \frac{1 - e^{-\delta p}}{\delta})
+% \end{equation}
+% %
+% %
+% %
+% \begin{equation}
+%     q
+%     =
+%     \sigma_0 + H p + (\sigma_{\infty} - \sigma_0)(1 - e^{-\delta p})
+% \end{equation}
+% %
+% %
+% %
+% où $K$ est le module d'écrouissage cinématique, et $H$ le module d'écrouissage isotrope. Les forces thermodynamiques assosciées aux variables internes $\tensorii{\varepsilon}{}_{\cell}^p$ et $p$ sont respectivement $K \tensorii{\varepsilon}{}_{\cell}^p$ et $Hp$.
+% %
+% %
+% %
+% \begin{equation}
+%     % f(\tensorii{\sigma}{}_{\cell}^p, q) = \sqrt{\frac{3}{2}} \rVert \text{dev} (\tensorii{\sigma} - K \tensorii{\varepsilon}{}^p) \lVert - \sigma_0 - H p
+%     f(\tensorii{\sigma}{}_{\cell}^p, q) = \sqrt{\frac{3}{2}} \rVert \text{dev} (\tensorii{\sigma} \lVert - p
+% \end{equation}

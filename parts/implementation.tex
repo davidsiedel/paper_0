@@ -641,4 +641,12 @@ We propose an alternative to the static condensation solving algorithm, postulat
 \label{res_cond}
 \end{figure}
 
-We show in Section \ref{sec_numerical_examples} that this algorithm gives identical results to those obtains with the Linear static condensation algorithm.
+\paragraph{Comparison of both algorithms}
+
+The Linear static condensation algorithm is the one described in the literature \cite{di_pietro_discontinuous-skeletal_2015,cockburn_algorithm_2019,abbas_hybrid_2019-1,abbas_hybrid_2018} to condensate cell unknowns on faces. This procedure needs not iterate at the cell level to acomodate the cell increment, and is hence, faster. However, one needs to store matrices used during the condensation step from one iteration to another in order do decondensate the cell increment.
+
+The Cell equlibrium algorithm, needs iterate at the cell level. It is hence is more costly, and requires to integrate the behaviour law more times that does the Linear static condensation algorithm.
+However, it allows to consider extending the present non-linear algorithm to \textit{e.g.} constrained resolution algorithm, to solve inequality constrained problems, as encountered in multi-field plasticity for instance.
+
+
+% We show in Section \ref{sec_numerical_examples} that this algorithm gives identical results to those obtains with the Linear static condensation algorithm.

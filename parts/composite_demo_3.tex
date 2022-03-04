@@ -11,32 +11,35 @@
 % For so-called \textit{non-conformal} methods, among which are \textit{e.g.} Discontinuous Galerkin methods, Hybrid Discontinuous Galerkin methods and Hybrid High Order methods, the displacement continuity at a cell boundary is not explicitly enforced, such that one needs to introduce supplementary ingredients in the formulation to pass information from one cell to another. A straightforward way of doing so consists in introducing an interface between cells, that acts as a membrane pulling them together. One can readily feel that the stiffer the membrane, the closer the cells, and the closer to the \textit{conformal} framework. This technique is the one at the foundation of Discontinuous Galerkin methods. By adding an intermediate structure in the membrane, called a \textit{bone}, one defines the framework of Hybrid Discontinuous Galerkin methods and Hybrid High Order methods; the membrane is split into two parts, one at each side of the bone, and communication between cells transits through the bone, via the membrane. The term hybrid expresses the fact that both cells and bones carry information about the displacement field, hence introducing the \textit{skeleton} of the body.
 % In the following section, we show that one recovers the full mathematical framework proper to these non-conformal method, by writing the equilibrium of a cell and its interface with its neighborhood.
 
-Many numerical methods consider a partition of the body into
-elementary parts. % subsets called \textit{cells}.
+% Many numerical methods consider a partition of the body into
+% elementary parts. % subsets called \textit{cells}.
 
-In this section one considers a subpart \(T\) of the body
-\(\bodyLag\). This subpart is in equilibrium with the rest of the body
+In this section let $\cell$ a subpart of the body
+\(\bodyLag\).
+In the following, one assumes that the cell $\cell$ is located inside the body $\bodyLag{}$, such that its boundary $\dCell{}$ bears contact loads only.
+This subpart is in equilibrium with the rest of the body
 \(\Omega\backslash T\) if the displacements and the normal traction are
-continuous at the boundary of \(\partial T\).
+continuous at the boundary $\dCell{}$.
 
-Enforcing the displacement continuity at the interface leads to
+
+\paragraph{Conformal methods} Enforcing the displacement continuity at the interface leads to
 so-called conformal methods, to which the standard finite element
-methods belongs.
+methods belongs (see Figure \ref{fig_02}(a)).
 
-On the contrary, this condition can be weakened by introducting an
+\paragraph{Discontinuous Galerkin methods} On the contrary, this condition can be weakened by introducting an
 elastic interface of negligible size between \(T\) and
-\(\Omega\backslash T\). This is the basis of Discontinuous Galerkin
-methods.
+\(\Omega\backslash T\). This representation is at the basis of Discontinuous Galerkin
+methods (see Figure \ref{fig_02}(b)).
 
-In this paper, we consider HDG and HHO methods where two elastic
+\paragraph{Hybird Discontinuous Galerkin methods} In this paper, we consider HDG and HHO methods where two elastic
 interfaces are introducted: one between \(T\) and its boundary
 \(\partial T\) and a second one between \(\Omega\backslash T\) and
-\(\partial T\).
+\(\partial T\) (see Figure \ref{fig_02}(c)).
 
 Following this idea, we show in this section how the use of the
 Hu-Hashizu Lagrangian allows to recover the main ingredients of the
-HDG/HHO methods, namely the reconstructed gradient and the stabilisation
-operator.
+HDG/HHO methods, namely the \textit{reconstructed gradient} and the \textit{stabilisation
+operator}.
 
 %% The equilibrium of the body is then expressed in terms of the sum of the mechanical contribution in each of these cells composing it.
 %% The equilibrium of the interface between two cells is then of major 
@@ -96,7 +99,7 @@ operator.
 %     L_{\cell}^{eq}
 %     % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
 %     =
-%     \int_{\cell} \mecPotential_{\bodyLag{}} + (\nabla_X \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
+%     \int_{\cell} \mecPotential_{\bodyLag{}} + (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
 %     -
 %     \int_{\cell} \loadLag \cdot \tensori{u}{}_{\cell}
 %     % -
@@ -188,9 +191,9 @@ By combining both the Lagragian of the core $\Bulk{}$ and that of the interface 
     L_{\cell}^{HW}
     % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
     =
-    \int_{\Bulk} \mecPotential_{\bodyLag{}} + (\nabla_X \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
+    \int_{\Bulk} \mecPotential_{\bodyLag{}} + (\nabla \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
     +
-    \int_{\Crown} \mecPotential_{\Crown{}} + (\nabla_X \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
+    \int_{\Crown} \mecPotential_{\Crown{}} + (\nabla \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
     -
     \int_{\Bulk} \loadLag \cdot \tensori{u}{}_{\Bulk}
     % -
@@ -209,7 +212,7 @@ Since the interface is of negligible volume compared to that of the core, let ma
 \paragraph{Displacement in the interface}
 
 The displacement in the interface $\Crown$ is assumed to be linear with respect to $\tensori{n}$, such that
-its gradient is homogeneous in $\Crown{}$
+its gradient is homogeneous in $\Crown{}$ along $\tensori{n}$
 %
 % 
 % 
@@ -269,7 +272,7 @@ In particular, making the width of the interface $\ell \rightarrow 0$, such that
 \begin{equation}
     \label{eq_0015}
     \begin{aligned}
-        J_{\cell}^{HW}
+        L_{\cell}^{HW}
         = &
         \int_{\cell{}} \mecPotential{}_{\bodyLag{}} + (\nabla \tensori{u}{}_{\cell{}} - \tensorii{G}{}_{\cell{}}) : \tensorii{P}{}_{\cell}
         % \\
@@ -319,7 +322,7 @@ The Lagrangian \eqref{eq_0015} defines the mixed field functional to minimize, w
 \begin{subequations}
     \label{eq_0017}
         \begin{alignat}{3}
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
             = & \int_{\cell} \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
             -
             \int_{\cell} \tensori{f}{}_V \cdot \delta \tensori{u}{}_{\cell}
@@ -332,7 +335,7 @@ The Lagrangian \eqref{eq_0015} defines the mixed field functional to minimize, w
             % \in \virtualDisplacementSpaceCell
         \label{eq_0017:eq0}
         \\
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
             = &
             \int_{\neumannCell} (\tensori{\theta}{}_{\dCell} - \tensori{t}{}_{\neumannCell}) \cdot \delta \tensori{u}{}_{\dCell}
             &&
@@ -342,7 +345,7 @@ The Lagrangian \eqref{eq_0015} defines the mixed field functional to minimize, w
             % \in \virtualDisplacementSpaceDCell
         \label{eq_0017:eq1}
         \\
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
             = &
             \int_{\cell} (\frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{\cell}} - \tensorii{P}{}_{\cell}) : \delta \tensorii{G}{}_{\cell}
             &&
@@ -352,7 +355,7 @@ The Lagrangian \eqref{eq_0015} defines the mixed field functional to minimize, w
             % \in \gradSpaceCell
         \label{eq_0017:eq2}
         \\
-            \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
+            \frac{\partial L_{\cell}^{HW}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
             = & \int_{\cell} (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell} ) : \delta \tensorii{P}{}_{\cell}
             +
             \int_{\dCell} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell}) \cdot \delta \tensorii{P}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{}
@@ -437,7 +440,7 @@ By elimination of both \eqref{eq_0017:eq2} and \eqref{eq_0017:eq3} from \eqref{e
 \begin{equation}
     \label{eq_simple}
     \begin{aligned}
-        J_{\cell}^{VW}
+        L_{\cell}^{VW}
         = &
         \int_{\cell{}} \mecPotential{}_{\bodyLag{}}
         % \\
@@ -468,19 +471,19 @@ Minimization of the Lagrangian \eqref{eq_simple} amounts to find the displacemen
 \begin{equation}
     \label{eq_0018}
     \begin{aligned}
-        % d J_{\cell}^{\text{HW}}
+        % d L_{\cell}^{\text{HW}}
         % = &
-        % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+        % \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
         % +
-        % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
+        % \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
         % =
-        \delta J_{\cell, \text{int}}^{VW}
+        \delta L_{\cell, \text{int}}^{VW}
         (
             (\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}),
             (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
         )
         -
-        \delta J_{\cell, \text{ext}}^{VW}
+        \delta L_{\cell, \text{ext}}^{VW}
         (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
         =
         0
@@ -488,7 +491,7 @@ Minimization of the Lagrangian \eqref{eq_simple} amounts to find the displacemen
         &&
         \forall (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
         % \\
-        % = & \delta J_{\cell}^{\text{int}} + \delta J_{\cell}^{\text{ext}}
+        % = & \delta L_{\cell}^{\text{int}} + \delta L_{\cell}^{\text{ext}}
         % \\
         % = & 
         % \int_{T}
@@ -523,7 +526,7 @@ with
 \begin{subequations}
     \label{eq_0nonamemee}
         \begin{alignat}{3}
-            \delta J_{\cell, \text{int}}^{VW} & = 
+            \delta L_{\cell, \text{int}}^{VW} & = 
             \int_{T}
             \tensorii{P}{}_{\cell}(\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}))
             :
@@ -539,7 +542,7 @@ with
             % \delta \tensori{Z}{}_{\dCell{}}
             \tensori{Z}{}_{\dCell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
             \\
-            \delta J_{\cell, \text{ext}}^{VW} & = 
+            \delta L_{\cell, \text{ext}}^{VW} & = 
             \int_{\neumannCell} \neumannCellLoad{} \cdot \delta \tensori{u}{}_{\dCell{}}
             +
             \int_{T} \loadLag \cdot \delta \tensori{u}{}_{\cell}
@@ -570,14 +573,15 @@ Equations \eqref{eq_simple}, \eqref{eq_grad} and \eqref{eq_stress} define the me
 
 \subsection{Small strain hypothesis extension}
 
-La formulation proposée en grandes déformations permet également un passage naturel au cadre des petites déformations. Dans ce contexte, étant donné que le gradient de la transformation $\tensorii{F}{}_{\cell}$ est supposé petit devant $\tensorii{1}$, on cherche le champ de déformation infinitésimale $\tensorii{\varepsilon}{}_{\cell}$ comme la formulation faible de $\nabla^s \tensori{u}{}_{\cell}$ plutot que le gradient du champ de déplacement $\tensorii{G}{}_{\cell}$. le tenseur des contraintes $\tensorii{P}{}_{\cell}$ est alors identifié à $\tensorii{\sigma}{}_{\cell}$, de sorte que le problème \eqref{eq_0015} devient
+% La formulation proposée en grandes déformations permet également un passage naturel au cadre des petites déformations. Dans ce contexte, étant donné que le gradient de la transformation $\tensorii{F}{}_{\cell}$ est supposé petit devant $\tensorii{1}$, on cherche le champ de déformation infinitésimale $\tensorii{\varepsilon}{}_{\cell}$ comme la formulation faible de $\nabla^s \tensori{u}{}_{\cell}$ plutot que le gradient du champ de déplacement $\tensorii{G}{}_{\cell}$. le tenseur des contraintes $\tensorii{P}{}_{\cell}$ est alors identifié à $\tensorii{\sigma}{}_{\cell}$, de sorte que le problème \eqref{eq_0015} devient
+The proposed large deformation formulation also allows a natural transition to the small deformation framework. In this context, since the gradient of the transformation $\tensorii{F}{}_{\cell}$ is assumed to be small compared to $\tensorii{1}$, we seek the infinitesimal deformation field $\tensorii{\varepsilon}_{\cell}$ as the weak formulation of $\nabla^s \tensori{u}_{\cell}$ rather than the gradient of the displacement field $\tensorii{G}{}_{\cell}$. The stress tensor $\tensorii{P}{}_{\cell}$ is then identified with $\tensorii{\sigma}{}_{\cell}$, so that the problem \eqref{eq_0015} becomes
 %
 %
 %
 \begin{equation}
     \label{eq_small_defs}
     \begin{aligned}
-        J_{\cell}^{HW}
+        L_{\cell}^{HW}
         = &
         \int_{\cell{}} \mecPotential{}_{\bodyLag{}} + (\nabla^s \tensori{u}{}_{\cell{}} - \tensorii{\varepsilon}{}_{\cell{}}) : \tensorii{\sigma}{}_{\cell}
         % \\
@@ -597,14 +601,15 @@ La formulation proposée en grandes déformations permet également un passage n
 %
 %
 %
-En poursuivant le même développement que précédemment, l'énargie à minimiser est donnée par l'équation \ref{eq_simple} comme dans le cadre des grandes déformations. En revanche,l'équation du gradient reconstruit \ref{eq_grad} devient
+% En poursuivant le même développement que précédemment, l'énargie à minimiser est donnée par l'équation \ref{eq_simple} comme dans le cadre des grandes déformations. En revanche,l'équation du gradient reconstruit \ref{eq_grad} devient
+Continuing the same development as above, the energy to be minimized is given by equation \ref{eq_simple} as in the large deformation framework. On the other hand, the reconstructed gradient equation \ref{eq_grad} becomes
 %
 %
 %
 % \begin{equation}
 %     \label{eq_simple_ss}
 %     \begin{aligned}
-%         J_{\cell}^{VW}
+%         L_{\cell}^{VW}
 %         = &
 %         \int_{\cell{}} \mecPotential{}_{\bodyLag{}}
 %         % \\
@@ -645,7 +650,8 @@ En poursuivant le même développement que précédemment, l'énargie à minimis
 %
 %
 %
-En particulier, les deformations $\tensorii{\varepsilon}{}_{\cell}$ étant symétriques, tout comme la contrainte $\tensorii{\sigma}{}_{\cell}$, on cherche donc ces grandeurs dans l'espace des déformations $\gradSpaceCell$ et contraintes $\stressSpaceCell$ statiquement admissbles et symétriques. L'expression de la contrainte en fonction de la déformation de cellule est alors donnée par
+% En particulier, les deformations $\tensorii{\varepsilon}{}_{\cell}$ étant symétriques, tout comme la contrainte $\tensorii{\sigma}{}_{\cell}$, on cherche donc ces grandeurs dans l'espace des déformations $\gradSpaceCell$ et contraintes $\stressSpaceCell$ statiquement admissbles et symétriques. L'expression de la contrainte en fonction de la déformation de cellule est alors donnée par
+In particular, the deformations $\tensorii{\varepsilon}{}_{\cell}$ being symmetrical, as well as the stress $\tensorii{\sigma}{}_{\cell}$, we thus seek these quantities in the space of statically admissible and symmetrical deformations and stresses. The expression of the stress as a function of the cell deformation is then given by
 %
 %
 %

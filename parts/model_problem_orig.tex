@@ -38,13 +38,13 @@ Le solide $\bodyLag{}$ est décrit par un potentiel hyperélsatique $\psi$
 %
 %
 %
-The three fields Hu–Washizu principle characterizes the equilibrium of the body by the minimization of the functional $J_{\bodyLag}^{HW}$ with respect to the displacement field $\tensori{u}{} \in U(\bodyLag)$ verifying $\tensori{u}{} \vert_{\dirichletBoundaryLag{}} = \dirichletLag$, the displacement gradient field $\tensorii{G} \in G(\bodyLag)$, and the first Piola-Kirchoff stress tensor field $\tensorii{P} \in S(\bodyLag)$, such that
+The three fields Hu–Washizu principle characterizes the equilibrium of the body by the minimization of the functional $L_{\bodyLag}^{HW}$ with respect to the displacement field $\tensori{u}{} \in U(\bodyLag)$ verifying $\tensori{u}{} \vert_{\dirichletBoundaryLag{}} = \dirichletLag$, the displacement gradient field $\tensorii{G} \in G(\bodyLag)$, and the first Piola-Kirchoff stress tensor field $\tensorii{P} \in S(\bodyLag)$, such that
 %
 %
 %
 \begin{equation}
     \label{eq_hu_washizu_0}
-        J_{\bodyLag}^{HW}
+        L_{\bodyLag}^{HW}
         % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
         =
         \int_{\bodyLag{}} \mecPotential{} + (\nabla \tensori{u}{} - \tensorii{G}{}) : \tensorii{P}{}
@@ -68,7 +68,7 @@ Deriving \eqref{eq_hu_washizu_0} with respect to all variables yields the weak f
 \begin{subequations}
     \label{eq_hu_washizu_derivative_0}
         \begin{alignat}{3}
-            \frac{\partial J_{\bodyLag}^{HW}}{\partial \tensori{u}{}} \delta \tensori{u}{}
+            \frac{\partial L_{\bodyLag}^{HW}}{\partial \tensori{u}{}} \delta \tensori{u}{}
             = & \int_{\bodyLag} \tensorii{P}{} : \nabla \delta \tensori{u}{}
             -
             \int_{\bodyLag} \tensori{f}{}_V \cdot \delta \tensori{u}{}
@@ -81,7 +81,7 @@ Deriving \eqref{eq_hu_washizu_0} with respect to all variables yields the weak f
             \in \virtualDisplacementSpaceCell
         \label{eq_hu_washizu_derivative_0:eq0}
         \\
-            \frac{\partial J_{\bodyLag}^{HW}}{\partial \tensorii{G}{}} \delta \tensorii{G}{}
+            \frac{\partial L_{\bodyLag}^{HW}}{\partial \tensorii{G}{}} \delta \tensorii{G}{}
             = &
             \int_{\bodyLag} (\frac{\partial \mecPotential}{\partial \tensorii{G}{}} - \tensorii{P}{}) : \delta \tensorii{G}{}
             &&
@@ -91,7 +91,7 @@ Deriving \eqref{eq_hu_washizu_0} with respect to all variables yields the weak f
             \in \gradSpaceCell
         \label{eq_hu_washizu_derivative_0:eq2}
         \\
-            \frac{\partial J_{\bodyLag}^{HW}}{\partial \tensorii{P}{}} \delta \tensorii{P}{}
+            \frac{\partial L_{\bodyLag}^{HW}}{\partial \tensorii{P}{}} \delta \tensorii{P}{}
             = & \int_{\bodyLag} (\nabla \tensori{u}{} - \tensorii{G}{} ) : \delta \tensorii{P}{}
             &&
             \ \ \ \ \ \ \ \ 
@@ -111,7 +111,7 @@ where $U_0(\bodyLag{})$ is the space of all kinematically admissible virtual dis
 \begin{subequations}
 \label{eq_model_problem_0}
     \begin{alignat}{2}
-    % \tensorii{F} - \nabla_{X} \tensori{u} & = \tensorii{1} \quad && \text{in } \Omega_{0} \label{eq_model_problem:eq1}
+    % \tensorii{F} - \nabla \tensori{u} & = \tensorii{1} \quad && \text{in } \Omega_{0} \label{eq_model_problem:eq1}
     \tensorii{G}{} & = \nabla \tensori{u}{} 
     % \quad
     % &&
@@ -125,7 +125,7 @@ where $U_0(\bodyLag{})$ is the space of all kinematically admissible virtual dis
     % \text{in } \bodyLag{}
     \label{eq_model_problem_0:eq2}
     \\
-    \nabla_{X} \cdot \tensorii{P}{} & = - \loadLag
+    \nabla \cdot \tensorii{P}{} & = - \loadLag
     % \quad
     % &&
     % \text{in } \bodyLag{}
@@ -156,14 +156,14 @@ One readily identifies \eqref{eq_model_problem_0:eq1} with the displacement stra
 %
 %
 %
-Considering now that $\tensorii{G}{}$ and $\tensorii{P}{}$ are not unknowns of the problem, \textit{i.e.} by explicitly eliminating both \eqref{eq_hu_washizu_derivative_0:eq2} and \eqref{eq_hu_washizu_derivative_0:eq3} from \eqref{eq_hu_washizu_derivative_0}, \eqref{eq_hu_washizu_0} simplifies as : find the displacement field $\tensori{u}{} \in \displacementSpaceCell$ verifying $\tensori{u}{} \vert_{\dirichletBoundaryLag{}} = \dirichletLag$ that minimizes the energy functional $J_{\bodyLag{}}^{VW}$
+Considering now that $\tensorii{G}{}$ and $\tensorii{P}{}$ are not unknowns of the problem, \textit{i.e.} by explicitly eliminating both \eqref{eq_hu_washizu_derivative_0:eq2} and \eqref{eq_hu_washizu_derivative_0:eq3} from \eqref{eq_hu_washizu_derivative_0}, \eqref{eq_hu_washizu_0} simplifies as : find the displacement field $\tensori{u}{} \in \displacementSpaceCell$ verifying $\tensori{u}{} \vert_{\dirichletBoundaryLag{}} = \dirichletLag$ that minimizes the energy functional $L_{\bodyLag{}}^{VW}$
 %
 %
 %
 \begin{equation}
     \label{eq_virtual_works_0}
     \begin{aligned}
-        J_{\bodyLag{}}^{VW}
+        L_{\bodyLag{}}^{VW}
         % (\tensori{u}{}_{\cell})
         =
         \int_{\bodyLag{}} \mecPotential{}
@@ -183,10 +183,10 @@ Deriving \eqref{eq_virtual_works_0} with respect to the primal unknown $\tensori
 % \begin{equation}
 %     \label{eq_virtual_works_02}
 %     \begin{aligned}
-%         % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
-%         \delta J_{\bodyLag{}}^{VW}
+%         % \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+%         \delta L_{\bodyLag{}}^{VW}
 %         % =
-%         % \frac{\partial J_{\cell}^{VW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+%         % \frac{\partial L_{\cell}^{VW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
 %         & =
 %         \int_{\bodyLag{}}
 %         % \frac{\partial \mecPotential{}_{\cell}}{\partial \nabla \tensori{u}{}_{\cell}} : \nabla \delta \tensori{u}{}_{\cell}
@@ -351,13 +351,13 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % %
 % %
 % % 
-% The equilibrium of the body $\cell$ is reached for the displacement gradient field $\tensorii{G}{}_{\cell} \in \gradSpaceCell$, the first Piola-Kirchoff stress field $\tensorii{P}{}_{\cell} \in \stressSpaceCell$ and the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ minimizing the three field Hu–Washizu energy functional $J_{\cell}^{HW}$
+% The equilibrium of the body $\cell$ is reached for the displacement gradient field $\tensorii{G}{}_{\cell} \in \gradSpaceCell$, the first Piola-Kirchoff stress field $\tensorii{P}{}_{\cell} \in \stressSpaceCell$ and the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ minimizing the three field Hu–Washizu energy functional $L_{\cell}^{HW}$
 % %
 % %
 % %
 % \begin{equation}
 %     \label{eq_hu_washizu}
-%         J_{\cell}^{HW}
+%         L_{\cell}^{HW}
 %         % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
 %         =
 %         \int_{\cell} \mecPotential{}_{\cell} + (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
@@ -376,7 +376,7 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % \begin{subequations}
 %     \label{eq_hu_washizu_derivative}
 %         \begin{alignat}{3}
-%             \frac{\partial J_{\cell}^{HW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+%             \frac{\partial L_{\cell}^{HW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
 %             = & \int_{\cell} \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
 %             -
 %             \int_{\cell} \tensori{f}{}_V \cdot \delta \tensori{u}{}_{\cell}
@@ -389,7 +389,7 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 %             \in \virtualDisplacementSpaceCell
 %         \label{eq_hu_washizu_derivative:eq0}
 %         \\
-%             \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
+%             \frac{\partial L_{\cell}^{HW}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
 %             = &
 %             \int_{\cell} (\frac{\partial \mecPotential_{\cell}}{\partial \tensorii{G}{}_{\cell}} - \tensorii{P}{}_{\cell}) : \delta \tensorii{G}{}_{\cell}
 %             &&
@@ -399,7 +399,7 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 %             \in \gradSpaceCell
 %         \label{eq_hu_washizu_derivative:eq2}
 %         \\
-%             \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
+%             \frac{\partial L_{\cell}^{HW}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
 %             = & \int_{\cell} (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell} ) : \delta \tensorii{P}{}_{\cell}
 %             &&
 %             \ \ \ \ \ \ \ \ 
@@ -420,7 +420,7 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % \begin{subequations}
 % \label{eq_model_problem}
 %     \begin{alignat}{2}
-%     % \tensorii{F} - \nabla_{X} \tensori{u} & = \tensorii{1} \quad && \text{in } \Omega_{0} \label{eq_model_problem:eq1}
+%     % \tensorii{F} - \nabla \tensori{u} & = \tensorii{1} \quad && \text{in } \Omega_{0} \label{eq_model_problem:eq1}
 %     \tensorii{G}{}_{\cell} - \nabla \tensori{u}{}_{\cell} & = 0 \quad
 %     &&
 %     \text{in } \cell
@@ -432,7 +432,7 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 %     \text{in } \cell
 %     \label{eq_model_problem:eq2}
 %     \\
-%     \nabla_{X} \cdot \tensorii{P}{}_{\cell} + \loadLag & = 0 \quad
+%     \nabla \cdot \tensorii{P}{}_{\cell} + \loadLag & = 0 \quad
 %     &&
 %     \text{in } \cell
 %     \label{eq_model_problem:eq3}
@@ -456,14 +456,14 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % %
 % %
 % %
-% Considering now that $\tensorii{G}{}_{\cell}$ and $\tensorii{P}{}_{\cell}$ are not unknowns of the problem, \textit{i.e.} by explicitly eliminating both \eqref{eq_hu_washizu_derivative:eq2} and \eqref{eq_hu_washizu_derivative:eq3} from \eqref{eq_hu_washizu_derivative}, \eqref{eq_hu_washizu} simplifies as : find the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ that minimizes the energy functional $J_{\cell}^{VW}$
+% Considering now that $\tensorii{G}{}_{\cell}$ and $\tensorii{P}{}_{\cell}$ are not unknowns of the problem, \textit{i.e.} by explicitly eliminating both \eqref{eq_hu_washizu_derivative:eq2} and \eqref{eq_hu_washizu_derivative:eq3} from \eqref{eq_hu_washizu_derivative}, \eqref{eq_hu_washizu} simplifies as : find the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ that minimizes the energy functional $L_{\cell}^{VW}$
 % %
 % %
 % %
 % \begin{equation}
 %     \label{eq_virtual_works}
 %     \begin{aligned}
-%         J_{\cell}^{VW}
+%         L_{\cell}^{VW}
 %         % (\tensori{u}{}_{\cell})
 %         =
 %         \int_{\cell} \mecPotential{}_{\cell}
@@ -483,10 +483,10 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % \begin{equation}
 %     \label{eq_virtual_works_1}
 %     \begin{aligned}
-%         % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
-%         \delta J_{\cell}^{VW}
+%         % \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+%         \delta L_{\cell}^{VW}
 %         % =
-%         % \frac{\partial J_{\cell}^{VW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+%         % \frac{\partial L_{\cell}^{VW}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
 %         & =
 %         \int_{\cell}
 %         % \frac{\partial \mecPotential{}_{\cell}}{\partial \nabla \tensori{u}{}_{\cell}} : \nabla \delta \tensori{u}{}_{\cell}
@@ -508,14 +508,14 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % %
 % %
 % % ,and $\cdot \ \vert_{\dCell}$ is the trace operator on $\dCell$.
-% % The equilibrium of the body $\cell$ corresponding to problem \eqref{eq_model_problem} where equations \eqref{eq_model_problem:eq1} and \eqref{eq_model_problem:eq2} are enforced strongly is reached for the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ and minimizing the energy functional $J_{\cell}$:
+% % The equilibrium of the body $\cell$ corresponding to problem \eqref{eq_model_problem} where equations \eqref{eq_model_problem:eq1} and \eqref{eq_model_problem:eq2} are enforced strongly is reached for the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ and minimizing the energy functional $L_{\cell}$:
 % % %
 % % % 
 % % % 
 % % \begin{equation}
 % %     \label{eq_virtual_works}
 % %     \begin{aligned}
-% %         J_{\cell}
+% %         L_{\cell}
 % %         % (\tensori{u}{}_{\cell})
 % %         =
 % %         \int_{\cell} \mecPotential{}_{\cell}
@@ -535,8 +535,8 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % % \begin{equation}
 % %     \label{eq_virtual_works_1}
 % %     \begin{aligned}
-% %         % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
-% %         d J_{\cell} = \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+% %         % \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+% %         d L_{\cell} = \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
 % %         & =
 % %         \int_{\cell}
 % %         % \frac{\partial \mecPotential{}_{\cell}}{\partial \nabla \tensori{u}{}_{\cell}} : \nabla \delta \tensori{u}{}_{\cell}
@@ -550,13 +550,13 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % % %
 % % % 
 % % % 
-% % with $\displacementSpaceCell{} = H^1(\cell, \mathbb{R}^{d})$. If $\tensorii{G}{}_{\cell}$ and $\tensorii{P}{}_{\cell}$ are unknowns of the problem, one obtains the three-field Hu–Washizu functional $J_{\cell}$, for the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ such that :
+% % with $\displacementSpaceCell{} = H^1(\cell, \mathbb{R}^{d})$. If $\tensorii{G}{}_{\cell}$ and $\tensorii{P}{}_{\cell}$ are unknowns of the problem, one obtains the three-field Hu–Washizu functional $L_{\cell}$, for the displacement field $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ verifying $\tensori{u}{}_{\cell} \vert_{\dirichletCell} = \dirichletLag$ on $\dirichletCell$ such that :
 % % % 
 % % % 
 % % %
 % % % \begin{equation}
 % % % \label{eq_hu_washizu}
-% % %     J_{\cell}
+% % %     L_{\cell}
 % % %     % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
 % % %     =
 % % %     \int_{\cell} \mecPotential{}_{\cell} + (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
@@ -575,7 +575,7 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % % \begin{subequations}
 % %     \label{eq_hu_washizu_derivative}
 % %         \begin{alignat}{3}
-% %             \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
+% %             \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\cell}} \delta \tensori{u}{}_{\cell}
 % %             = & \int_{\cell} \tensorii{P}{}_{\cell} : \nabla \delta \tensori{u}{}_{\cell}
 % %             -
 % %             \int_{\cell} \tensori{f}{}_V \cdot \delta \tensori{u}{}_{\cell}
@@ -588,7 +588,7 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % %             \in \displacementSpaceCell
 % %         \label{eq_hu_washizu_derivative:eq0}
 % %         \\
-% %             \frac{\partial J_{\cell}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
+% %             \frac{\partial L_{\cell}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
 % %             = &
 % %             \int_{\cell} (\frac{\partial \mecPotential_{\cell}}{\partial \tensorii{G}{}_{\cell}} - \tensorii{P}{}_{\cell}) : \delta \tensorii{G}{}_{\cell}
 % %             &&
@@ -598,7 +598,7 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % %             \in \gradSpaceCell
 % %         \label{eq_hu_washizu_derivative:eq2}
 % %         \\
-% %             \frac{\partial J_{\cell}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
+% %             \frac{\partial L_{\cell}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
 % %             = & \int_{\cell} (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell} ) : \delta \tensorii{P}{}_{\cell}
 % %             &&
 % %             \ \ \ \ \ \ \ \ 
@@ -626,7 +626,7 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % \begin{equation}
 % \label{eq_hu_washizu_composite}
 % \begin{aligned}
-%     J_{\cell}^{HW}
+%     L_{\cell}^{HW}
 %     = & \sum_{1 \leq i \leq N} \int_{\matI} \mecPotential{}_{\matI} + (\nabla \tensori{u}{}_{\matI} - \tensorii{G}{}_{\matI}) : \tensorii{P}{}_{\matI}
 %     -
 %     \int_{\matI} \loadLag \cdot \tensori{u}{}_{\matI}
@@ -658,7 +658,7 @@ that relates to the strong problem defined by equation \eqref{eq_model_problem_0
 % \begin{equation}
 % \label{eq_hu_washizu_composite_continuous}
 % \begin{aligned}
-%     J_{\cell}^{HW}
+%     L_{\cell}^{HW}
 %     = & \sum_{1 \leq i \leq N} \int_{\matI} \mecPotential{}_{\matI} + (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
 %     -
 %     \int_{\matI} \loadLag \cdot \tensori{u}{}_{\cell}

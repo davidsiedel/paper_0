@@ -153,7 +153,7 @@ The first order variation of Lagrangian is given by:
   \label{eq_virtual_works_0}
   \frac{\partial L^{VW}_{\bodyLag{}}
     % \paren{\tensori{u}}
-  }{\partial \tensori{u}}\paren{ \delta \tensori{u}} =
+  }{\partial \tensori{u}} (\delta \tensori{u}) =
   \int_{\bodyLag} \tensorii{P} : \nabla \delta \tensori{u} -
   \int_{\bodyLag} \tensori{f}_V \cdot \delta \tensori{u} -
   \int_{\neumannBoundaryLag} \neumannLag{} \cdot \delta \tensori{u}
@@ -204,7 +204,7 @@ $\tensori{u}, \tensorii{G}$, and $\tensorii{P}$ yields
 \begin{subequations}
     \label{eq_hu_washizu_derivative_0}
         \begin{alignat}{3}
-        \deriv{L^{HW}_{\bodyLag{}}}{\tensori{u}}\paren{\delta \tensori{u}}
+        \deriv{L^{HW}_{\bodyLag{}}}{\tensori{u}} (\delta \tensori{u})
         = & \int_{\bodyLag} \tensorii{P} : \nabla \delta \tensori{u}
         -
         \int_{\bodyLag} \tensori{f}_V \cdot \delta \tensori{u}
@@ -217,7 +217,7 @@ $\tensori{u}, \tensorii{G}$, and $\tensorii{P}$ yields
         \forall \delta \tensori{u}{}
         \label{eq_hu_washizu_derivative_0:eq0}
         \\
-        \deriv{L^{HW}_{\bodyLag{}}}{\tensorii{P}}\paren{ \delta \tensorii{P}}
+        \deriv{L^{HW}_{\bodyLag{}}}{\tensorii{P}} (\delta \tensorii{P})
         = & \int_{\bodyLag} ( \nabla \tensori{u} - \tensorii{G} ) : \delta \tensorii{P}
         &&
         \ \ \ \ \ \ \ \ 
@@ -225,7 +225,7 @@ $\tensori{u}, \tensorii{G}$, and $\tensorii{P}$ yields
         \forall \delta \tensorii{P}{}
         \label{eq_hu_washizu_derivative_0:eq2}
         \\
-        \deriv{L^{HW}_{\bodyLag{}}}{\tensorii{G}}\paren{\delta \tensorii{G}}
+        \deriv{L^{HW}_{\bodyLag{}}}{\tensorii{G}} (\delta \tensorii{G})
         = &
         \int_{\bodyLag} (\frac{\partial \mecPotential}{\partial \tensorii{G}} - \tensorii{P}) : \delta \tensorii{G}
         &&
@@ -242,15 +242,42 @@ where equation \eqref{eq_hu_washizu_derivative_0:eq2} and \eqref{eq_hu_washizu_d
 account for \eqref{eq_grad_def} and \eqref{eq_stress_def} respectively in a weak
 sense.
 
-\paragraph{Practial importance of the Hu-Washizu principle}
+\subsection{On the use of the Hu-Washizu Lagrangian in mechanics to circumvent volumetric locking}
 
-En continue, aucun intérêt. Par contre, très puissant une fois les
-bases d'approximations choisies.
+In the continuous framework, the Hu-Washizu functional is not relevant, since equations
+\eqref{eq_hu_washizu_derivative_0:eq2} and \eqref{eq_hu_washizu_derivative_0:eq3} would hold true in a strong sense.
 
-Many variants:
+\paragraph{Pressure swelling formulations}
 
-- Ne considérer uniquement l'espace sphérique.
+Since volumetric locking is pressure dependent phenomenon, considering for instance a decomposition of the stress and strain fields into \textit{e.g.} devatoric and spherical components, one can
+express a mixed problem in terms of pressure and swelling, which is at the origin of so-called UPG methods \cite{al_akhrass_integrating_2014, simo_quasi-incompressible_1991,simo_variational_1985}. The scalar pressure and swelling unknowns replace respectively the stress and strain tensorial unknowns in \eqref{eq_HW_0}, and the pressure field is directly used in the behavior law to account for the spherical component of the stress. 
 
-- Gardez des champs globaux: U-P-G inconnues nodales. Variantes liées aux choix des espaces d'approximations de U, P et G (Al-Akrass).
+\paragraph{Enhanced assumed strains formulations}
 
-- Travailler par éléments: Assumed strain (c.f. Belytchko).
+Another approach of the use of the Hu-Washizu consists in studying the equilibrium of a single element. Such a framework falls into the scope of so-called Enhanced Assumed Strains methods \cite{simo_variational_1986,simo_class_1990}, which result for instance in the B-bar method, that consists in defining a modified derivation operator, such that one gets rid of the three-field formulation, to express the problem in terms of primal unknowns only.
+
+\paragraph{Towards Discontinuous methods}
+
+In the present document, we propose an introduction to so-called \textit{non-conformal} methods, through the lens of the Hu–Washizu Lagrangian.
+At the origin of these methods is the Discontinuous Galerkin method, which postulates the discontinuity of the displacement across elements.
+This feature that was introduced for mathematical reasons allows the method to be robust to volumetric locking.
+However, its formulation takes root in a possibly dry mathematical background, and the ingredients of the method are not introduced in the literature through physical arguments.
+The goal of the next section aims at introducing the whole framework of non-conformal methods, including the displacement discontinuity, through the use of the Hu–Washizu Lagragian.
+Though one counts a few occurances of the use of the Hu–Washizu Lagragian in the context of discontinuous methods \cite{noels_general_2006,neunteufel_three-field_2021}, none, to our knowledge, introduce all the ingredients of the method through the 
+sole Hu–Washizu Lagragian.
+
+% and though one counts a few applications of the Hu–Washizu Lagrangian for Discontinuous Galerkin methods \cite{}, none of them exploit the 
+% Its application in mechanics had not resulted in a break through, and
+% so did not its variants, among which the Hybird Discontinuous Galerkin method and the Hybird High Order method.
+% Though one counts a few applications of the Hu–Washizu Lagrangian for Discontinuous Galerkin methods 
+
+% En continue, aucun intérêt. Par contre, très puissant une fois les
+% bases d'approximations choisies.
+
+% Many variants:
+
+% - Ne considérer uniquement l'espace sphérique.
+
+% - Gardez des champs globaux: U-P-G inconnues nodales. Variantes liées aux choix des espaces d'approximations de U, P et G (Al-Akrass).
+
+% - Travailler par éléments: Assumed strain (c.f. Belytchko).
