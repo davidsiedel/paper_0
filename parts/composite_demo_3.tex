@@ -1,16 +1,70 @@
 \section{Introduction to discontinuous methods through a Hu-Washizu formulation}
 \label{sec_composite_demo}
 
-Many numerical methods
-consider a partition of the body into elementary subsets called \textit{cells}.
-% The equilibrium of the body is then expressed in terms of the sum of the mechanical contribution in each of these cells composing it.
-% The equilibrium of the interface between two cells is then of major 
-For the equilibrium of the whole body to hold, each cell must be in equilibrium with its neighbors, which means that they have to interact and pass information from one another.
-Communication between two cells is ensured by knowledge of the displacement field at their shared boundary.
-For \textit{conformal} methods to which belongs the Lagrange (\textit{i.e.} the standard) Finite Element Method, the displacement over the whole body is continuous, which implies that the displacement at a cell boundary is directly equal to that of its neighbors, and a cell has a direct knowledge of the motion of its neighborhood.
-For so-called \textit{non-conformal} methods, among which are \textit{e.g.} Discontinuous Galerkin methods, Hybrid Discontinuous Galerkin methods and Hybrid High Order methods, the displacement continuity at a cell boundary is not explicitly enforced, such that one needs to introduce supplementary ingredients in the formulation to pass information from one cell to another. A straightforward way of doing so consists in introducing an interface between cells, that acts as a membrane pulling them together. One can readily feel that the stiffer the membrane, the closer the cells, and the closer to the \textit{conformal} framework. This technique is the one at the foundation of Discontinuous Galerkin methods. By adding an intermediate structure in the membrane, called a \textit{bone}, one defines the framework of Hybrid Discontinuous Galerkin methods and Hybrid High Order methods; the membrane is split into two parts, one at each side of the bone, and communication between cells transits through the bone, via the membrane. The term hybrid expresses the fact that both cells and bones carry information about the displacement field, hence introducing the \textit{skeleton} of the body.
-In the following section, we show that one recovers the full mathematical framework proper to these non-conformal method, by writing the equilibrium of a cell and its interface with its neighborhood.
-%  cells must stick together in order to pass the mechanical information from one cell to another
+Many numerical methods consider a partition of the body into
+elementary parts. % subsets called \textit{cells}.
+
+In this section one considers a subpart \(T\) of the body
+\(\bodyLag\). This subpart is in equilibrium with the rest of the body
+\(\Omega\backslash T\) if the displacements and the normal traction are
+continuous at the boundary of \(\partial T\).
+
+Enforcing the displacement continuity at the interface leads to
+so-called conformal methods, to which the standard finite element
+methods belongs.
+
+On the contrary, this condition can be weakened by introducting an
+elastic interface of negligible size between \(T\) and
+\(\Omega\backslash T\). This is the basis of Discontinuous Galerkin
+methods.
+
+In this paper, we consider HDG and HHO methods where two elastic
+interfaces are introducted: one between \(T\) and its boundary
+\(\partial T\) and a second one between \(\Omega\backslash T\) and
+\(\partial T\).
+
+Following this idea, we show in this section how the use of the
+Hu-Hashizu Lagrangian allows to recover the main ingredients of the
+HDG/HHO methods, namely the reconstructed gradient and the stabilisation
+operator.
+
+%% The equilibrium of the body is then expressed in terms of the sum of the mechanical contribution in each of these cells composing it.
+%% The equilibrium of the interface between two cells is then of major 
+%For the equilibrium of the whole body to hold, each cell must be in
+%equilibrium with its neighbors, which means that they have to interact
+%and pass information from one another. Communication between two cells
+%is ensured by knowledge of the displacement field at their shared
+%boundary.
+%
+%For \textit{conformal} methods to which belongs the Lagrange
+%(\textit{i.e.} the standard) Finite Element Method, the displacement
+%over the whole body is continuous, which implies that the displacement
+%at a cell boundary is directly equal to that of its neighbors, and a
+%cell has a direct knowledge of the motion of its neighborhood.
+%
+%For so-called \textit{non-conformal} methods, among which are
+%\textit{e.g.} Discontinuous Galerkin methods, Hybrid Discontinuous
+%Galerkin methods and Hybrid High Order methods, the displacement
+%continuity at a cell boundary is not explicitly enforced, such that one
+%needs to introduce supplementary ingredients in the formulation to pass
+%information from one cell to another. A straightforward way of doing so
+%consists in introducing an interface between cells, that acts as a
+%membrane pulling them together. One can readily feel that the stiffer
+%the membrane, the closer the cells, and the closer to the
+%\textit{conformal} framework. This technique is the one at the
+%foundation of Discontinuous Galerkin methods. By adding an intermediate
+%structure in the membrane, called a \textit{bone}, one defines the
+%framework of Hybrid Discontinuous Galerkin methods and Hybrid High Order
+%methods; the membrane is split into two parts, one at each side of the
+%bone, and communication between cells transits through the bone, via the
+%membrane. The term hybrid expresses the fact that both cells and bones
+%carry information about the displacement field, hence introducing the
+%\textit{skeleton} of the body. In the following section, we show that
+%one recovers the full mathematical framework proper to these
+%non-conformal method, by writing the equilibrium of a cell and its
+%interface with its neighborhood.
+%%  cells must stick together in order to pass the mechanical information from one cell to another
+
 
 % Let $\cell$ be
 % such a cell and let $\dCell{}$ its boundary.
