@@ -1,36 +1,34 @@
 \section{Discretization}
 
-\paragraph{Mesh}
+% Since the displacement unknown is hybrid, we introduce the \textit{skeleton} of the mesh, that bears boundary unknowns. We then specify the problem to solve at 
+In this section, we specify the nature of the mesh, and introduce the so-called \textit{skeleton} of the mesh, that bears boundary displacement unknowns.
+We then devise the problem to solve at the structural level, from the equilibrium of an element as described in Section \ref{sec_hdg_element_equilibrium}.
+Approximation spaces for unknowns of the global problem are then described, which leads to several choices in terms of definition of the stabilization. Depending on such a choice, one recovers either the HDG method, or the HHO one. Finally, we give the expression of the global problem in discrete form.
 
-One defines the collection of all cells in the mesh as
-$\HybridMesh(\bodyLag) = \{ \matI \subset \bodyLag \ \vert \ 1 \leq i \leq N_{\cell} \}$, where $N_T$ denotes the total number of cells.
+\subsection{Spatial discretization}
 
-\paragraph{Face}
+\paragraph{Faces and skeleton of the mesh}
 
-The boundary $\dCell{}$ of each element is decomposed in faces, such thata face $F$ is a subset of $\bodyLag$, and either there are two cells $\cell$ and $\cell'$ such that $F = \dCell \cap \dCell'$ ($F$ is then an interior face), or there is a single cell $\cell$ such that $F = \dCell \cap \partial \Omega$ ($F$ is then an exterior face).
-
-\paragraph{Faces sets}
-
-% Let $\dHybridMesh{}^i(\bodyLag)$ denote the set of interior faces, and $\dHybridMesh{}^e(\bodyLag)$ that of exterior ones.
-% $\dHybridMesh{}^e(\bodyLag)$ is partitioned into $\dHybridMesh{}_{D}^e(\bodyLag) = \{ F \in \dHybridMesh{}^e(\bodyLag) \ \vert \ F \subset \partial_D \bodyLag \}$ the set of exterior faces imposed to prescribed Dirichlet boundary conditions, and into $\dHybridMesh{}_{N}^e(\bodyLag) = \{ F \in \dHybridMesh{}^e(\bodyLag) \ \vert \ F \subset \partial_N \bodyLag \}$ the set of exterior faces imposed to prescribed Neumann boundary conditions.
-For any element $\cell \in \mathcal{T}$, let $\mathcal{F}(\cell) = \{ F \in \dHybridMesh \ \vert \ F \subset \dCell \}$ the set of faces composing the boundary of $\cell$.
+The boundary $\dCell{}$ of each element is decomposed in faces, such that a face $F$ is a subset of $\bodyLag$, and either there are two cells $\cell$ and $\cell'$ such that $F = \dCell \cap \dCell'$ ($F$ is then an interior face), or there is a single cell $\cell$ such that $F = \dCell \cap \partial \Omega$ ($F$ is then an exterior face).
+For any cell $\cell$, let $\mathcal{F}(\cell) = \{ F \in \dHybridMesh \ \vert \ F \subset \dCell \}$ the set of faces composing the boundary of $\cell$.
 Let finally $\dHybridMesh(\bodyLag) = \{ F_i \subset \bodyLag \ \vert \ 1 \leq i \leq N_{F} \}$ the skeleton of the mesh, collecting all element faces $F_i$ in the mesh, where $N_{F}$ denotes the number of faces.
 
-\paragraph{Hybird mesh}
+\paragraph{Mesh}
 
+Likewise, one defines the collection of all cells in the mesh as
+$\HybridMesh(\bodyLag) = \{ \matI \subset \bodyLag \ \vert \ 1 \leq i \leq N_{\cell} \}$, where $N_T$ denotes the total number of cells.
 The composition of both $\mathcal{T}(\bodyLag)$ and $\dHybridMesh{}(\bodyLag)$ forms the hybrid mesh
 % $\overline{\mathcal{T}}({\bodyLag}) = \{T \subset \bodyLag, F \subset \bodyLag \ \vert \ T \in \mathcal{T}(\bodyLag) \ \vert \ F \in \mathcal{F}(\bodyLag) \}$.
 $\HybridMeshWhole({\bodyLag}) = \{ \mathcal{T}(\bodyLag), \mathcal{F}(\bodyLag) \}$.
-%
-%
-%
+
+\subsection{Global continuous problem}
 
 \paragraph{Global unknown}
 
 % Contrary to the standard finite element method that consists in seeking a global solution in a regular enough space over the whole mesh, we consider here a much broader space that consists in $\displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell$ the collection of all regular enough displacements element-wise.
 % Similarly, we consider $\displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)$ the space of all regular enough displacements face-wise for the skeleton unknown, such that the global solution space $\hybridDisplacementSpaceHybridMesh = \displacementSpaceHybridMesh \times \displacementSpaceDHybridMesh$ for the whole problem is simply the assembly of all element and face spaces in the mesh.
 
-Let the global unknown $(\tensori{v}{}_{\HybridMesh}, \tensori{v}{}_{\dHybridMesh})$ a displacement pair such that for each $\cell \in \HybridMesh(\bodyLag), \tensori{v}{}_{\HybridMesh} = \tensori{v}{}_{\cell}$ in $\cell$ and for each $F \in \dHybridMesh(\bodyLag), \tensori{v}{}_{\dHybridMesh} = \tensori{v}{}_{F}$ on $F$, where $\tensori{v}{}_{\cell} \in \displacementSpaceCell$ and $\tensori{v}{}_{F} \in \displacementSpaceDCell$ denote a cell and a face displacement field respectively.
+Let the global unknown $(\tensori{v}{}_{\HybridMesh}, \tensori{v}{}_{\dHybridMesh})$ a displacement pair such that for each $\cell \in \HybridMesh(\bodyLag), \tensori{v}{}_{\HybridMesh} = \tensori{v}{}_{\cell}$ in $\cell$ and for each $F \in \dHybridMesh(\bodyLag), \tensori{v}{}_{\dHybridMesh} = \tensori{v}{}_{F}$ on $F$, where $\tensori{v}{}_{\cell}$ and $\tensori{v}{}_{F}$ denote a cell and a face displacement field respectively.
 
 % \newcommand\virtualDisplacementSpaceHybridMesh{U_0(\mathcal{T})}
 % \newcommand\virtualDisplacementSpaceDHybridMesh{V_0(\mathcal{F})}
@@ -56,7 +54,7 @@ Let the global unknown $(\tensori{v}{}_{\HybridMesh}, \tensori{v}{}_{\dHybridMes
 
 % , where both cells and faces are considered as part of the support for defining
 The weak form of the global mechanical problem of $\bodyLag$ reads : find the global displacement unknown pair $(\tensori{u}{}_{\HybridMesh}, \tensori{u}{}_{\dHybridMesh})$ verifying $\tensori{u}{}_{\dHybridMesh} \vert_{\dirichletBoundaryLag} = \dirichletLag$ on $\dirichletBoundaryLag$ such that
-$\forall (\delta \tensori{u}{}_{\HybridMesh}, \delta \tensori{u}{}_{\dHybridMesh}) \in \virtualHybridDisplacementSpaceHybridMesh$
+$\forall (\delta \tensori{u}{}_{\HybridMesh}, \delta \tensori{u}{}_{\dHybridMesh})$
 %
 %
 %
@@ -130,9 +128,11 @@ where for each element $\cell \in \HybridMesh(\bodyLag)$, the boundary displacem
 % %
 % Similarily, for each element $\cell \in \mathcal{T}$, the displacement space of its boundary $\displacementSpaceDCell$ is the collection of the face displacement spaces to which it is connected such that $\displacementSpaceDCell = \prod_{F \in \mathcal{F}(\cell)} V(F)$.
 
+\subsection{Functional discretization and stabilization}
+
 \paragraph{Discrete functional space}
 
-A polynomial approximation of the global solution is then sought in a subspace of $\displacementSpaceHybridMesh$, and for each element $\cell \in \HybridMesh(\bodyLag)$, we denote $\discreteDisplacementSpaceCell \subset \displacementSpaceCell$ the approximation displacement space in the cell, and $\discreteDisplacementSpaceDCell \subset \displacementSpaceDCell$ that on the boundary. Similarly, let $\discreteGradSpaceCell \subset \gradSpaceCell$ the space used to build the discrete reconstructed gradient and $\discreteStressSpaceCell \subset \stressSpaceCell$ that chosen for the discrete stress such that
+For each element $\cell \in \HybridMesh(\bodyLag)$, we denote $\discreteDisplacementSpaceCell$ the approximation displacement space in the cell, and $\discreteDisplacementSpaceDCell$ that on the boundary. Similarly, let $\discreteGradSpaceCell$ the space used to build the discrete reconstructed gradient and $\discreteStressSpaceCell$ that chosen for the discrete stress such that
 %
 %
 %
@@ -154,6 +154,9 @@ where the cell displacement polynomial order $l$ might be chosen different from 
 % The jump function $\tensori{Z}{}_{\dCell}$ can be tweaked in order to act on the convergence order of the approximated solution
 % LES STABILIZATIONS SONT A LORIOGINE DE LORDRE DE CONV
 % Since two polynomial orders are available to define the displacement approximation,
+
+\paragraph{HDG stabilization}
+
 Accounting for the possible different polynomial order between the cell and faces, one can specify a discrete jump function in a natural way such that it delivers the displacement difference point-wise for any displacement pair $(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteHybridDisplacementSpaceCell$
 %
 %
@@ -170,6 +173,9 @@ Accounting for the possible different polynomial order between the cell and face
 %
 where $\discreteHybridDisplacementSpaceCell = \discreteDisplacementSpaceCell \times \discreteDisplacementSpaceDCell$ and $\Pi^k_{\dCell{}}$ denotes the orthogonal projector onto $\discreteDisplacementSpaceDCell$.
 This straightforward discrete jump function is at the origin of Hybrid Discontinuous Galerkin methods, and grants a convergence of order $k$ in the energy norm.
+
+\paragraph{HHO stabilization}
+
 A richer discrete jump function $\tensori{Z}{}_{\dCell}^{HHO}$ providing a convergence of order $k + 1$ in the energy norm was introduced in \cite{di_pietro_discontinuous-skeletal_2015}, hence giving the Hybrid High Order method its name, such that
 %
 %
@@ -191,7 +197,13 @@ A richer discrete jump function $\tensori{Z}{}_{\dCell}^{HHO}$ providing a conve
 %
 %
 %
-where $\Pi_{\cell}^k$ is the projector onto $P^{k}(\cell, \mathbb{R}^{d})$, $\tensoro{I}{}_{\cell}^{k + 1}$ is the identity function in $\discretePotentialSpaceCell = P^{k + 1}(\cell, \mathbb{R}^{d})$, and $\tensori{w}{}_{\cell}^{k+1} \in \discretePotentialSpaceCell$ denotes a higher order discrete displacement solving the following linear problem for any displacement pair $(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteHybridDisplacementSpaceCell$
+where $\Pi_{\cell}^k$ is the projector onto $P^{k}(\cell, \mathbb{R}^{d})$, $\tensoro{I}{}_{\cell}^{k + 1}$ is the identity function in $\discretePotentialSpaceCell = P^{k + 1}(\cell, \mathbb{R}^{d})$.
+
+\paragraph{Reconstructed higher order displacement}
+
+The term $\tensori{w}{}_{\cell}^{k+1}$ in \eqref{eq_hho_stabilization_vector}
+% $ \in \discretePotentialSpaceCell$
+denotes a higher order discrete displacement in $\discretePotentialSpaceCell$ that solves for any displacement pair $(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteHybridDisplacementSpaceCell$
 %
 %
 %
@@ -217,16 +229,21 @@ where $\Pi_{\cell}^k$ is the projector onto $P^{k}(\cell, \mathbb{R}^{d})$, $\te
 %
 %
 
+\subsection{Global discrete problem}
+
+\paragraph{Discrete global approximtion spaces}
+
 % With obvious notations,
-Let 
-$\discreteDisplacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \discreteDisplacementSpaceCell$ the global discrete cell displacement space,
-$\discreteDisplacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V^h(F)$ the global discrete face displacement space, and
+Let $\discreteDisplacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \discreteDisplacementSpaceCell$ the global discrete cell displacement space.
+Let $\discreteDisplacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V^h(F)$ the global discrete face displacement space, and
 $\discreteHybridDisplacementSpaceHybridMesh = \discreteDisplacementSpaceHybridMesh \times \discreteDisplacementSpaceDHybridMesh$ the global unknown approximation space.
-Let $\discreteVirtualDisplacementSpaceHybridMesh$ and $\discreteVirtualDisplacementSpaceDHybridMesh$ the respective discrete mesh and skeleton virtual displacement spaces, and
+Similarly, let $\discreteVirtualDisplacementSpaceHybridMesh$ and $\discreteVirtualDisplacementSpaceDHybridMesh$ the respective discrete mesh and skeleton virtual displacement spaces, and
 $\discreteVirtualHybridDisplacementSpaceHybridMesh = \discreteVirtualDisplacementSpaceHybridMesh \times \discreteVirtualDisplacementSpaceDHybridMesh$ the discrete virtual global displacement space.
 % Let $(\tensori{v}{}_{\HybridMesh}^l, \tensori{v}{}_{\dHybridMesh}^k) \in \discreteHybridDisplacementSpaceHybridMesh$ denote a global displacement pair such that $\forall \cell \in \HybridMesh(\bodyLag), \tensori{v}{}_{\HybridMesh}^l = \tensori{v}{}_{\cell}^l$ in $\cell$ and $\forall F \in \HybridMesh(\bodyLag), \tensori{v}{}_{\dHybridMesh}^k = \tensori{v}{}_{F}^k$ in $F$.
 
-The global mechanical problem in discrete weak form for the Hybrid High Order method finally writes : find the global displacement unknown pair $(\tensori{u}{}_{\HybridMesh}^l, \tensori{u}{}_{\dHybridMesh}^k) \in \discreteHybridDisplacementSpaceHybridMesh$ verifying $\tensori{u}{}_{\dHybridMesh}^k \vert_{\dirichletBoundaryLag} = \dirichletLag$ on $\dirichletBoundaryLag$ such that $\forall (\delta \tensori{u}{}_{\HybridMesh}^l, \delta \tensori{u}{}_{\dHybridMesh}^k) \in \discreteVirtualHybridDisplacementSpaceHybridMesh$
+\paragraph{Discrete global problem}
+
+The global problem in discrete form writes : find the pair $(\tensori{u}{}_{\HybridMesh}^l, \tensori{u}{}_{\dHybridMesh}^k) \in \discreteHybridDisplacementSpaceHybridMesh$ verifying $\tensori{u}{}_{\dHybridMesh}^k \vert_{\dirichletBoundaryLag} = \dirichletLag$ on $\dirichletBoundaryLag$ such that $\forall (\delta \tensori{u}{}_{\HybridMesh}^l, \delta \tensori{u}{}_{\dHybridMesh}^k) \in \discreteVirtualHybridDisplacementSpaceHybridMesh$
 %
 %
 %
@@ -274,7 +291,7 @@ with
 %
 %
 %
-with the discrete reconstructed gradient $\tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteGradSpaceCell$ solving $\forall (\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteHybridDisplacementSpaceCell$
+where the discrete reconstructed gradient $\tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteGradSpaceCell$ solves $\forall (\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteHybridDisplacementSpaceCell$
 %
 %
 %

@@ -1,13 +1,19 @@
 \section{Implementation}
 \label{sec_implementation}
 
-% Dans le cas de comp non lineaires, on agit localement sur les pts Gauss pour dériver PK1
+In this section, we specify the underlying matricial implementation of problem \eqref{eq_0nonamemeergjj}. In the following, the expression $\{ \cdot \}$ denotes a real-valued vector, and the notation $[\cdot]$ a real-valued matrix.
 
-Let $\cellQuadrature$ a quadrature of $\cell$ of order at least $2k$.
-In the following, the expression $\{ \cdot \}$ denotes a real-valued vector, and the notation $[\cdot]$ a real-valued matrix.
+\paragraph{Quadrature}
+
+As is customary with finite element methods, integrals are evaluated numerically by means of a quadrature rule on an element shape. Hence, let $\cellQuadrature$ a quadrature rule for the cell $\cell$ of order at least $2k$. A quadrature point is denoted $\tensori{X}{}_q$ and a quadrature weight $w_q$.
+
+\subsection{Reconstructed gradient and stabilization operators}
+
+\paragraph{Reconstructed gradient operator}
+
 From an algebraic standpoint, \eqref{eq_discrete_grad} defines a linear problem
 % with respect to the pair $(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\cell}^k)$
-consisting in inverting a mass matrix in $\discreteGradSpaceCell{}$ in order to obtain 
+consisting in inverting a mass matrix in $\discreteGradSpaceCell{}$. One can thus defines 
 % $\begin{bmatrix}
 %     B_{\cell} && B_{\dCell}
 % \end{bmatrix}
@@ -16,7 +22,8 @@ consisting in inverting a mass matrix in $\discreteGradSpaceCell{}$ in order to 
 $
 [B_{\cell}]
 $
-the discrete gradient operator acting on the pair $(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\cell}^k)$ at a quadrature point $\tensori{x}{}_q \in \cellQuadrature$, such that the algebraic realization of \eqref{eq_discrete_grad} reads
+the discrete gradient operator acting on the pair $(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\cell}^k)$ at a quadrature point $\tensori{x}{}_q \in \cellQuadrature$ to evaluate the discrete gradient $\tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k)$ such that
+% Hence, the algebraic realization of \eqref{eq_discrete_grad}
 %
 %
 %
@@ -26,10 +33,12 @@ the discrete gradient operator acting on the pair $(\tensori{v}{}_{\cell}^l, \te
         \begin{Bmatrix}
             \tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k)
         \end{Bmatrix}
-        (\tensori{x}{}_q)
+        (\tensori{X}{}_q)
         =
         \begin{bmatrix}
-            B_{\cell} && B_{\dCell}
+            B_{\cell}
+            % &&
+            % B_{\dCell}
         \end{bmatrix}
         (\tensori{x}{}_q)
         \cdot
@@ -45,8 +54,14 @@ the discrete gradient operator acting on the pair $(\tensori{v}{}_{\cell}^l, \te
 %
 %
 %
-where we have decomposed the expression of the discrete gradient operator $[B_{\cell}]$ into a cell block $B_{\cell}$ and a boundary block $B_{\dCell}$, to emphasize the dependence of the problem on both unknowns.
+% where we have decomposed the expression of $[B_{\cell}]$ into a cell block $B_{\cell}$ and a boundary block $B_{\dCell}$, to emphasize the dependence of the problem on both unknowns.
 % Once this offline computation step is performed, the 
+where $[B_{\cell}]$ is composed by a cell block $B_{\cell}$ and a boundary block $B_{\dCell}$.
+% to emphasize the dependence of the problem on both unknowns.
+
+
+\paragraph{Stabilization operator}
+
 Similarly, the algebraic realization of \eqref{eq_hho_stabilization_vector} amounts to compute the stabilization operator $[Z_{\cell}]$ such that 
 %
 %
@@ -59,7 +74,9 @@ Similarly, the algebraic realization of \eqref{eq_hho_stabilization_vector} amou
         \end{Bmatrix}
         =
         \begin{bmatrix}
-            Z_{\cell} && Z_{\dCell}
+            Z_{\cell}
+            % &&
+            % Z_{\dCell}
         \end{bmatrix}
         \cdot
         \begin{Bmatrix}
@@ -74,8 +91,13 @@ Similarly, the algebraic realization of \eqref{eq_hho_stabilization_vector} amou
 %
 %
 %
+as for $[B_{\cell}]$, the operator $[Z_{\cell}]$ is composed by a cell block $Z_{\cell}$ and a boundary block $Z_{\dCell}$.
+
+\paragraph{Offline computation}
+
 Since \eqref{eq_discrete_grad} and \eqref{eq_hho_stabilization_vector} depend on the geometry of the element $\cell$ only, one can compute the operators $[B_{\cell}]$ and $[Z_{\cell}]$ for each element once and for all in an offline pre-computation step by working in the reference configuration. Once this offline step is performed, the algebraic form of the problem resembles closely to the standard finite element one, where the operator $[B_{\cell}]$ replaces the usual shape function gradient operator, and the stabilization operator 
 $[Z_{\cell}]$ is incorporated in the expression of the tangent matrix and in that of internal forces.
+
 %
 %
 %
@@ -112,7 +134,14 @@ $[Z_{\cell}]$ is incorporated in the expression of the tangent matrix and in tha
 %     \end{aligned}
 % \end{equation}
 
+\subsection{Iterative method}
+
+\paragraph{Notations}
+
 In the following, let $(\tensori{u}{}_{\cell}^{l, {m,n}}, \tensori{u}{}_{\dCell}^{k, {m,n}})$ denote the displacement pair value at some pseudo time step $m$ and some iteration $n$. The initial value of the displacement at time step $m = 0$ and iteration $n = 0$ is set to zero, and at a new pseudo time step $m+1$, the displacement at the first iteration $n = 0$ takes the value of the displacement of the last iteration of the previous time step.
+
+\paragraph{Internal forces}
+
 In such a context, the internal forces vector $\{ F_{T}^{int} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n}) \}$ writes
 %
 %
@@ -131,10 +160,12 @@ In such a context, the internal forces vector $\{ F_{T}^{int} (\tensori{u}{}_{\c
             )
         \end{Bmatrix}
         = &
-        \sum_{\tensori{x}{}_q \in \cellQuadrature{}}
+        \sum_{\tensori{X}{}_q \in \cellQuadrature{}}
         \begin{bmatrix}
-            B_{\cell} && B_{\dCell}
-        \end{bmatrix}^{\text{trans}}(\tensori{x}{}_q)
+            B_{\cell}
+            % &&
+            % B_{\dCell}
+        \end{bmatrix}^{\text{trans}}(\tensori{X}{}_q)
         \cdot
         \begin{Bmatrix}
             \tensorii{P}{}_{\cell}^k(
@@ -147,16 +178,21 @@ In such a context, the internal forces vector $\{ F_{T}^{int} (\tensori{u}{}_{\c
                     \tensori{u}{}_{\dCell}^{k,m,n}
                 )
             )
-        \end{Bmatrix}(\tensori{x}{}_q)
-        \\
-        & +
-        \beta
+        \end{Bmatrix}(\tensori{X}{}_q)
+        % \\
+        % &
+        +
+        \frac{\beta}{h_T}
         \begin{bmatrix}
-            Z_{\cell} && Z_{\dCell}
+            Z_{\cell}
+            % &&
+            % Z_{\dCell}
         \end{bmatrix}^{\text{trans}}
         \cdot
         \begin{bmatrix}
-            Z_{\cell} && Z_{\dCell}
+            Z_{\cell}
+            % && 
+            % Z_{\dCell}
         \end{bmatrix}
         % \begin{bmatrix}
         %     Z_{\cell \cell} && Z_{\cell \dCell}
@@ -177,7 +213,11 @@ In such a context, the internal forces vector $\{ F_{T}^{int} (\tensori{u}{}_{\c
 %
 %
 where the superscript $[\cdot]^{\text{trans}}$ denotes the transpose operation, and
-$\{ \tensorii{P}{}_{\cell}^k(\tensorii{G}{}_{\cell}^k (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})) \}$ is the stress components vector, computed by integration of the behavior law at each quadrature point $\tensori{x}{}_q$ from the values of the displacement gradient $\tensorii{G}{}_{\cell}^k (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})$.
+$\{ \tensorii{P}{}_{\cell}^k(\tensorii{G}{}_{\cell}^k (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})) \}$ is the stress components vector, computed by integration of the behavior law at each quadrature point $\tensori{X}{}_q$ from the values of the displacement gradient $\tensorii{G}{}_{\cell}^k (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})$.
+% The parameter $\beta / h_T$ is the so-called stabilization parameter, that is the stiffness of the interface introduced in \eqref{eq_0009}.
+
+\paragraph{External forces}
+
 The external forces vector is, as is customary with the standard finite element method, the evaluation of the given bulk and boundary loads at respective cell and face quadrature points tested against the respective cell and face shape functions, and is denoted
 %
 %
@@ -199,6 +239,9 @@ The external forces vector is, as is customary with the standard finite element 
 %
 %
 %
+
+\paragraph{Tangent matrix}
+
 The tangent matrix $[K_{\cell}^{tan}(\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})]$ is the sum of the usual product of the displacement gradients by the tangent operator $\tensoriv{A}{}(\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})$ and of an additional stabilization term such that
 %
 %
@@ -216,11 +259,13 @@ The tangent matrix $[K_{\cell}^{tan}(\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{
             )
         \end{bmatrix}
         = &
-        \sum_{\tensori{x}{}_q \in \cellQuadrature{}}
+        \sum_{\tensori{X}{}_q \in \cellQuadrature{}}
         \begin{bmatrix}
-            B_{\cell} && B_{\dCell}
+            B_{\cell}
+            % &&
+            % B_{\dCell}
         \end{bmatrix}^{\text{trans}}
-        (\tensori{x}{}_q)
+        (\tensori{X}{}_q)
         \cdot
         \begin{bmatrix}
             \tensoriv{A}{}
@@ -232,21 +277,28 @@ The tangent matrix $[K_{\cell}^{tan}(\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{
                 \tensori{u}{}_{\dCell}^{k,m,n}
             )
         \end{bmatrix}
-        (\tensori{x}{}_q)
+        (\tensori{X}{}_q)
         \cdot
         \begin{bmatrix}
-            B_{\cell} && B_{\dCell}
+            B_{\cell}
+            % &&
+            % B_{\dCell}
         \end{bmatrix}
-        (\tensori{x}{}_q)
-        \\
-        & +
-        \beta
+        (\tensori{X}{}_q)
+        % \\
+        % &
+        +
+        \frac{\beta}{h_T}
         \begin{bmatrix}
-            Z_{\cell} && Z_{\dCell}
+            Z_{\cell}
+            % &&
+            % Z_{\dCell}
         \end{bmatrix}^{\text{trans}}
         \cdot
         \begin{bmatrix}
-            Z_{\cell} && Z_{\dCell}
+            Z_{\cell}
+            % &&
+            % Z_{\dCell}
         \end{bmatrix}
     \end{aligned}
 \end{equation}
@@ -298,6 +350,8 @@ where $\tensoriv{A}{}(\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m
         }
     \end{aligned}
 \end{equation}
+
+\paragraph{Newton method}
 %
 %
 %
@@ -328,22 +382,61 @@ Following the iterative Newton method, the algebraic system to solve at the elem
         \end{Bmatrix}
         =
         \begin{Bmatrix}
+            R_{\cell}^{m,n}
+        \end{Bmatrix}
+        &&
+        \text{with}
+        &&
+        \begin{Bmatrix}
+            R_{\cell}^{m,n}
+        \end{Bmatrix}
+        =
+        \begin{Bmatrix}
             F_T^{int} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
         \end{Bmatrix}
         -
         \begin{Bmatrix}
             F_T^{ext}
         \end{Bmatrix}
-        =
-        \begin{Bmatrix}
-            R_{\cell}^{m,n}
-        \end{Bmatrix}
     \end{aligned}
 \end{equation}
 %
 %
 %
-In particular, since both $[B_{\cell}]$ and $[Z_{\cell}]$ are expressed in terms of cell and boundary blocks, so does the tangent matrix which can be decomposed into four coupled cell-boundary blocks with the notation
+such that the displacement at the next iteration is incremented by the displacement increment $(\delta \tensori{u}{}_{\cell}^{l}, \delta \tensori{u}{}_{\dCell}^{k})$
+%
+%
+%
+\begin{equation}
+    \label{eq_adding_increment}
+    \begin{Bmatrix}
+        \tensori{u}{}_{\cell}^{l,m,n+1}
+        \\
+        \tensori{u}{}_{\dCell}^{k,m,n+1}
+    \end{Bmatrix}
+    =
+    \begin{Bmatrix}
+        \tensori{u}{}_{\cell}^{l,m,n}
+        \\
+        \tensori{u}{}_{\dCell}^{k,m,n}
+    \end{Bmatrix}
+    +
+    \begin{Bmatrix}
+        \delta
+        \tensori{u}{}_{\cell}^{l}
+        \\
+        \delta
+        \tensori{u}{}_{\dCell}^{k}
+    \end{Bmatrix}
+\end{equation}
+
+\subsection{Static condensation}
+
+\paragraph{Static condensation}
+%
+%
+%
+Since both $[B_{\cell}]$ and $[Z_{\cell}]$ are expressed in terms of cell and boundary blocks, so does the tangent matrix which can be decomposed into four coupled cell-boundary blocks with the notation
 %
 %
 %
@@ -478,7 +571,7 @@ with
 %
 %
 %
-The incremental cell displacement expresses linearly with the respect to the boundary one such that
+and the incremental cell displacement expresses linearly with the respect to the boundary one such that
 %
 %
 %
@@ -516,7 +609,16 @@ The incremental cell displacement expresses linearly with the respect to the bou
 %
 %
 %
-A schematic representation of an Newton iteration is given in Figure \ref{res_cond0}
+
+\subsection{Algorithmic aspects}
+
+\paragraph{Linear static condensation algorithm}
+\label{par_static_cond}
+
+At a given pseudo-time step $m$ and iteration $n$, the element displacement unknown is incremented by the element displacement increment.
+The reconstructed gradient field is then computed, and is used to integrate the behaviour law, which provides the stress and tangent operator values at quadrature points.
+The internal forces, external forces and tangent matrix are then computed, and condensated on the element faces. The resulting system is assembled on the global system matrix, and a new value of the increment is computed by inverting the global matrix.
+A schematic representation this procedure is given in Figure \ref{res_cond0}
 % Le problème global incrémental (\ref{eq_hho2}) est alors l'assemblage des systèmes élémentaires condensés (\ref{hho_incremental_cond}), dont la résolution consiste en un algorithme de Newton sur l'incrément des inconnues de faces uniquement. Ce schéma de résolution par condensation statique dont on donne le principe Figure \ref{res_cond0} exploite la relation linéaire entre l'incrément des inconnues de cellules et celui des faces.
     
 \begin{figure}[H]
@@ -526,9 +628,9 @@ A schematic representation of an Newton iteration is given in Figure \ref{res_co
 \label{res_cond0}
 \end{figure}
 
-\subsection{Résolution par équilibre de cellule}
+\paragraph{Cell equlibrium algorithm}
 
-We propose an alternative to the static condensation solving algorithm, postulating an implicit relation between the increment of the cell unknowns and the increment of the faces, and consisting in solving locally a nonlinear system on the cell increment with a fixed face increment, in order to check the equilibrium of the cell with its faces at each iteration of the global problem. This new solution scheme is described in Figure \ref{res_cond}, where we note $i$ a Newton iteration for solving the global problem on the set of face unknowns, and $j$ a Newton iteration for solving the local problem on the cell unknowns in an element.
+We propose an alternative to the static condensation solving algorithm, postulating an implicit relation between the increment of the cell unknowns and the increment of the faces, that consists in solving locally a nonlinear system on the cell increment at a fixed face increment. This non-linear local procedure adds up to the algorithm described above, to ensure the equilibrium of the cell with its faces at each iteration of the global problem. This new solution scheme is described in Figure \ref{res_cond}, where we note $i$ a Newton iteration for solving the global problem on the set of face unknowns, and $j$ a Newton iteration for solving the local problem on the cell unknowns in an element.
 
 % Nous proposons une alternative à l'algorithme de résolution par condensation statique, postulant une relation implicite entre l'incrément des inconnues de cellule est celui des faces et consistant à résoudre localement un système non-linéaire sur l'incrément de cellule à incrément de faces fixé, afin de vérifier l'équilibre de la cellule avec ses faces à chaque itération du problème global. Ce nouveau schéma de résolution est décrit Figure \ref{res_cond}, où on note $i$ une itération de Newton pour la résolution du problème global sur l'ensemble des inconnues de faces, et $j$ une itération de Newton pour la résolution du problème local sur les inconnues de cellule dans un élément $T$:
 
@@ -538,3 +640,5 @@ We propose an alternative to the static condensation solving algorithm, postulat
 \caption{Description schématique de l'algorithme d'équilibre de cellule}
 \label{res_cond}
 \end{figure}
+
+We show in Section \ref{sec_numerical_examples} that this algorithm gives identical results to those obtains with the Linear static condensation algorithm.

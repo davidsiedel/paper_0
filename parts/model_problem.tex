@@ -66,7 +66,7 @@ in the current configuration $\bodyEul$ and the displacement.
 
 \paragraph{Deformation gradient, gradient of the displacement}
 
-The deformation gradient $\tensorii{F}$ is defined as:
+The deformation gradient $\tensorii{F}$ is defined as
 %
 %
 %
@@ -77,28 +77,40 @@ The deformation gradient $\tensorii{F}$ is defined as:
 %
 %
 where $\nabla$ is the gradient operator in the
-reference configuration and $\tensorii{G} = \nabla \tensori{u}$ denotes the gradient of the
-displacement.
-
-\paragraph{Hyperelastic material}
-
-The body is assumed made of an hyperelastic material described by a
-free energy $\mecPotential_{\bodyLag{}}$ which relates the deformation gradient
-$\tensorii{F}$ and the first Piola-Kirchhoff stress tensor $\tensorii{P}$ as follows:
+reference configuration and 
 %
 %
 %
 \begin{equation}
+    \label{eq_grad_def}
+    \tensorii{G} = \nabla \tensori{u}
+\end{equation}
+%
+%
+%
+denotes the gradient of the
+displacement.
+
+\paragraph{Stress tensor}
+
+The body is assumed made of an hyperelastic material described by a
+free energy $\mecPotential_{\bodyLag{}}$ which relates the deformation gradient
+$\tensorii{F}$ and the first Piola-Kirchhoff stress tensor $\tensorii{P}$ such that
+%
+%
+%
+\begin{equation}
+    \label{eq_stress_def}
 \tensorii{P}=\deriv{\mecPotential_{\bodyLag{}}}{\tensorii{F}}
 \end{equation}
 
 \subsubsection{Primal problem and Principle of Virtual Works}
 
-% \paragraph{Total lagrangian}
+\paragraph{Total lagrangian}
 
 The total Lagrangian 
 $L^{VW}_{\bodyLag{}}$ of the body is defined as the stored energy minus the work of
-external loadings as follows:
+external loadings
 %
 %
 %
@@ -106,7 +118,9 @@ external loadings as follows:
 \label{eq_Lagrangian}
 L^{VW}_{\bodyLag{}}
 % \paren{\tensori{u}}
-= \int_{\Omega}\mecPotential_{\bodyLag{}} \paren{\tensorii{F}\paren{\tensori{u}}}
+= \int_{\Omega}\mecPotential_{\bodyLag{}}
+(\tensorii{F}(\tensori{u}))
+% \paren{\tensorii{F}\paren{\tensori{u}}}
 - \int_{\bodyLag} \tensori{f}{}_V \cdot \delta \tensori{u}{}
 - \int_{\neumannBoundaryLag} \neumannLag{} \cdot \delta \tensori{u}{}
 \vert_{\neumannBoundaryLag}
@@ -116,54 +130,70 @@ L^{VW}_{\bodyLag{}}
 %
 where the body forces $\tensori{f}_{V}$ and conctat tractions
 $\neumannLag$ in the reference configuration have been obtained from
-their counterparts $\tensori{f}_{v}$ and $\neumannEul$ thanks to the
-Nanson formulae, i.e. $\tensori{f}_{V}=...$ and $\tensori{f}{}_V=...$
-%
+their counterparts $\tensori{f}_{v}$ and $\neumannEul$ using the
+Nanson formulae.
 %\paragraph{Variational characterisation of the mechanical equilibrium}
 %
+
+\paragraph{Principle of Virtual Works}
+
 The displacement $\tensori{u}$ satisfying
-the mechanical equilibrium minimizes the Lagragian $L^{VW}_{\bodyLag{}}$
+the mechanical equilibrium minimizes the Lagragian $L^{VW}_{\bodyLag{}}$.
 %
 %
 %
-\begin{equation}
-\tensori{u} = \underset{\displaystyle\tensori{u}^{\star}\in U(\bodyLag)}{\argmin}\,
-L^{VW}_{\bodyLag{}}\paren{\tensori{u}^{\star}}
-\end{equation}
+% \begin{equation}
+% \tensori{u} = \underset{\displaystyle\tensori{u}^{\star}\in U(\bodyLag)}{\argmin}\,
+% L^{VW}_{\bodyLag{}}\paren{\tensori{u}^{\star}}
+% \end{equation}
 %
 %
 %
-where $U(\bodyLag)$ denotes the set of admissible displacements.
+% where $U(\bodyLag)$ denotes the set of admissible displacements.
 Taking the first order variation of Lagrangian yields the principle of
-virtual work:
+virtual work
+% by seeking the zero of the first order variation of Lagrangian
 %
 %
 %
 \begin{equation}
     \label{eq_virtual_works_0}
-    \frac{\partial L^{VW}_{\bodyLag{}}\paren{\tensori{u}}}{\partial \tensori{u}} =
-    \int_{\bodyLag} \tensorii{P} : \nabla \delta \tensori{u} = 
-    \int_{\bodyLag} \tensori{f}_V \cdot \delta \tensori{u} +
-    \int_{\neumannBoundaryLag} \neumannLag{} \cdot \delta \tensori{u}
-    \vert_{\neumannBoundaryLag}
+    \begin{aligned}
+        \frac{\partial L^{VW}_{\bodyLag{}}
+        % \paren{\tensori{u}}
+        }{\partial \tensori{u}} \delta \tensori{u} =
+        \int_{\bodyLag} \tensorii{P} : \nabla \delta \tensori{u} -
+        \int_{\bodyLag} \tensori{f}_V \cdot \delta \tensori{u} +
+        \int_{\neumannBoundaryLag} \neumannLag{} \cdot \delta \tensori{u}
+        \vert_{\neumannBoundaryLag}
+        &&
+        \ \ \ \ \
+        &&
+        \forall \delta \tensori{u}{}        
+    \end{aligned}
 \end{equation}
+%
+%
+%
+% which gives the Principle of Virtual Works
 
 \subsubsection{Mixed problem and Hu-Washizu functional}
 
-% \paragraph{Hu-Washizu Lagrangian}
+\paragraph{Total Hu-Washizu Lagrangian}
 
-The Hu-Washizu Lagrangian generalizes the previous variational principle by
+The Hu-Washizu Lagrangian $L^{HW}_{\bodyLag{}}$ generalizes the previous variational principle by
 considering that the gradient of the displacement $\tensorii{G}$ and
 the first Piola-Kirchoff $\tensorii{P}$ stress are independent
-unknowns of the problem.
-The Hu-Washizu Lagrangian $L^{HW}$ is then defined as follows:
+unknowns of the problem, such that
 %
 %
 %
 \begin{equation}
-L^{HW}\paren{\tensori{u},\tensorii{G},
-  \tensorii{P}} = \int_{\bodyLag{}}
-\mecPotential\paren{\tensorii{I}+\tensorii{G}} + (\nabla \tensori{u}{} -
+    \label{eq_HW_0}
+L^{HW}
+% \paren{\tensori{u},\tensorii{G}, \tensorii{P}}
+= \int_{\bodyLag{}}
+\mecPotential_{\bodyLag{}} (\tensorii{I}+\tensorii{G} ) + (\nabla \tensori{u}{} -
 \tensorii{G}{})\,\colon\,\tensorii{P} - \int_{\bodyLag{}} \loadLag \cdot
 \tensori{u}{} - \int_{\neumannBoundaryLag{}} \neumannLag{} \cdot
 \tensori{u}
@@ -172,49 +202,70 @@ L^{HW}\paren{\tensori{u},\tensorii{G},
 %
 %
 %
-and the solution $\tensori{u}$, $\tensorii{G}$ and $\tensorii{P}$
-minimize the Hu-Washizu Lagrangian $L^{HW}$:
+% and the solution $\tensori{u}$, $\tensorii{G}$ and $\tensorii{P}$
+% minimize the Hu-Washizu Lagrangian $L^{HW}$
 %
 %
 %
-\begin{equation}
-\paren{\tensori{u},\, \tensorii{G},\, \tensorii{P}} =
-\underset{\displaystyle\substack{\tensori{u}^{\star}\in U(\bodyLag),\\ \tensorii{G}^{\star},\tensorii{P}^{\star}}}{\argmin}\,
-L\paren{\tensori{u}^{\star}, \tensorii{G}^{\star},\tensorii{P}^{\star}}
-\end{equation}
+% \begin{equation}
+% \paren{\tensori{u},\, \tensorii{G},\, \tensorii{P}} =
+% \underset{\displaystyle\substack{\tensori{u}^{\star}\in U(\bodyLag),\\ \tensorii{G}^{\star},\tensorii{P}^{\star}}}{\argmin}\,
+% L\paren{\tensori{u}^{\star}, \tensorii{G}^{\star},\tensorii{P}^{\star}}
+% \end{equation}
 %
 %
 %
+
+
+\paragraph{The Hu-Washizu saddle point problem}
+
+The solution $(\tensori{u}, \tensorii{G}, \tensorii{P})$ satisfying
+the mechanical equilibrium minimizes the Lagragian $L^{HW}_{\bodyLag{}}$.
 The first order variation of the Hu-Washizu Lagragian with respect to
-$\tensori{u}$, $\tensorii{G}$, $\tensorii{P}$ yields:
+$\tensori{u}, \tensorii{G}$, and $\tensorii{P}$ yields
+%
+%
+%
 \begin{subequations}
     \label{eq_hu_washizu_derivative_0}
         \begin{alignat}{3}
-           \variation{L^{HW}}{\tensori{u}}
-            = & \int_{\bodyLag} \tensorii{P}\,\cdot\,\nabla \delta \tensori{u}
-            -
-            \int_{\bodyLag} \tensori{f}_V \cdot \delta \tensori{u}
-            -
-            \int_{\neumannBoundaryLag} \neumannLag \cdot \delta \tensori{u}
-            \vert_{\neumannBoundaryLag}
+        \deriv{L^{HW}_{\bodyLag{}}}{\tensori{u}} \delta \tensori{u}
+        = & \int_{\bodyLag} \tensorii{P} : \nabla \delta \tensori{u}
+        -
+        \int_{\bodyLag} \tensori{f}_V \cdot \delta \tensori{u}
+        -
+        \int_{\neumannBoundaryLag} \neumannLag \cdot \delta \tensori{u}
+        \vert_{\neumannBoundaryLag}
+        &&
+        \ \ \ \ \ \ \ \ 
+        &&
+        \forall \delta \tensori{u}{}
         \label{eq_hu_washizu_derivative_0:eq0}
         \\
-            \variation{L^{HW}}{\tensorii{P}}
-            = & \int_{\bodyLag} \paren{\nabla \tensori{u} - \tensorii{G}}\,\cdot\,\delta \tensorii{P}
+        \deriv{L^{HW}_{\bodyLag{}}}{\tensorii{P}} \delta \tensori{u}
+        = & \int_{\bodyLag} ( \nabla \tensori{u} - \tensorii{G} ) : \delta \tensorii{P}
+        &&
+        \ \ \ \ \ \ \ \ 
+        &&
+        \forall \delta \tensorii{P}{}
         \label{eq_hu_washizu_derivative_0:eq2}
         \\
-            \variation{L^{HW}}{\tensorii{G}}
-            = &
-            \int_{\bodyLag} (\frac{\partial \mecPotential}{\partial \tensorii{G}} - \tensorii{P})\,\cdot\,\delta \tensorii{G}
+        \deriv{L^{HW}_{\bodyLag{}}}{\tensorii{G}} \delta \tensori{u}
+        = &
+        \int_{\bodyLag} (\frac{\partial \mecPotential}{\partial \tensorii{G}} - \tensorii{P}) : \delta \tensorii{G}
+        &&
+        \ \ \ \ \ \ \ \ 
+        &&
+        \forall \delta \tensorii{G}{}
         \label{eq_hu_washizu_derivative_0:eq3}
     \end{alignat}
 \end{subequations}
-
-Equation~\eqref{eq_hu_washizu_derivative_0:eq2}
-shows that $\tensorii{G}$ is equal to $\nabla \tensori{u}$ is a weak
-sense and Equation~\eqref{eq_hu_washizu_derivative_0:eq3} shows that the
-First Piola Kirchhoff stress is equal to the derivative the free energy
-in a weak sense.
+%
+%
+%
+where equation \eqref{eq_hu_washizu_derivative_0:eq2} and \eqref{eq_hu_washizu_derivative_0:eq3}
+account for \eqref{eq_grad_def} and \eqref{eq_stress_def} respectively in a weak
+sense.
 
 \paragraph{Some words about the importance of the Hu-Washizu principle}
 

@@ -1,15 +1,80 @@
 \section{Introduction to discontinuous methods through a Hu-Washizu formulation}
 \label{sec_composite_demo}
 
-Many numerical methods
-consider a partition of the body into elementary subsets called \textit{cells}.
-% The equilibrium of the body is then expressed in terms of the sum of the mechanical contribution in each of these cells composing it.
-% The equilibrium of the interface between two cells is then of major 
-For the equilibrium of the whole body to hold, each cell must be in equilibrium with its neighbors, which means that they have to interact and pass information from one another.
-Communication between two cells is ensured by knowledge of the displacement field at their shared boundary.
-For \textit{conformal} methods to which belongs the Lagrange (\textit{i.e.} the standard) Finite Element Method, the displacement over the whole body is continuous, which implies that the displacement at a cell boundary is directly equal to that of its neighbors, and a cell has a direct knowledge of the motion of its neighborhood.
-For so-called \textit{non-conformal} methods, among which are \textit{e.g.} Discontinuous Galerkin methods, Hybrid Discontinuous Galerkin methods and Hybrid High Order methods, the displacement continuity at a cell boundary is not explicitly enforced, such that one needs to introduce supplementary ingredients in the formulation to pass information from one cell to another. A straightforward way of doing so consists in introducing an interface between cells, that acts as a membrane pulling them together. One can readily feel that the stiffer the membrane, the closer the cells, and the closer to the \textit{conformal} framework. This technique is the one at the foundation of Discontinuous Galerkin methods. By adding an intermediate structure in the membrane, called a \textit{bone}, one defines the framework of Hybrid Discontinuous Galerkin methods and Hybrid High Order methods; the membrane is split into two parts, one at each side of the bone, and communication between cells transits through the bone, via the membrane. The term hybrid expresses the fact that both cells and bones carry information about the displacement field, hence introducing the \textit{skeleton} of the body.
-In the following section, we show that one recovers the full mathematical framework proper to these non-conformal method, by writing the equilibrium of a cell and its interface with its neighborhood.
+% Many numerical methods
+% consider a partition of the body into elementary subsets called \textit{cells}.
+% % The equilibrium of the body is then expressed in terms of the sum of the mechanical contribution in each of these cells composing it.
+% % The equilibrium of the interface between two cells is then of major 
+% For the equilibrium of the whole body to hold, each cell must be in equilibrium with its neighbors, which means that they have to interact and pass information from one another.
+% Communication between two cells is ensured by knowledge of the displacement field at their shared boundary.
+% For \textit{conformal} methods to which belongs the Lagrange (\textit{i.e.} the standard) Finite Element Method, the displacement over the whole body is continuous, which implies that the displacement at a cell boundary is directly equal to that of its neighbors, and a cell has a direct knowledge of the motion of its neighborhood.
+% For so-called \textit{non-conformal} methods, among which are \textit{e.g.} Discontinuous Galerkin methods, Hybrid Discontinuous Galerkin methods and Hybrid High Order methods, the displacement continuity at a cell boundary is not explicitly enforced, such that one needs to introduce supplementary ingredients in the formulation to pass information from one cell to another. A straightforward way of doing so consists in introducing an interface between cells, that acts as a membrane pulling them together. One can readily feel that the stiffer the membrane, the closer the cells, and the closer to the \textit{conformal} framework. This technique is the one at the foundation of Discontinuous Galerkin methods. By adding an intermediate structure in the membrane, called a \textit{bone}, one defines the framework of Hybrid Discontinuous Galerkin methods and Hybrid High Order methods; the membrane is split into two parts, one at each side of the bone, and communication between cells transits through the bone, via the membrane. The term hybrid expresses the fact that both cells and bones carry information about the displacement field, hence introducing the \textit{skeleton} of the body.
+% In the following section, we show that one recovers the full mathematical framework proper to these non-conformal method, by writing the equilibrium of a cell and its interface with its neighborhood.
+
+Many numerical methods consider a partition of the body into
+elementary parts. % subsets called \textit{cells}.
+
+In this section one considers a subpart \(T\) of the body
+\(\bodyLag\). This subpart is in equilibrium with the rest of the body
+\(\Omega\backslash T\) if the displacements and the normal traction are
+continuous at the boundary of \(\partial T\).
+
+Enforcing the displacement continuity at the interface leads to
+so-called conformal methods, to which the standard finite element
+methods belongs.
+
+On the contrary, this condition can be weakened by introducting an
+elastic interface of negligible size between \(T\) and
+\(\Omega\backslash T\). This is the basis of Discontinuous Galerkin
+methods.
+
+In this paper, we consider HDG and HHO methods where two elastic
+interfaces are introducted: one between \(T\) and its boundary
+\(\partial T\) and a second one between \(\Omega\backslash T\) and
+\(\partial T\).
+
+Following this idea, we show in this section how the use of the
+Hu-Hashizu Lagrangian allows to recover the main ingredients of the
+HDG/HHO methods, namely the reconstructed gradient and the stabilisation
+operator.
+
+%% The equilibrium of the body is then expressed in terms of the sum of the mechanical contribution in each of these cells composing it.
+%% The equilibrium of the interface between two cells is then of major 
+%For the equilibrium of the whole body to hold, each cell must be in
+%equilibrium with its neighbors, which means that they have to interact
+%and pass information from one another. Communication between two cells
+%is ensured by knowledge of the displacement field at their shared
+%boundary.
+%
+%For \textit{conformal} methods to which belongs the Lagrange
+%(\textit{i.e.} the standard) Finite Element Method, the displacement
+%over the whole body is continuous, which implies that the displacement
+%at a cell boundary is directly equal to that of its neighbors, and a
+%cell has a direct knowledge of the motion of its neighborhood.
+%
+%For so-called \textit{non-conformal} methods, among which are
+%\textit{e.g.} Discontinuous Galerkin methods, Hybrid Discontinuous
+%Galerkin methods and Hybrid High Order methods, the displacement
+%continuity at a cell boundary is not explicitly enforced, such that one
+%needs to introduce supplementary ingredients in the formulation to pass
+%information from one cell to another. A straightforward way of doing so
+%consists in introducing an interface between cells, that acts as a
+%membrane pulling them together. One can readily feel that the stiffer
+%the membrane, the closer the cells, and the closer to the
+%\textit{conformal} framework. This technique is the one at the
+%foundation of Discontinuous Galerkin methods. By adding an intermediate
+%structure in the membrane, called a \textit{bone}, one defines the
+%framework of Hybrid Discontinuous Galerkin methods and Hybrid High Order
+%methods; the membrane is split into two parts, one at each side of the
+%bone, and communication between cells transits through the bone, via the
+%membrane. The term hybrid expresses the fact that both cells and bones
+%carry information about the displacement field, hence introducing the
+%\textit{skeleton} of the body. In the following section, we show that
+%one recovers the full mathematical framework proper to these
+%non-conformal method, by writing the equilibrium of a cell and its
+%interface with its neighborhood.
+%%  cells must stick together in order to pass the mechanical information from one cell to another
+
 %  cells must stick together in order to pass the mechanical information from one cell to another
 
 % Let $\cell$ be
@@ -54,9 +119,9 @@ In the following section, we show that one recovers the full mathematical framew
 
 % Cette section montre que l'application de Hu-Hashizu à l'élément à son interphase permet de retrouver tous les ingrédients principaux des méthodes HDG et HH0: le gradient reconstruit et l'opérateur de stabilisation.
 
-\subsection{Partie 1}
+\subsection{Element description}
 
-\paragraph{Element description}
+\paragraph{Element geometry}
 
 In the following, the cell $\cell$ is assumed to be convex.
 It is split into a core part $\Bulk \subset \cell$ with boundary $\dBulk$, and into an interface part $\Crown{} \subset \cell$ with boundary $\dCrown = \dBulk \cup \dCell$, as shown in Figure \ref{fig_02}. The interface $\Crown{}$ has some thickness $\ell > 0$ that is supposed to be small compared to $h_{\cell}$ the diameter of $\cell$.
@@ -66,7 +131,7 @@ From a geometrical standpoint, the core par of the element $\Bulk{}$ is an homot
 % 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=12.cm]{img/hu_washizu.png}
+    \includegraphics[width=14.cm]{img/hu_washizu.png}
     \caption{schematic representation of the composite region}
     \label{fig_02}
 \end{figure}
@@ -76,7 +141,7 @@ From a geometrical standpoint, the core par of the element $\Bulk{}$ is an homot
 
 \paragraph{Element behaviour}
 
-The core of the element $\Bulk{}$ is made out of the same material that composes $\Omega$ and behaves according to the free energy potential $\mecPotential{}_{\bodyLag{}}$. The interface $\Crown{}$ is made out of a linear elastic material of Young modulus $\beta (\ell / h_{\cell})$ with a zero Poisson ratio and its behavior is defined by the free energy potential $\mecPotential{}_{\Crown{}}$ such that
+The core of the element $\Bulk{}$ is made out of the same material that composes $\Omega$ and behaves according to the free energy potential $\mecPotential{}_{\bodyLag{}}$. The interface $\Crown{}$ is made out of a linear elastic-like material of Young modulus $\beta (\ell / h_{\cell})$ with a zero Poisson ratio and its behavior is defined by the free energy potential $\mecPotential{}_{\Crown{}}$ such that
 %
 %
 %
@@ -93,7 +158,7 @@ where the dimensionless ratio $\ell / h_{\cell}$ balances the accumulated energy
 
 The core $\Bulk$ is subjected to the volumetric loading $\loadLag{}$, and to the contact load applied by the interface $\Crown{}$ onto $\dBulk{}$. By continuity of the traction force, the same opposite contact load acts on $\Crown{}$. The interface $\Crown{}$ is also subjected to some contact load $\neumannCellLoad{}$ acting on $\dCell{}$, that accounts for the action of the rest of the solid $\bodyLag{}$ onto $\cell$.
 
-\paragraph{Element unknowns}
+\paragraph{Discplacement, displacement gradient and stress fields}
 
 Let note $\tensori{u}{}_{\Bulk}$ the displacement field, $\tensorii{G}{}_{\Bulk}$ the displacement gradient field and $\tensorii{P}{}_{\Bulk}$ the stress field in $\Bulk{}$. Similarly, let $\tensori{u}{}_{\Crown{}}$ the displacement field, $\tensorii{G}{}_{\Crown}$ the displacement gradient field and $\tensorii{P}{}_{\Crown}$ the stress field in $\Crown{}$.
 The displacement of the boundary $\dCell{}$ is denoted $\tensori{u}{}_{\dCell{}}$.
@@ -137,11 +202,13 @@ By combining both the Lagragian of the core $\Bulk{}$ and that of the interface 
 \subsection{Hypotheses}
 \label{sec_assumtions}
 
-The behavior and the kinematics having been described, let now make a number of assumptions on the expression of the fields of unknowns, exploiting the fact that the core is of negligible volume compared to the interface.
+% The behavior and the kinematics having been described,
+% Let make a number of assumptions on the expression of the fields of unknowns, by exploiting the fact that the core is of negligible volume compared to the interface.
+Since the interface is of negligible volume compared to that of the core, let make some assumptions on the displacement and the stress in the interface.
 
 \paragraph{Displacement in the interface}
 
-Since the interface $\Crown$ is thin compared to the cell volume $\cell$, let linearize the displacement in the interface $\Crown$ with respect to $\tensori{n}$, such that
+The displacement in the interface $\Crown$ is assumed to be linear with respect to $\tensori{n}$, such that
 its gradient is homogeneous in $\Crown{}$
 %
 % 
@@ -187,11 +254,15 @@ Furthermore, let assume that $\tensorii{P}{}_{\Crown}$ is constant along the dir
     \end{aligned}
 \end{equation}
 
-\subsection{Partie 2}
+\subsection{Deriving the formulation of Hybrid discontinuous methods from the Hu-Washizu functional on the element}
 
-\paragraph{Hu–Washizu avec hypothèses}
+Using the hypotheses stated Section \ref{sec_assumtions} on the displacement field and the stress field in $\Crown{}$,
+one can write \eqref{eq_hu_washizu_split} as a term depending on the width of the interface $\ell$ and on the core and boundary unknowns only. The reader can refer to Section \ref{sec_appendix} for more details.
+% one can writes \eqref{eq_hu_washizu_split} as the simplified Hu–Washizu Lagrangian
 
-Taking into accounts the assumptions made Section \ref{sec_assumtions}, the total Lagrangian of the system can be re-written (see Section \ref{sec_appendix} for details) in the following simplified form
+\paragraph{Simplified Hu–Washizu Lagrangian for a vanishing interface}
+
+In particular, making the width of the interface $\ell \rightarrow 0$, such that $\Crown{}$ vanishes and the core part $\Bulk{}$ identifies to $\cell$, one obtains the simplified Hu–Washizu Lagrangian
 % 
 % 
 %
@@ -218,29 +289,32 @@ Taking into accounts the assumptions made Section \ref{sec_assumtions}, the tota
 %
 %
 %
-where we have made the width of the interface $\ell \rightarrow 0$, such that the core part $\Bulk{}$ now identifies as $\cell$.
+which fully defines the equilibrium of an element for discontinuous methods.
 
-\paragraph{hybridization of the primal unknown}
+\paragraph{Hybridization of the primal unknown; the HDG and HHO methods}
 
-The displacement is discontinuous across $\dCell{}$ by considering the vanishing interface, that allows for the core part $\cell{}$ to move away from the boundary $\dCell$, thus introducing a possible displacement jump on $\dCell{}$.
-This assumption relates to the concept of hybridization of the displacement unknown, which is at the foundation of Hybrid Discontinuous Galerkin methods.
-The displacement of the element $\cell$ hence depends on the pair $(\tensori{u}_{\cell}, \tensori{u}_{\dCell})$, where the trace of the core unknown $\tensori{u}_{\cell} \vert_{\dCell{}}$ coexists with $\tensori{u}_{\dCell}$ on $\dCell{}$.
+Since the interface $\Crown{}$ has vanished by making $\ell \rightarrow 0$, both $\tensori{u}{}_{\cell} \vert_{\dCell{}}$ the trace of the displacement of the core part $\cell$ onto $\dCell{}$ and the displacement of the boundary $\tensori{u}{}_{\dCell{}}$ coexist on $\dCell{}$. The displacement of the element $\cell$ is thus said to be \textit{hybrid}, and is denoted by the pair $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})$.
 
-\paragraph{Discontinuous Galerkin}
+% The displacement is discontinuous across $\dCell{}$ by considering the vanishing interface, that allows for the core part $\cell{}$ to move away from the boundary $\dCell$, thus introducing a possible displacement jump on $\dCell{}$.
+% This assumption relates to the concept of hybridization of the displacement unknown, which is at the foundation of Hybrid Discontinuous Galerkin methods.
+% The displacement of the element $\cell$ hence depends on the pair $(\tensori{u}_{\cell}, \tensori{u}_{\dCell})$, where the trace of the core unknown $\tensori{u}_{\cell} \vert_{\dCell{}}$ coexists with $\tensori{u}_{\dCell}$ on $\dCell{}$.
 
-By replacing $\tensori{u}{}_{\dCell}$ by $\tensori{u}{}_{\cell'} \vert_{\dCell}$ for any neighbouring cell $\cell'$ to $\cell$ amounts to describe the framework for Discontinuous Galerkin methods, where only the core unknown $\tensori{u}{}_{\cell}$ is considered, and the displacement jump on $\dCell$ depends on the trace of neighbouring cells  displacement, instead of that only defined on the boundary.
+\paragraph{The special case of DG methods}
+
+Replacing $\tensori{u}{}_{\dCell}$ by $\tensori{u}{}_{\cell'} \vert_{\dCell}$ for any neighboring cell $\cell'$ amounts to describe the framework of Discontinuous Galerkin methods, where only the core unknown $\tensori{u}{}_{\cell}$ is considered, and the displacement jump on $\dCell$ depends on $\tensori{u}{}_{\cell'} \vert_{\dCell}$ the trace of the displacement of neighboring cells instead.
+% of that of an independent boundary shared by both $\cell$ and $\cell '$.
 
 \paragraph{Conformal Galerkin formulation}
 
-By enforcing continuity of the displacement across $\dCell{}$ such that $\tensori{u}_{\cell} \vert_{\dCell} = \tensori{u}_{\dCell}$, one recovers the usual expression over 
+By strongly enforcing continuity of the displacement across $\dCell{}$ such that $\tensori{u}_{\cell} \vert_{\dCell} = \tensori{u}_{\dCell}$, one recovers the system defined in \eqref{eq_HW_0}, which defines the framework of conformal methods.
 
-The displacement is discontinuous across $\dCell{}$ by considering the vanishing interface, that allows for the core part $\cell{}$ to move away from the boundary $\dCell$, thus introducing a possible displacement jump on $\dCell{}$.
-This assumption relates to the concept of hybridization of the displacement unknown, which is at the foundation of Hybrid Discontinuous Galerkin methods.
-The displacement of the element $\cell$ hence depends on the pair $(\tensori{u}_{\cell}, \tensori{u}_{\dCell})$, where the trace of the core unknown $\tensori{u}_{\cell} \vert_{\dCell{}}$ coexists with $\tensori{u}_{\dCell}$ on $\dCell{}$.
+% The displacement is discontinuous across $\dCell{}$ by considering the vanishing interface, that allows for the core part $\cell{}$ to move away from the boundary $\dCell$, thus introducing a possible displacement jump on $\dCell{}$.
+% This assumption relates to the concept of hybridization of the displacement unknown, which is at the foundation of Hybrid Discontinuous Galerkin methods.
+% The displacement of the element $\cell$ hence depends on the pair $(\tensori{u}_{\cell}, \tensori{u}_{\dCell})$, where the trace of the core unknown $\tensori{u}_{\cell} \vert_{\dCell{}}$ coexists with $\tensori{u}_{\dCell}$ on $\dCell{}$.
 
-\paragraph{Derivative}
+\paragraph{Mixed problem for the discontinuous framework}
 
-La fonctionelle \eqref{eq_0015} définit le problème mixte sous forme faible, et revient à résoudre les problèmes couplés suivants
+The Lagrangian \eqref{eq_0015} defines the mixed field functional to minimize, which amounts to solve the system
 
 \begin{subequations}
     \label{eq_0017}
@@ -255,7 +329,7 @@ La fonctionelle \eqref{eq_0015} définit le problème mixte sous forme faible, e
             \ \ \ \ \ \ \ \ 
             &&
             \forall \delta \tensori{u}{}_{\cell}
-            \in \virtualDisplacementSpaceCell
+            % \in \virtualDisplacementSpaceCell
         \label{eq_0017:eq0}
         \\
             \frac{\partial J_{\cell}^{HW}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
@@ -265,7 +339,7 @@ La fonctionelle \eqref{eq_0015} définit le problème mixte sous forme faible, e
             \ \ \ \ \ \ \ \ 
             &&
             \forall \delta \tensori{u}{}_{\dCell}
-            \in \virtualDisplacementSpaceDCell
+            % \in \virtualDisplacementSpaceDCell
         \label{eq_0017:eq1}
         \\
             \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
@@ -275,7 +349,7 @@ La fonctionelle \eqref{eq_0015} définit le problème mixte sous forme faible, e
             \ \ \ \ \ \ \ \ 
             &&
             \forall \delta \tensorii{G}{}_{\cell}
-            \in \gradSpaceCell
+            % \in \gradSpaceCell
         \label{eq_0017:eq2}
         \\
             \frac{\partial J_{\cell}^{HW}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
@@ -286,7 +360,7 @@ La fonctionelle \eqref{eq_0015} définit le problème mixte sous forme faible, e
             \ \ \ \ \ \ \ \ 
             &&
             \forall \delta \tensorii{P}{}_{\cell}
-            \in \stressSpaceCell
+            % \in \stressSpaceCell
         \label{eq_0017:eq3}
     \end{alignat}
 \end{subequations}
@@ -307,10 +381,11 @@ In particular, \eqref{eq_0017:eq0} is the expression of the principle of virtual
 % Indeed, defining $\tensori{I}{}(\tensori{v}{})$ the interpolation operator
 
 \subsection{Problem in primal form}
+\label{sec_hdg_element_equilibrium}
 
 \paragraph{Reconstructed gradient}
 
-Since minimization of \eqref{eq_0017:eq3} defines a linear problem with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$, one can eliminate the equation from the system \eqref{eq_0017}, which defines the so-called \textit{reconstructed gradient} $\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ associated with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ that solves
+Since minimization of \eqref{eq_0017:eq3} defines a linear problem with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$, one can eliminate \eqref{eq_0017:eq3} from the system \eqref{eq_0017}. The resulting equation defines the so-called \textit{reconstructed gradient} $\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ associated with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$, that solves
 %
 %
 %
@@ -329,28 +404,33 @@ Since minimization of \eqref{eq_0017:eq3} defines a linear problem with any disp
 
 \paragraph{Stress tensor}
 
-Equation \eqref{eq_0017:eq2} is also linear with the derivative of $\mecPotential_{\bodyLag}$ with respect to $\tensorii{G}{}_{\cell}$, and one can eliminate it as well from \eqref{eq_0017}, hence defining the stress tensor 
+Likewise, one eliminates \eqref{eq_0017:eq2} from \eqref{eq_0017}. Assuming that the space of kinematically admissible stress fields is included in that of kinematically admissible displacement gradient fields, one considers the equality in a strong sense
+%
+%
+%
+% \begin{equation}
+%     \label{eq_stress}
+%     \begin{aligned}
+%         \int_{\cell} \tensorii{P}{}_{\cell} : \tensorii{\gamma}{}_{\cell}
+%         =
+%         \int_{\cell} \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{\cell}}  : \tensorii{\gamma}{}_{\cell}
+%         &&
+%         \forall \tensorii{\gamma}{}_{\cell} \in \gradSpaceCell
+%     \end{aligned}
+% \end{equation}
 %
 %
 %
 \begin{equation}
     \label{eq_stress}
     \begin{aligned}
-        \int_{\cell} \tensorii{P}{}_{\cell} : \tensorii{\gamma}{}_{\cell}
-        =
-        \int_{\cell} \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{\cell}}  : \tensorii{\gamma}{}_{\cell}
-        &&
-        \forall \tensorii{\gamma}{}_{\cell} \in \gradSpaceCell
+        \tensorii{P}{}_{\cell} = \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{\cell}}
     \end{aligned}
 \end{equation}
-%
-%
-%
-In particular, one notices that \eqref{eq_stress} holds in a strong sense if $\stressSpaceCell \subset \gradSpaceCell$.
 
-\paragraph{Simplified form}
+\paragraph{Total Lagrangian for the problem in primal form}
 
-Now that \eqref{eq_0017:eq2} and \eqref{eq_0017:eq3} have been eliminated from the system, one considers the simplified functional \eqref{eq_simple} instead of \eqref{eq_0015}
+By elimination of both \eqref{eq_0017:eq2} and \eqref{eq_0017:eq3} from \eqref{eq_0017}, the functional for the problem in primal form \eqref{eq_simple} arises from \eqref{eq_0015}
 %
 %
 %
@@ -375,12 +455,13 @@ Now that \eqref{eq_0017:eq2} and \eqref{eq_0017:eq3} have been eliminated from t
     \end{aligned}
 \end{equation}
 
-\paragraph{Principle of virtual works}
+\paragraph{Principle of virtual works for HDG methods}
 %
 %
 %
-The problem in primal form amounts to find the displacement pair $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}) \in \hybridDisplacementSpaceCell$ verifying $\tensori{u}{}_{\dCell} = \dirichletLag$ on $\dirichletCell$,
-such that for all kinematically admissible displacements pairs $(\delta \tensori{u}{}_{T}, \delta \tensori{u}{}_{\partial T}) \in \virtualHybridDisplacementSpaceCell$, the functional \eqref{eq_simple} is minimal, \textit{i.e.} such that
+% The problem in primal form amounts to find the displacement pair $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}) \in \hybridDisplacementSpaceCell$ verifying $\tensori{u}{}_{\dCell} = \dirichletLag$ on $\dirichletCell$,
+% such that for all kinematically admissible displacements pairs $(\delta \tensori{u}{}_{T}, \delta \tensori{u}{}_{\partial T}) \in \virtualHybridDisplacementSpaceCell$, the functional \eqref{eq_simple} is minimal, \textit{i.e.} such that
+Minimization of the Lagrangian \eqref{eq_simple} amounts to find the displacement pair $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})$ that solves
 %
 %
 %
@@ -393,9 +474,19 @@ such that for all kinematically admissible displacements pairs $(\delta \tensori
         % +
         % \frac{\partial J_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
         % =
-        \delta J_{\cell, \text{int}}^{VW} - \delta J_{\cell, \text{ext}}^{VW}
+        \delta J_{\cell, \text{int}}^{VW}
+        (
+            (\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}),
+            (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
+        )
+        -
+        \delta J_{\cell, \text{ext}}^{VW}
+        (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
         =
         0
+        &&
+        &&
+        \forall (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
         % \\
         % = & \delta J_{\cell}^{\text{int}} + \delta J_{\cell}^{\text{ext}}
         % \\
@@ -457,7 +548,7 @@ with
 %
 %
 %
-where we introduced the jump function $\tensori{Z}{}_{\dCell}$ :
+where we introduced the jump function $\tensori{Z}{}_{\dCell}$ such that
 %
 %
 %
@@ -476,3 +567,104 @@ In particular, one can readliy see the resemblance of \eqref{eq_0nonamemee} with
 % the ususal formulation of the principle of virtual works
 where the so called \textit{reconstructed gradient} $\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})$ plays the role of the usual displacement Lagrangian gradient $\nabla \tensori{u}{}_{\cell}$, and where an additional \textit{stabilization term} corresponding to a traction energy on the boundary has been added to account for the penalization of the displacement jump on $\dCell$ through $\tensori{Z}{}_{\dCell}$ (or, equivalently, to account for the infinitésimale interface that lays between the bulk domain and its boundary).
 Equations \eqref{eq_simple}, \eqref{eq_grad} and \eqref{eq_stress} define the mechanical problem to solve at the cell level for Hybrid Discontinuous Galerkin methods, and \eqref{eq_0018} describes the weak form of these equations.
+
+\subsection{Small strain hypothesis extension}
+
+La formulation proposée en grandes déformations permet également un passage naturel au cadre des petites déformations. Dans ce contexte, étant donné que le gradient de la transformation $\tensorii{F}{}_{\cell}$ est supposé petit devant $\tensorii{1}$, on cherche le champ de déformation infinitésimale $\tensorii{\varepsilon}{}_{\cell}$ comme la formulation faible de $\nabla^s \tensori{u}{}_{\cell}$ plutot que le gradient du champ de déplacement $\tensorii{G}{}_{\cell}$. le tenseur des contraintes $\tensorii{P}{}_{\cell}$ est alors identifié à $\tensorii{\sigma}{}_{\cell}$, de sorte que le problème \eqref{eq_0015} devient
+%
+%
+%
+\begin{equation}
+    \label{eq_small_defs}
+    \begin{aligned}
+        J_{\cell}^{HW}
+        = &
+        \int_{\cell{}} \mecPotential{}_{\bodyLag{}} + (\nabla^s \tensori{u}{}_{\cell{}} - \tensorii{\varepsilon}{}_{\cell{}}) : \tensorii{\sigma}{}_{\cell}
+        % \\
+        % &
+        + \int_{\dCell{}} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell}) \cdot \tensorii{\sigma}{}_{\cell} \vert_{\dCell{}} \cdot \tensori{n}{}
+        % \\
+        % &
+        + \int_{\dCell} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\cell{}} \vert_{\dCell{}} \rVert^2
+        \\
+        &
+        -
+        \int_{\cell} \loadLag{} \cdot \tensori{u}{}_{\cell{}}
+        -
+        \int_{\neumannCell{}} \neumannCellLoad{} \cdot \tensori{u}{}_{\dCell{}}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+En poursuivant le même développement que précédemment, l'énargie à minimiser est donnée par l'équation \ref{eq_simple} comme dans le cadre des grandes déformations. En revanche,l'équation du gradient reconstruit \ref{eq_grad} devient
+%
+%
+%
+% \begin{equation}
+%     \label{eq_simple_ss}
+%     \begin{aligned}
+%         J_{\cell}^{VW}
+%         = &
+%         \int_{\cell{}} \mecPotential{}_{\bodyLag{}}
+%         % \\
+%         % &
+%         % + \int_{\dCell{}} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell}) \cdot \tensorii{P}{}_{\cell} \vert_{\dCell{}} \cdot \tensori{n}{}
+%         % \\
+%         % &
+%         + \int_{\dCell} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\cell{}} \vert_{\dCell{}} \rVert^2
+%         % \\
+%         % &
+%         -
+%         \int_{\cell} \loadLag{} \cdot \tensori{u}{}_{\cell{}}
+%         -
+%         \int_{\neumannCell{}} \neumannCellLoad{} \cdot \tensori{u}{}_{\dCell{}}
+%     \end{aligned}
+% \end{equation}
+%
+%
+%
+% where \eqref{eq_0017:eq3} results in the definition of the \textit{reconstructed gradient} $\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ associated with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \hybridDisplacementSpaceCell$ that solves
+% where \eqref{eq_0017:eq2} and \eqref{eq_0017:eq3} are taken to be zero such that the reconstructed gradient $\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ associated with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \displacementSpaceCell \times \displacementSpaceDCell$ explicitly solves
+%
+%
+%
+\begin{equation}
+    \label{eq_grad_ss}
+    \begin{aligned}
+        \int_{\cell} \tensorii{\varepsilon}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) : \tensorii{\tau}{}_{\cell}
+        =
+        \int_{\cell}  \nabla^s \tensori{v}{}_{\cell} : \tensorii{\tau}{}_{\cell}
+        +
+        \int_{\dCell} (\tensori{v}{}_{\dCell} - \tensori{v}{}_{\cell} \vert_{\dCell}) \cdot \tensorii{\tau}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{}
+        &&
+        \forall \tensorii{\tau}{}_{\cell}
+        % \in \stressSpaceCell
+    \end{aligned}
+\end{equation}
+%
+%
+%
+En particulier, les deformations $\tensorii{\varepsilon}{}_{\cell}$ étant symétriques, tout comme la contrainte $\tensorii{\sigma}{}_{\cell}$, on cherche donc ces grandeurs dans l'espace des déformations $\gradSpaceCell$ et contraintes $\stressSpaceCell$ statiquement admissbles et symétriques. L'expression de la contrainte en fonction de la déformation de cellule est alors donnée par
+%
+%
+%
+% \begin{equation}
+%     \label{eq_stress_ss}
+%     \begin{aligned}
+%         \int_{\cell} \tensorii{\sigma}{}_{\cell} : \tensorii{\gamma}{}_{\cell}
+%         =
+%         \int_{\cell} \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{\varepsilon}{}_{\cell}}  : \tensorii{\gamma}{}_{\cell}
+%         &&
+%         \forall \tensorii{\gamma}{}_{\cell} \in \gradSpaceCell
+%     \end{aligned}
+% \end{equation}
+%
+%
+%
+\begin{equation}
+    \label{eq_stress_ss}
+    \begin{aligned}
+        \tensorii{\sigma}{}_{\cell} = \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{\varepsilon}{}_{\cell}}
+    \end{aligned}
+\end{equation}
