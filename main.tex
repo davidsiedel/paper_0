@@ -142,6 +142,8 @@
 \usepackage{multicol}
 \usepackage{import}
 \usepackage{comment}
+% \usepackage{cancel}
+\usepackage{ulem}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}{Corollary}[theorem]
@@ -326,16 +328,16 @@
 \begin{abstract}
 %% Text of abstract
 The Hybrid High Order (HHO) method is a powerful
-discretization method which has only been recently applied from to
+discretization method which has only been recently applied to
 non linear computational mechanics.
 
 The Hybrid High Order method divides the domain of interest
-in cells of arbitrary polyhedral shape, whose boundaries is called
-the skeleton, and introduces two kinds of degrees of freedom: the
-displacements in the cell and the displacements of the skeleton.
+in cells of arbitrary polyhedral shape, whose boundaries form
+the skeleton of the mesh, and introduces two kinds of degrees of freedom: the
+displacements in cells and the displacements of the skeleton.
 
-Most introductory materials to the HHO method is focus on
-the mathematical aspects of the methods. While those aspects are
+Most introductory materials to the HHO method is focused on
+mathematical aspects. While they are
 important, an approach based on physical considerations would help
 spreading this method to the computational mechanics and engineering
 communities.
@@ -350,7 +352,7 @@ use of approximation spaces based on polynomials of arbitrary
 orders.
 
 From the point of view of numerical performances, the
-elimination of the cell degrees of freedom is mandatory to to reduce
+elimination of the cell degrees of freedom is mandatory to reduce
 the size of the stiffness matrix. The standard static condensation,
 is presented, as well as a novel strategy called "cell equilibrium".
 Advantages and disadvantages of both strategies are discussed.
@@ -359,7 +361,8 @@ The resolution of axi-symmetrical problems, which has seldom,
 if ever, been discussed in the literature, is then presented.
 
 Numerical examples prove the robustness of the method
-with regards to volumetric locking....
+with regards to volumetric locking
+
 \end{abstract}
 
 \begin{keyword}
