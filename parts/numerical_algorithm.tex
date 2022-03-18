@@ -1,0 +1,58 @@
+\section{Numerical examples for the algorithm}
+\label{sec_numerical_algorithm}
+
+In this section, we evaluate the response of the cell equilibrium algorithm.
+
+\paragraph{Specimen and loading}
+
+We consider a the cook membrane specimen that is subjected to uniaxial
+traction.
+% This example has been studied previously by many authors as a necking problem 3,5,7,8,22 and can be used to
+% test the robustness of the different methods.
+The membrane has a width of $48$ mm and a height of $60$ mm.
+A vertical traction $t_y = 1000$ N/m is imposed at the top, as shown in Figure \ref{fig_ssnaallmesh}.
+The HHO computation is compared with a standard Q1 and Q2 (\textit{i.e.} linear and quadratic approximations)
+
+\paragraph{Behaviour law}
+
+The same behavior law as that in \ref{sec_swelling_sphere} is considered for the present test case. 
+However, the finite strain hypothesis is chosen, based on a logarithmic decomposition of the stress \cite{miehe_anisotropic_2002}.
+
+\paragraph{Material parameters}
+
+Materials parameters are taken as
+$\sigma_0 = 450$ MPa, $\sigma_{\infty} = 715$ MPa with a saturation parameter $\delta = 16.93$. The Young modulus is $E = 206.9$ GPa, and the Poisson ratio is $\nu = 0.29$.
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=12.cm]{img_calcs/sphere_mesh.png}
+%     \caption{the swelling sphere test case. Geometry, loadings, final displacement along the radius of the sphere, and final equivalent plastic strain map at quadrature points}
+%     \label{fig_sphereall}
+% \end{figure}
+
+% In this section, we evaluate the proposed axi-symmetric HHO method on classical test cases taken from the literature to emphasize robustness to volumetric locking.
+% We consider both the small and large strains framework, and for elasto-plastic behaviors.
+% The first test case is that of a elasto-perfect plastic swelling sphere. The second one consists in the necking of a notched bar.
+% In this section, we denote by HHO($k,l$) the HHO element of order $k$ on faces, and order $l$ in the cell.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12.cm]{img_calcs/cook_comp.png}
+    \caption{Hydrostatic pressure map one the reference configuration at the limit load}
+    \label{fig_sphereall}
+\end{figure}
+
+\paragraph{Algorithm performance}
+
+We compare the performance of 
+
+\paragraph{Prediction decondensation step}
+
+Using a decondensation setp for the cell algorithm
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12.cm]{img_calcs/algo_comp.png}
+    \caption{Comparison in terms of performance for different algorithms}
+    \label{fig_sphereall}
+\end{figure}
