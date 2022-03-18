@@ -257,7 +257,8 @@ Furthermore, let assume that $\tensorii{P}{}_{\Crown}$ is constant along the dir
     \end{aligned}
 \end{equation}
 
-\subsection{Deriving the formulation of Hybrid discontinuous methods from the Hu-Washizu functional on the element}
+% \subsection{Deriving the formulation of Hybrid discontinuous methods from the Hu-Washizu functional on the element}
+\subsection{Towards Hybrid discontinuous methods from the Hu-Washizu functional}
 
 Using the hypotheses stated Section \ref{sec_assumtions} on the displacement field and the stress field in $\Crown{}$,
 one can write \eqref{eq_hu_washizu_split} as a term depending on the width of the interface $\ell$ and on the core and boundary unknowns only. The reader can refer to Section \ref{sec_appendix} for more details.
@@ -684,7 +685,7 @@ Moreover, owing to
 
 The cartesian space is expressed in cylindrical coordinates and a point $\tensori{X} \in \bodyLag$ has coordinates $\tensori{X} = (r, z, \theta)$ where $r$ denotes the radial component, $z$ the ordinate one, and $\theta$ is the angular component describing a revolution around the axis $r = 0$. By cylindrical symmetry, the angular displacement $\tensoro{u}{}_{\theta}$ is supposed to be zero, and both components $u_r$ and $u_z$ do not depend on the angular coordinate $\theta$.
 
-\paragraph{Cell discplacement gradient}
+\paragraph{Cell displacement gradient}
 
 % Adopting notations introduced in Section \ref{sec_composite_demo}, let $\cell$ an open subset of $\bodyLag \subset \mathbb{R}^2$ in the $(r,z)$ plane with cell displacement $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ and boundary displacement $\tensori{u}{}_{\dCell} \in \displacementSpaceDCell$.
 The partial derivatives of $\tensori{u}{}_{\cell}$ with respect to the cylindrical coordinates are given by
@@ -696,3 +697,27 @@ The partial derivatives of $\tensori{u}{}_{\cell}$ with respect to the cylindric
         \forall i, j \in \{ r,z \}, \tensoro{u}{}_{\cell i,j} = \frac{\partial u_{\cell i}}{\partial j} && \text{and} && \tensoro{u}{}_{\cell \theta, \theta} = \frac{u_{\cell r}}{r}
     \end{aligned}
 \end{equation}
+
+\paragraph{Axis faces treatment}
+
+Since in cylindrical coordinates, all integrals depend on the radial component $r$, boundary integrals vanish at $r = 0$ on the symmetry axis.
+Therefore, the reconstructed gradient (and the stabilization) do not depend on a closed surface wrapping a $\cell$ located on the symmetry axis.
+However, this feature is necessary to prove the robustness of the HHO method to volumetric locking (see Section \ref{sec_appendix}).
+Therefore, we exclude the symmetry axis from the domain, by considering infinitely thin cylindrical faces of radius $\varrho > 0$ surrounding it (see Figure \ref{fig_axi}).
+
+
+% On the symmetry axis
+
+% Moreover, since in cylindrical coordinates, all integrals depend on the radial component $r$, there is a singularity at $r = 0$ for boundary integrals on faces located on the symmetry axis, and from a geometrical standpoint, these faces lose a dimension; a face that is not located on the symmetry axis behaves like a shell by revolution of the $(r,z)$ plane,
+% whereas one attached to the axis reduces to a beam that is only allowed to move and morph in the $z$ direction.
+% On a more algebraic note, the problem as such is ill-defined, since building the jump function involves inverting a mass matrix in $\discreteDisplacementSpaceDCell$ to define the projector $\Pi_{\dCell}^k$.
+% Therefore, a face on the axis is swelled by a small radius $\varrho $ such that it becomes a cylinder with same dimensions as the others (see Figure \ref{fig_axi})
+%
+%
+%
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=8.cm]{img/sketch_axi.png}
+    \caption{schematic representation of the modeling of a face located on the symmetry axis}
+    \label{fig_axi}
+\end{figure}
