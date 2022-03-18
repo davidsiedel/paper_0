@@ -674,3 +674,25 @@ In particular, the deformations $\tensorii{\varepsilon}{}_{\cell}$ being symmetr
         \tensorii{\sigma}{}_{\cell} = \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{\varepsilon}{}_{\cell}}
     \end{aligned}
 \end{equation}
+
+\subsection{Extension to the axi-symmetric framework}
+
+In the following section, we devise a Hybrid High order method for an axi-symmetric framework. In such a framework, owing to geometrical assumptions on the displacement and its gradient, the definition of the reconstructed gradient \eqref{eq_grad} and of that of the higher order displacement \eqref{eq_potential} needs be modified accordingly. Details about the definitions of these ingredients can be found in Section \ref{sec_appendix}.
+Moreover, owing to 
+
+\paragraph{Axi-symmetric framework}
+
+The cartesian space is expressed in cylindrical coordinates and a point $\tensori{X} \in \bodyLag$ has coordinates $\tensori{X} = (r, z, \theta)$ where $r$ denotes the radial component, $z$ the ordinate one, and $\theta$ is the angular component describing a revolution around the axis $r = 0$. By cylindrical symmetry, the angular displacement $\tensoro{u}{}_{\theta}$ is supposed to be zero, and both components $u_r$ and $u_z$ do not depend on the angular coordinate $\theta$.
+
+\paragraph{Cell discplacement gradient}
+
+% Adopting notations introduced in Section \ref{sec_composite_demo}, let $\cell$ an open subset of $\bodyLag \subset \mathbb{R}^2$ in the $(r,z)$ plane with cell displacement $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ and boundary displacement $\tensori{u}{}_{\dCell} \in \displacementSpaceDCell$.
+The partial derivatives of $\tensori{u}{}_{\cell}$ with respect to the cylindrical coordinates are given by
+%
+%
+%
+\begin{equation}
+    \begin{aligned}
+        \forall i, j \in \{ r,z \}, \tensoro{u}{}_{\cell i,j} = \frac{\partial u_{\cell i}}{\partial j} && \text{and} && \tensoro{u}{}_{\cell \theta, \theta} = \frac{u_{\cell r}}{r}
+    \end{aligned}
+\end{equation}
