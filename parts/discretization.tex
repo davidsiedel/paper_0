@@ -11,9 +11,9 @@ Approximation spaces for unknowns of the global problem are then described, whic
 
 The boundary $\dCell{}$ of each element is decomposed in faces, such that a face $F$ is a subset of $\bodyLag$, and either there are two cells $\cell$ and $\cell'$ such that $F = \dCell \cap \dCell'$ ($F$ is then an interior face), or there is a single cell $\cell$ such that $F = \dCell \cap \partial \Omega$ ($F$ is then an exterior face).
 For any cell $\cell$, let $\mathcal{F}(\cell) = \{ F \in \dHybridMesh \ \vert \ F \subset \dCell \}$ the set of faces composing the boundary of $\cell$.
-Let finally $\dHybridMesh(\bodyLag) = \{ F_i \subset \bodyLag \ \vert \ 1 \leq i \leq N_{F} \}$ the skeleton of the mesh, collecting all element faces $F_i$ in the mesh, where $N_{F}$ denotes the number of faces.
+Let finally $\dHybridMesh(\bodyLag) = \{ F_i \subset \bodyLag \ \vert \ 1 \leq i \leq N_{F} \}$ the skeleton of the mesh, collecting all element faces $F_i$ in the mesh, where $N_{F}$ denotes the number of faces. The set of faces subjected to Neumann boundary conditions is denoted $\dHybridMesh{}_{N}^e(\bodyLag)$, and $\dHybridMesh{}_{D}^e(\bodyLag)$ denotes that subjected to Dirichlet boundary conditions.
 
-\paragraph{Mesh}
+\paragraph{Mesh description}
 
 Likewise, one defines the collection of all cells in the mesh as
 $\HybridMesh(\bodyLag) = \{ \matI \subset \bodyLag \ \vert \ 1 \leq i \leq N_{\cell} \}$, where $N_T$ denotes the total number of cells.
@@ -53,7 +53,7 @@ Let the global unknown $(\tensori{v}{}_{\HybridMesh}, \tensori{v}{}_{\dHybridMes
 
 
 % , where both cells and faces are considered as part of the support for defining
-The weak form of the global mechanical problem of $\bodyLag$ reads : find the global displacement unknown pair $(\tensori{u}{}_{\HybridMesh}, \tensori{u}{}_{\dHybridMesh})$ verifying $\tensori{u}{}_{\dHybridMesh} \vert_{\dirichletBoundaryLag} = \dirichletLag$ on $\dirichletBoundaryLag$ such that
+The weak form of the global mechanical problem in $\bodyLag$ reads : find the global displacement unknown pair $(\tensori{u}{}_{\HybridMesh}, \tensori{u}{}_{\dHybridMesh})$ verifying $\tensori{u}{}_{\dHybridMesh} \vert_{\dirichletBoundaryLag} = \dirichletLag$ on $\dirichletBoundaryLag$ such that
 $\forall (\delta \tensori{u}{}_{\HybridMesh}, \delta \tensori{u}{}_{\dHybridMesh})$
 %
 %
@@ -237,13 +237,18 @@ denotes a higher order discrete displacement in $\discretePotentialSpaceCell$ th
 Let $\discreteDisplacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \discreteDisplacementSpaceCell$ the global discrete cell displacement space.
 Let $\discreteDisplacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V^h(F)$ the global discrete face displacement space, and
 $\discreteHybridDisplacementSpaceHybridMesh = \discreteDisplacementSpaceHybridMesh \times \discreteDisplacementSpaceDHybridMesh$ the global unknown approximation space.
-Similarly, let $\discreteVirtualDisplacementSpaceHybridMesh$ and $\discreteVirtualDisplacementSpaceDHybridMesh$ the respective discrete mesh and skeleton virtual displacement spaces, and
-$\discreteVirtualHybridDisplacementSpaceHybridMesh = \discreteVirtualDisplacementSpaceHybridMesh \times \discreteVirtualDisplacementSpaceDHybridMesh$ the discrete virtual global displacement space.
+%
+%
+%
+% Similarly, let $\discreteVirtualDisplacementSpaceHybridMesh$ and $\discreteVirtualDisplacementSpaceDHybridMesh$ the respective discrete mesh and skeleton virtual displacement spaces, and
+% $\discreteVirtualHybridDisplacementSpaceHybridMesh = \discreteVirtualDisplacementSpaceHybridMesh \times \discreteVirtualDisplacementSpaceDHybridMesh$ the discrete virtual global displacement space.
 % Let $(\tensori{v}{}_{\HybridMesh}^l, \tensori{v}{}_{\dHybridMesh}^k) \in \discreteHybridDisplacementSpaceHybridMesh$ denote a global displacement pair such that $\forall \cell \in \HybridMesh(\bodyLag), \tensori{v}{}_{\HybridMesh}^l = \tensori{v}{}_{\cell}^l$ in $\cell$ and $\forall F \in \HybridMesh(\bodyLag), \tensori{v}{}_{\dHybridMesh}^k = \tensori{v}{}_{F}^k$ in $F$.
 
 \paragraph{Discrete global problem}
 
-The global problem in discrete form writes : find the pair $(\tensori{u}{}_{\HybridMesh}^l, \tensori{u}{}_{\dHybridMesh}^k) \in \discreteHybridDisplacementSpaceHybridMesh$ verifying $\tensori{u}{}_{\dHybridMesh}^k \vert_{\dirichletBoundaryLag} = \dirichletLag$ on $\dirichletBoundaryLag$ such that $\forall (\delta \tensori{u}{}_{\HybridMesh}^l, \delta \tensori{u}{}_{\dHybridMesh}^k) \in \discreteVirtualHybridDisplacementSpaceHybridMesh$
+The global problem in discrete form writes : find the pair $(\tensori{u}{}_{\HybridMesh}^l, \tensori{u}{}_{\dHybridMesh}^k) \in \discreteHybridDisplacementSpaceHybridMesh$ verifying $\tensori{u}{}_{\dHybridMesh}^k \vert_{\dirichletBoundaryLag} = \dirichletLag$ on $\dirichletBoundaryLag$ such that $\forall (\delta \tensori{u}{}_{\HybridMesh}^l, \delta \tensori{u}{}_{\dHybridMesh}^k)
+% \in \discreteVirtualHybridDisplacementSpaceHybridMesh
+$
 %
 %
 %

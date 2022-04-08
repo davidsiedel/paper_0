@@ -1,14 +1,14 @@
-\section{Numerical examples}
+\section{Numerical examples in the Axisymmetric framework}
 \label{sec_numerical_examples}
 
 In this section, we evaluate the proposed axi-symmetric HHO method on classical test cases taken from the literature to emphasize robustness to volumetric locking.
-We consider both the small and large strains framework, and for elasto-plastic behaviors.
-The first test case is that of a elasto-perfect plastic swelling sphere. The second one consists in the necking of a notched bar.
+We consider both the small and large strains framework, for elasto-plastic behaviors.
+% The first test case is that of a elasto-perfect plastic swelling sphere. The second one consists in the necking of a notched bar.
 In this section, we denote by HHO($k,l$) the HHO element of order $k$ on faces, and order $l$ in the cell.
 
 \paragraph{Stabilization parameter}
 
-To ensure coercivity of the HHO method, the stabilisation parameter needs be chosen according to the material under study. In the literature \cite{di_pietro_discontinuous-skeletal_2015}, a value of order $2 \mu$ is advocated, where $\mu$ denotes the shear modulus of the material.
+To ensure coercivity of the HHO method, the stabilization parameter $\beta$ needs be chosen according to the material under study. In the literature \cite{di_pietro_discontinuous-skeletal_2015}, a value of order $2 \mu$ is advocated, where $\mu$ denotes the shear modulus of the material.
 We use this values for all test cases in the present section.
 % where $\mu = \frac{E}{2(1+\nu)}$ with 
 
@@ -16,6 +16,56 @@ We use this values for all test cases in the present section.
 
 % In this section, we specify the thermodynamical framework in which falls the considered test case, \textit{i.e.} that of elasto-plasticity under the small strain hypothesis.
 % Then we describe the chosen behavior law for the numerical example, as well as the mechanical setting of the test case. Results are finally displayed and discussed at the end of the present section.
+
+
+\subsection{The free dilatation test}
+\label{sec_satoh_test}
+
+The first test case of the following benchmark aims at displaying the robustness of the HHO method for coupled mechanical-thermal problems.
+
+\paragraph{Specimen and loading}
+
+For this test case, the unit box is fixed on both the right and bottom boundaries in their respective normal directions, and a quadratic thermal load depending on the $r$-coordinate is imposed in the solid (see Figure \ref{fig_satoh_setting}). The mesh is composed of 400
+quadrangles. The thermal loading is given by
+%
+%
+%
+\begin{equation}
+    T(r,z) = 4 (T_{max} - T_{min})r(1 - r) + T_{min}
+\end{equation}
+%
+%
+%
+with temperature values $T_{max} = 2000$ K and $T_{min} = 293.15$ K.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10.cm]{img_calcs/satoh_setting.png}
+    \caption{Geometry, displacement boundary conditions and temperature loading for the free dilatation test case}
+    \label{fig_satoh_setting}
+\end{figure}
+
+\paragraph{Material behaviour}
+
+A linear thermo-elastic energy potential is considered with a Young modulus $E = 150$ GPa. The material is quasi-incompressible with a Poisson ration $\nu = 0.499$. The dilatation parameter is taken as $\alpha = 1e^{-6}$ K$^{-1}$.
+
+\paragraph{Volumetric locking and polynomial approximation for the strain and temperature fields}
+
+Lagrange finite elements of order $1 \leq k \leq 2$ evaluate a mechanical strain of order $0 \leq k-1 \leq 1$, whereas the thermal strain is of order $2$. Using the total strain for the computation of the stress results in strong volumetric locking.
+Hence, for Lagrange element to accurately model the problem, one needs to choose a temperature fields that is one order lower than that describing the displacement field.
+This feature is of major importance for mixed elements, where quadratic elements needs be employed to match the the linear pressure unknown polynomial order.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10.cm]{img_calcs/satoh_calc.png}
+    \caption{Map fo the Trace of the Cauchy stress at quadrature points for the Free dilatation test case at the last time step}
+    \label{fig_satoh_calc}
+\end{figure}
+
+\paragraph{Comparison of FE and HHO methods}
+
+In Figure \ref{fig_satoh_calc}, one can observe that the pressure map is completely smooth for the HHO computations, even for a quadratic temperature field acting on a linear gradient using HHO(1,1). As expected, the results display mild signs of volumetric locking for the quadratic finite element
+approximation, and strong oscillations are noted for the linear finite element solution.
 
 \subsection{Perfect plastic swelling sphere}
 \label{sec_swelling_sphere}
@@ -28,7 +78,7 @@ The sphere has an inner radius $r_{int} = 0.8$ mm and an outer
 radius $r_{ext} = 1$ mm. An internal radial displacement $u$ is imposed. The mesh is composed of XXX quadrangles (see Figure \ref{fig_sphereall}).
 The simulation is performed until the limit load corresponding to an internal displacement of $0.2$ mm is reached.
 
-\paragraph{Behaviour law}
+\paragraph{Material behaviour}
 
 An isotropic hardening energy potential $\mecPotential{}_{\bodyLag{}}^p$ is chosen for the description of the plastic evolution of the material such that
 
@@ -59,7 +109,7 @@ where the parameter $p$ denotes the equivalent plastic strain and a Von Mises yi
 %
 Moreover, the small strain hypothesis is assumed for this test case.
 
-\paragraph{Material parameters}
+% \paragraph{Material parameters}
 
 Perfect plasticity is considered for this test case , where the saturation parameter $\delta = 0$, the yield stresses $\sigma_0 = \sigma_{\infty} = 6$ MPa, the hardening parameter $H = 0$ and the elastic potential parameters are the Young modulus $E = 28.85$ MPa and the Poisson ratio $\nu = 0.499$, such that the material is quasi-incompressible.
 

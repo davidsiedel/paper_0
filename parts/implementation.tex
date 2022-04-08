@@ -22,7 +22,7 @@ consisting in inverting a mass matrix in $\discreteGradSpaceCell{}$. One can thu
 $
 [B_{\cell}]
 $
-the discrete gradient operator acting on the pair $(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\cell}^k)$ at a quadrature point $\tensori{x}{}_q \in \cellQuadrature$ to evaluate the discrete gradient $\tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k)$ such that
+the discrete gradient operator acting on the pair $(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\cell}^k)$ at a quadrature point $\tensori{X}{}_q \in \cellQuadrature$ to evaluate the discrete gradient $\tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k)$ such that
 % Hence, the algebraic realization of \eqref{eq_discrete_grad}
 %
 %
@@ -40,7 +40,7 @@ the discrete gradient operator acting on the pair $(\tensori{v}{}_{\cell}^l, \te
             % &&
             % B_{\dCell}
         \end{bmatrix}
-        (\tensori{x}{}_q)
+        (\tensori{X}{}_q)
         \cdot
         \begin{Bmatrix}
             \tensori{v}{}_{\cell}^l
@@ -56,7 +56,7 @@ the discrete gradient operator acting on the pair $(\tensori{v}{}_{\cell}^l, \te
 %
 % where we have decomposed the expression of $[B_{\cell}]$ into a cell block $B_{\cell}$ and a boundary block $B_{\dCell}$, to emphasize the dependence of the problem on both unknowns.
 % Once this offline computation step is performed, the 
-where $[B_{\cell}]$ is composed by a cell block $B_{\cell}$ and a boundary block $B_{\dCell}$.
+where $[B_{\cell}]$ is composed by a cell block and a boundary block.
 % to emphasize the dependence of the problem on both unknowns.
 
 
@@ -91,7 +91,7 @@ Similarly, the algebraic realization of \eqref{eq_hho_stabilization_vector} amou
 %
 %
 %
-as for $[B_{\cell}]$, the operator $[Z_{\cell}]$ is composed by a cell block $Z_{\cell}$ and a boundary block $Z_{\dCell}$.
+as for $[B_{\cell}]$, the operator $[Z_{\cell}]$ is composed by a cell and a boundary block.
 
 \paragraph{Offline computation}
 
@@ -631,6 +631,7 @@ A schematic representation this procedure is given in Figure \ref{res_cond0}
 \end{figure}
 
 \paragraph{Cell equlibrium algorithm}
+\label{par_cell_eq}
 
 We propose an alternative to the static condensation solving algorithm, postulating an implicit relation between the increment of the cell unknowns and the increment of the faces, that consists in solving locally a nonlinear system on the cell increment at a fixed face increment. This non-linear local procedure adds up to the algorithm described above, to ensure the equilibrium of the cell with its faces at each iteration of the global problem. This new solution scheme is described in Figure \ref{res_cond}, where we note $i$ a Newton iteration for solving the global problem on the set of face unknowns, and $j$ a Newton iteration for solving the local problem on the cell unknowns in an element.
 
@@ -650,7 +651,7 @@ We propose an alternative to the static condensation solving algorithm, postulat
 The Linear static condensation algorithm is the one described in the literature \cite{di_pietro_discontinuous-skeletal_2015,cockburn_algorithm_2019,abbas_hybrid_2019-1,abbas_hybrid_2018} to condensate cell unknowns on faces. This procedure needs not iterate at the cell level to acomodate the cell increment, and is hence, faster. However, one needs to store matrices used during the condensation step from one iteration to another in order do decondensate the cell increment.
 
 The Cell equlibrium algorithm, needs iterate at the cell level. It is hence is more costly, and requires to integrate the behaviour law more times that does the Linear static condensation algorithm.
-However, it allows to consider extending the present non-linear algorithm to \textit{e.g.} constrained resolution algorithm, to solve inequality constrained problems, as encountered in multi-field plasticity for instance.
+However, it allows to consider extending the present non-linear algorithm to \textit{e.g.} constrained resolution algorithm, to solve inequality constrained problems, as encountered in multi-field plasticity \cite{schroder_small_2015} for instance.
 
 
 % We show in Section \ref{sec_numerical_examples} that this algorithm gives identical results to those obtains with the Linear static condensation algorithm.

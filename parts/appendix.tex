@@ -2,6 +2,9 @@
 \label{sec_appendix}
 
 \subsection{From the continuous Hu-Washizu Lagrangian to the HDG Lagrangian}
+\label{sec_appendix_Hu_Washizu}
+
+In this part, the development for the expression of the Hu-Washizu Lagrangian \eqref{eq_0015} is exposed, using the assumptions made in Section \ref{sec_assumtions}.
 
 % Let $\tensori{\Psi}(\tensori{X})$ the linear mapping consisting in a change of euclidean frame such that
 % %
@@ -230,19 +233,19 @@ Noticing that $\nabla \tensori{u}{}_{\Crown} \in C_\Crown$, one has :
         \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}) \otimes
         \tensori{n} : (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}) \otimes
         \tensori{n}
-        \\
-        = & 
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{i,j} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
-        \tensoro{n}_{j}{}^2
-        \\
-        = & 
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{j} \tensoro{n}_{j}{}^2 \sum_{i} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
-        \\
-        = & 
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{i} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
+        % \\
+        % = & 
+        % \ell (1 - \frac{\alpha}{2} \ell)
+        % \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{i,j} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
+        % \tensoro{n}_{j}{}^2
+        % \\
+        % = & 
+        % \ell (1 - \frac{\alpha}{2} \ell)
+        % \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{j} \tensoro{n}_{j}{}^2 \sum_{i} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
+        % \\
+        % = & 
+        % \ell (1 - \frac{\alpha}{2} \ell)
+        % \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{i} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
         \\
         = & 
         \ell (1 - \frac{\alpha}{2} \ell)
@@ -272,19 +275,19 @@ Moreover, for $\tensorii{P}{}_{\Crown}$ in $C_\Crown{}$ :
         \int_{\dBulk{}}
         \frac{1}{\ell}
         (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk}) \otimes \tensori{n} : \tensorii{P}{}_{\Crown{}}
-        \\
-        = &
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}}
-        \frac{1}{\ell}
-        \sum_{i,j}
-        (\tensoro{u}{}_{\dCell}{}_{i} - \tensoro{u}{}_{\Bulk}{}{}_{i} \vert_{\dBulk}) \tensoro{n}{}_{j} \tensoro{P}{}_{\Crown{}}{}_{ij}
-        \\
-        = &
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}}
-        \frac{1}{\ell}
-        (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk}) \cdot \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}} \cdot \tensori{n}
+        % \\
+        % = &
+        % \ell (1 - \frac{\alpha}{2} \ell)
+        % \int_{\dBulk{}}
+        % \frac{1}{\ell}
+        % \sum_{i,j}
+        % (\tensoro{u}{}_{\dCell}{}_{i} - \tensoro{u}{}_{\Bulk}{}{}_{i} \vert_{\dBulk}) \tensoro{n}{}_{j} \tensoro{P}{}_{\Crown{}}{}_{ij}
+        % \\
+        % = &
+        % \ell (1 - \frac{\alpha}{2} \ell)
+        % \int_{\dBulk{}}
+        % \frac{1}{\ell}
+        % (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk}) \cdot \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}} \cdot \tensori{n}
         \\
         = &
         (1 - \frac{\alpha}{2} \ell)
@@ -362,7 +365,7 @@ the interface region vanishes such that $\Crown{} \rightarrow \emptyset, \Bulk{}
 % 
 %
 \begin{equation}
-    \label{eq_0015}
+    \label{eq_0015A}
     \begin{aligned}
         L_{\cell}^{HW}
         = &
@@ -381,6 +384,8 @@ the interface region vanishes such that $\Crown{} \rightarrow \emptyset, \Bulk{}
         \int_{\neumannCell{}} \neumannCellLoad{} \cdot \tensori{u}{}_{\dCell{}}
     \end{aligned}
 \end{equation}
+
+which concludes the development of equation \eqref{eq_0015}.
 
 % The Lagrangian in the interface is given by
 % %
@@ -574,6 +579,11 @@ the interface region vanishes such that $\Crown{} \rightarrow \emptyset, \Bulk{}
 % \end{equation}
 
 \subsection{Reconstructed gradient and Elliptic projection}
+\label{sec_appendix_gradient}
+
+This section aims at generalizing the elliptic projection property of the reconstructed gradient, as introduced in \cite{di_pietro_hybrid_2015}. In the following, subspaces for the cell and faces approximations are not assumed to be polynomial necessarily.
+
+Let $\displacementSpaceCell$ the space of cell kinematically admissible displacements, and $\displacementSpaceDCell$ that of face kinematically admissible displacements. The space for statically admissible stress and strain is denoted $\stressSpaceCell$.
 
 % ------------------------------------------------------- DEVELOPMENT
 %
@@ -686,6 +696,8 @@ the interface region vanishes such that $\Crown{} \rightarrow \emptyset, \Bulk{}
         %
         %
         which states that $\tensorii{G}{}_{\cell}^h(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h)$ is the orthogonal projection of $\nabla \tensori{u}{}_{\cell}$ onto $S^h(\cell)$.
+        By linearity of the algebraic trace operator, one has that $\text{Tr}(\tensorii{G}{}_{\cell}^h(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h))$ is the orthogonal projection of $\nabla \cdot \tensori{u}$, which proves robustness of the method
+        for linear elastic materials, since the Lamé coefficient $\lambda$ acts on $\nabla \cdot \tensori{u}$.
         % IL FAUDRAIT MONTRER QUE $S^h(\cell)$ EST SUFFISANT POUR EMPECHER LE LOCKING DANS $U^h(\cell) \times V^h(\dCell)$ ??
         % ET FAIRE LE LIEN ENTRE $S^h(\cell)$ et $G^h(\cell)$.
         % Trouver aussi une justification pour $\stressSpaceCell \subset \gradSpaceCell$, la contrainte est plus régulière que le gradient, ce qui semble vrai (avec les décompositions sphérique dévaitoriques par exemples, etc)
@@ -696,6 +708,9 @@ the interface region vanishes such that $\Crown{} \rightarrow \emptyset, \Bulk{}
 % }
 
 \subsection{Operators in the axi-symmetric framework}
+\label{sec_appendix_axi}
+
+This part specifies the formulation of HHO operators in the axi-symmetric framework.
 
 \paragraph{Reconstructed gradient}
 

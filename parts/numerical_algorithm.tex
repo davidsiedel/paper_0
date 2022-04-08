@@ -1,19 +1,21 @@
-\section{Numerical examples for the algorithm}
+\section{Numerical examples using the cell resolution algorithm}
 \label{sec_numerical_algorithm}
 
-In this section, we evaluate the response of the cell equilibrium algorithm.
+The section showcases numerical examples demonstrating the robustness of the cell resolution algorithm.
+The test cases under study, namely the classical Cook membrane, and the indentation test cases, show that no volumetric locking is encountered using the cell resolution algorithm.
+
+\subsection{Cook's membrane test case}
 
 \paragraph{Specimen and loading}
 
-We consider a the cook membrane specimen that is subjected to uniaxial
+Let consider the Cook membrane specimen that is subjected to uniaxial
 traction.
 % This example has been studied previously by many authors as a necking problem 3,5,7,8,22 and can be used to
 % test the robustness of the different methods.
-The membrane has a width of $48$ mm and a height of $60$ mm.
-A vertical traction $t_y = 1000$ N/m is imposed at the top, as shown in Figure \ref{fig_ssnaallmesh}.
-The HHO computation is compared with a standard Q1 and Q2 (\textit{i.e.} linear and quadratic approximations)
+The membrane has a width of $48$ mm and a height of $60$ mm, and a vertical traction $t_y = 1000$ N/m is imposed at the top.
+The HHO computation is run on a polygonal mesh (see Figure \ref{fig_cook}) and is compared with standard QU4 and QU8 formulations (\textit{i.e.} linear and quadratic approximations)
 
-\paragraph{Behaviour law}
+\paragraph{Constitutive equation}
 
 The same behavior law as that in \ref{sec_swelling_sphere} is considered for the present test case. 
 However, the finite strain hypothesis is chosen, based on a logarithmic decomposition of the stress \cite{miehe_anisotropic_2002}.
@@ -39,20 +41,62 @@ $\sigma_0 = 450$ MPa, $\sigma_{\infty} = 715$ MPa with a saturation parameter $\
     \centering
     \includegraphics[width=12.cm]{img_calcs/cook_comp.png}
     \caption{Hydrostatic pressure map one the reference configuration at the limit load}
-    \label{fig_sphereall}
+    \label{fig_cook}
 \end{figure}
 
-\paragraph{Algorithm performance}
+\paragraph{Numerical results}
 
-We compare the performance of 
+As expected, the linear and quadratic finite element methods display respectively strong and mild oscillations of the pressure, whereas the HHO one shows no sign of locking.
 
-\paragraph{Prediction decondensation step}
+\subsection{Indentation test case}
 
-Using a decondensation setp for the cell algorithm
+\paragraph{Specimen and loading}
+
+The last test case consists in the indentation of a cube of size $10$ mm. A pressure of $300$ MPa is imposed on the top surface see Figure \ref{fig_cube}).
+
+\paragraph{Material}
+
+The same perfect plastic material as that in \ref{sec_swelling_sphere} is considered for the present test case.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=12.cm]{img_calcs/cube.png}
+    \caption{Hydrostatic pressure map one the reference configuration at the limit load}
+    \label{fig_cube}
+\end{figure}
+
+\paragraph{Numerical results}
+
+The pressure map at the end of the computation is displayed in Figure \ref{fig_cube}, and no sign of volumetric locking are present on the HHO computation, as opposed to the linear finite element one.
+
+\paragraph{Performance of the algorithm}
+
+As stated in Section \ref{par_cell_eq}, the cell resolution algorithm needs more iterations (see Figure \ref{fig_algo_comp}) than the classical linear resolution using a static condensation procedure.
+Indeed, since after a increment over the skeleton of the mesh, the cell displacement does not yet solve the equilibrium in the cell,
+the computation of the reconstructed gradient is not accurate, which results in ill-computed stresses at quadrature points. In order to circumvent this phenomenon, a prediction step is
+used to lift the cell displacement and then solve a non-linear problem within the cell.
+Using this prediction step displays similar results that those obtained with the static condensation algorithm (see Figure \ref{fig_algo_comp}).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=12.cm]{img_calcs/algo_comp.png}
     \caption{Comparison in terms of performance for different algorithms}
-    \label{fig_sphereall}
+    \label{fig_algo_comp}
 \end{figure}
+
+\section{Conclusion}
+
+An introduction to HDG and HHO methods has been proposed, based on the minimization of a Hu-Washizu Lagrangian. The expression of the method arising from this approach allows to introduce naturally all the ingredients of the method, as well as the displacement discontinuity, in a unified framework.
+This new formulation also allows one to draw a connection between HDG methods and other locking-free methods, all based on the minimization of a Hu-Washizu Lagrangian.
+A natural cell-based resolution scheme emerged from this formulation, leading to the proposition for a novel algorithm, based on the resolution of the equilibrium of the cell. This algorithm has been tested and investigated.
+Finally, we have devised and evaluated numerically an HHO method to account for mechanical problems in the axisymmetric framework, for both linear thermoelastic behaviours, and plastic behaviours under both the small and finite strain hypotheses.
+The HHO method exhibits a robust behavior for strain-hardening plasticity as well as for perfect plasticity and produces accurate solutions with a moderate number of degrees of freedom for various benchmarks from the literature.
+
+This work can be pursued in several directions. One could use the cell resolution algorithm to address local resolution problems, such as those encountered with \textit{e.g.} damage irreversibility in phase field fracture mechanics, or multi field plasticity. Moreover, an adaptation of the HHO method to
+reconstruct pressure-driven gradient terms only could lead to a simpler formulation, closer to that of mixed methods \cite{simo_quasi-incompressible_1991}.
+
+% We have devised and evaluated numerically an HHO method to account for mechanical problems in the axisymmetric framework, for both linear thermoelastic behaviours, and plastic behaviours under both the small and finite strain hypotheses.
+% The HHO method exhibits a robust behavior for strain-hardening plasticity as well as for perfect plasticity and produces accurate solutions with a moderate number of degrees of freedom for various benchmarks from the literature.
+% Moreover, a novel resolution algorithm, based on the application of a cell equilibrium algorithm has been proposed, tested and investigated.
+
+% This framework allows one to reuse behavior laws developed originally for small deformations in the context of finite deformations. The HHO method exhibits a robust behavior for strain-hardening plasticity as well as for perfect plasticity and produces accurate solutions with a moderate number of degrees of freedom for various benchmarks from the literature. In particular, as mixed methods, the HHO method avoids volumetric locking due to plastic incompressiblity, but with less unknowns than mixed methods for the same accuracy. Moreover, the HHO method supports general meshes with nonmatching interfaces. This work can be pursued in several directions. One could use a nonlocal plasticity model, as for example a strain-gradient plasticity model, to take into account scale-dependent effects19 and possibly prevent unphysical localization of the plastic deformations. Furthermore, the extension of the present HHO method to contact and friction problems is the subject of an ongoing work.
