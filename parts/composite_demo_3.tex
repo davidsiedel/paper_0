@@ -491,18 +491,19 @@ Minimization of the Lagrangian \eqref{eq_simple} amounts to the definition of a 
         % \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
         % =
         \delta L_{\cell, \text{int}}^{VW}
-        (
-            (\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}),
-            (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
-        )
+        % (
+            % (\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})
+            % ,
+            % (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
+        % )
         -
         \delta L_{\cell, \text{ext}}^{VW}
-        (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
+        % (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
         =
         0
-        &&
-        &&
-        \forall (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
+        % &&
+        % &&
+        % \forall (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
         % \\
         % = & \delta L_{\cell}^{\text{int}} + \delta L_{\cell}^{\text{ext}}
         % \\
@@ -532,19 +533,26 @@ Minimization of the Lagrangian \eqref{eq_simple} amounts to the definition of a 
 %
 %
 %
-with
+where $\forall (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})$
 %
 %
 %
 \begin{subequations}
     \label{eq_0nonamemee}
         \begin{alignat}{3}
-            \delta L_{\cell, \text{int}}^{VW} & = 
+            \delta L_{\cell, \text{int}}^{VW}
+            % (
+                % (\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})
+                % ,
+                % (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
+            % )
+            = & 
             \int_{T}
             \tensorii{P}{}_{\cell}(\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}))
             :
             \tensorii{G}{}_{\cell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
             % \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_T} : \delta \tensorii{G}{}_{T}
+            % \\ &
             +
             \int_{\dCell} (\beta / h_{\cell})
             % (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell})
@@ -555,7 +563,7 @@ with
             % \delta \tensori{Z}{}_{\dCell{}}
             \tensori{Z}{}_{\dCell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
             \\
-            \delta L_{\cell, \text{ext}}^{VW} & = 
+            \delta L_{\cell, \text{ext}}^{VW} = & 
             \int_{\neumannCell} \neumannCellLoad{} \cdot \delta \tensori{u}{}_{\dCell{}}
             +
             \int_{T} \loadLag \cdot \delta \tensori{u}{}_{\cell}
@@ -564,7 +572,7 @@ with
 %
 %
 %
-where we introduced the jump function $\tensori{Z}{}_{\dCell}$ such that
+and where we introduced the jump function $\tensori{Z}{}_{\dCell}$ such that
 %
 %
 %

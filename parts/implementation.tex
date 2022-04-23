@@ -98,6 +98,297 @@ as for $[B_{\cell}]$, the operator $[Z_{\cell}]$ is composed by a cell and a bou
 Since \eqref{eq_discrete_grad} and \eqref{eq_hho_stabilization_vector} depend on the geometry of the element $\cell$ only, one can compute the operators $[B_{\cell}]$ and $[Z_{\cell}]$ for each element once and for all in an offline pre-computation step by working in the reference configuration. Once this offline step is performed, the algebraic form of the problem resembles closely to the standard finite element one, where the operator $[B_{\cell}]$ replaces the usual shape function gradient operator, and the stabilization operator 
 $[Z_{\cell}]$ is incorporated in the expression of the tangent matrix and in that of internal forces.
 
+
+\subsection{Elementary residual and its derivatives}
+
+\paragraph{Internal forces} The internal forces vector depends on the product of the stress values with the gradient operator computed at quadrature points, plus a supplementary force corresponding to that of the traction between the cell and its boundary
+
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenaljjjdjj}
+    \begin{aligned}
+        \begin{Bmatrix}
+            F_{T}^{int}
+            (
+                % \delta
+                \tensori{u}{}_{\cell}^{l}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k}
+            )
+        \end{Bmatrix}
+        = &
+        \sum_{\tensori{X}{}_q \in \cellQuadrature{}}
+        w_q
+        \begin{bmatrix}
+            B_{\cell}
+            % &&
+            % B_{\dCell}
+        \end{bmatrix}^{\text{trans}}(\tensori{X}{}_q)
+        \cdot
+        \begin{Bmatrix}
+            \tensorii{P}{}_{\cell}^k(
+                \tensorii{G}{}_{\cell}^k
+                (
+                    % \delta
+                    \tensori{u}{}_{\cell}^{l}
+                    ,
+                    % \delta
+                    \tensori{u}{}_{\dCell}^{k}
+                )
+            )
+        \end{Bmatrix}(\tensori{X}{}_q)
+        % \\
+        % &
+        +
+        \frac{\beta}{h_T}
+        \begin{bmatrix}
+            Z_{\cell}
+            % &&
+            % Z_{\dCell}
+        \end{bmatrix}^{\text{trans}}
+        \cdot
+        \begin{bmatrix}
+            Z_{\cell}
+            % && 
+            % Z_{\dCell}
+        \end{bmatrix}
+        % \begin{bmatrix}
+        %     Z_{\cell \cell} && Z_{\cell \dCell}
+        %     \\
+        %     Z_{\dCell \cell} && Z_{\dCell \dCell}
+        % \end{bmatrix}
+        \cdot
+        \begin{Bmatrix}
+            % \delta
+            \tensori{u}{}_{\cell}^{l}
+            \\
+            % \delta
+            \tensori{u}{}_{\dCell}^{k}
+        \end{Bmatrix}
+    \end{aligned}
+\end{equation}
+
+\paragraph{External forces}
+
+The external forces vector is the evaluation of the given bulk and boundary loads at respective cell and face quadrature points tested against the respective cell and face shape functions, and is denoted
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenaljjjdjj}
+    \begin{aligned}
+        \begin{Bmatrix}
+            F_{T}^{ext}
+        \end{Bmatrix}
+        =
+        \begin{Bmatrix}
+            \loadLag
+            \\
+            \neumannLag
+        \end{Bmatrix}
+    \end{aligned}
+\end{equation}
+
+\paragraph{Residual} Following \eqref{eq_residual_def}, the elementary residual vector writes
+
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenaljjjdjj}
+    \begin{aligned}
+        \begin{Bmatrix}
+            R_{T}
+            (
+                % \delta
+                \tensori{u}{}_{\cell}^{l}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k}
+            )
+        \end{Bmatrix}
+        =
+        \begin{Bmatrix}
+            F_{T}^{int}
+            (
+                % \delta
+                \tensori{u}{}_{\cell}^{l}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k}
+            )
+        \end{Bmatrix}
+        -
+        \begin{Bmatrix}
+            F_{T}^{ext}
+        \end{Bmatrix}
+    \end{aligned}
+\end{equation}
+
+\paragraph{Tangent matrix}
+
+The tangent matrix $[K_{\cell}(\tensori{u}{}_{\cell}^{l}, \tensori{u}{}_{\dCell}^{k})]$ expresses the derivative of $\{ R_{T} ( \tensori{u}{}_{\cell}^{l}, \tensori{u}{}_{\dCell}^{k} \}$ with respect to $\{ \tensori{u}{}_{\cell}^{l} \}$ and $\{ \tensori{u}{}_{\dCell}^{k} \}$, and writes as the product of the gradient operators by the tangent operators $\tensoriv{A}{}(\tensori{u}{}_{\cell}^{l}, \tensori{u}{}_{\dCell}^{k})$ at quadrature points, plus the additional stabilization term such that
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenaljdjjjkk}
+    \begin{aligned}
+        \begin{bmatrix}
+            K_{\cell}(
+                % \delta
+                \tensori{u}{}_{\cell}^{l}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k}
+            )
+        \end{bmatrix}
+        % \begin{bmatrix}
+        %     \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\cell}^{l}}
+        %     (\tensori{u}{}_{\cell}^{l}, \tensori{u}{}_{\dCell}^{k})
+        %     &&
+        %     K_{\cell \dCell} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+        %     \\
+        %     K_{\dCell \cell} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+        %     &&
+        %     K_{\dCell \dCell} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+        % \end{bmatrix}
+        = &
+        \sum_{\tensori{X}{}_q \in \cellQuadrature{}}
+        w_q
+        \begin{bmatrix}
+            B_{\cell}
+            % &&
+            % B_{\dCell}
+        \end{bmatrix}^{\text{trans}}
+        (\tensori{X}{}_q)
+        \cdot
+        \begin{bmatrix}
+            \tensoriv{A}{}
+            (
+                % \delta
+                \tensori{u}{}_{\cell}^{l}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k}
+            )
+        \end{bmatrix}
+        (\tensori{X}{}_q)
+        \cdot
+        \begin{bmatrix}
+            B_{\cell}
+            % &&
+            % B_{\dCell}
+        \end{bmatrix}
+        (\tensori{X}{}_q)
+        % \\
+        % &
+        +
+        \frac{\beta}{h_T}
+        \begin{bmatrix}
+            Z_{\cell}
+            % &&
+            % Z_{\dCell}
+        \end{bmatrix}^{\text{trans}}
+        \cdot
+        \begin{bmatrix}
+            Z_{\cell}
+            % &&
+            % Z_{\dCell}
+        \end{bmatrix}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+where the tangent operator $\tensoriv{A}{}(\tensori{u}{}_{\cell}^{l}, \tensori{u}{}_{\dCell}^{k})$ is the derivative of the stress with respect to the displacement gradient
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenaljdkkjjjkk}
+    \begin{aligned}
+        % \begin{bmatrix}
+            \tensoriv{A}{}
+            (
+                % \delta
+                \tensori{u}{}_{\cell}^{l}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k}
+            )
+        % \end{bmatrix}
+        =
+        \frac{
+            \partial
+            \tensorii{P}{}_{\cell}^k
+            % (
+            %     \tensorii{G}{}_{\cell}^k
+            %     (
+            %         % \delta
+            %         \tensori{u}{}_{\cell}^{l,m,n}
+            %         ,
+            %         % \delta
+            %         \tensori{u}{}_{\dCell}^{k,m,n}
+            %     )
+            % )
+        }
+        {
+            \partial
+            \tensorii{G}{}_{\cell}^k
+            % (
+            %     % \delta
+            %     \tensori{u}{}_{\cell}^{l,m,n}
+            %     ,
+            %     % \delta
+            %     \tensori{u}{}_{\dCell}^{k,m,n}
+            % )
+        }
+    \end{aligned}
+\end{equation}
+%
+%
+%
+and the tangent matrix can be decomposed by blocks such that
+%
+%
+%
+\begin{equation}
+    \label{hho_incremenahhljdjjjkk}
+    \begin{aligned}
+        \begin{bmatrix}
+            K_{\cell}(
+                % \delta
+                \tensori{u}{}_{\cell}^{l}
+                ,
+                % \delta
+                \tensori{u}{}_{\dCell}^{k}
+            )
+        \end{bmatrix}
+        =
+        \begin{bmatrix}
+            % K_{\cell \cell} (\tensori{u}{}_{\cell}^{l}, \tensori{u}{}_{\dCell}^{k})
+            \partial R_{\cell}^{\cell} / \partial \tensori{u}{}_{\cell}^{l}
+            &&
+            % K_{\cell \dCell} (\tensori{u}{}_{\cell}^{l}, \tensori{u}{}_{\dCell}^{k})
+            \partial R_{\dCell}^{\cell} / \partial \tensori{u}{}_{\cell}^{l}
+            \\
+            % K_{\dCell \cell} (\tensori{u}{}_{\cell}^{l}, \tensori{u}{}_{\dCell}^{k})
+            \partial R_{\cell}^{\cell} / \partial \tensori{u}{}_{\dCell}^{k}
+            &&
+            % K_{\dCell \dCell} (\tensori{u}{}_{\cell}^{l}, \tensori{u}{}_{\dCell}^{k})
+            \partial R_{\dCell}^{\cell} / \partial \tensori{u}{}_{\dCell}^{k}
+        \end{bmatrix}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+where one retrieves the expressions of the residual derivatives as introduced in Section \ref{sec_cell_u_elmini}
+
 %
 %
 %
@@ -134,524 +425,393 @@ $[Z_{\cell}]$ is incorporated in the expression of the tangent matrix and in tha
 %     \end{aligned}
 % \end{equation}
 
-\subsection{Iterative method}
+% \subsection{Iterative method}
 
-\paragraph{Notations}
+% \paragraph{Notations}
 
-In the following, let $(\tensori{u}{}_{\cell}^{l, {m,n}}, \tensori{u}{}_{\dCell}^{k, {m,n}})$ denote the displacement pair value at some pseudo time step $m$ and some iteration $n$. The initial value of the displacement at time step $m = 0$ and iteration $n = 0$ is set to zero, and at a new pseudo time step $m+1$, the displacement at the first iteration $n = 0$ takes the value of the displacement of the last iteration of the previous time step.
+% In the following, let $(\tensori{u}{}_{\cell}^{l, {m,n}}, \tensori{u}{}_{\dCell}^{k, {m,n}})$ denote the displacement pair value at some pseudo time step $m$ and some iteration $n$. The initial value of the displacement at time step $m = 0$ and iteration $n = 0$ is set to zero, and at a new pseudo time step $m+1$, the displacement at the first iteration $n = 0$ takes the value of the displacement of the last iteration of the previous time step.
 
-\paragraph{Internal forces}
+% \paragraph{Internal forces}
 
-In such a context, the internal forces vector $\{ F_{T}^{int} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n}) \}$ writes
-%
-%
-%
-\begin{equation}
-    \label{hho_incremenaljjjdjj}
-    \begin{aligned}
-        \begin{Bmatrix}
-            F_{T}^{int}
-            (
-                % \delta
-                \tensori{u}{}_{\cell}^{l,m,n}
-                ,
-                % \delta
-                \tensori{u}{}_{\dCell}^{k,m,n}
-            )
-        \end{Bmatrix}
-        = &
-        \sum_{\tensori{X}{}_q \in \cellQuadrature{}}
-        \begin{bmatrix}
-            B_{\cell}
-            % &&
-            % B_{\dCell}
-        \end{bmatrix}^{\text{trans}}(\tensori{X}{}_q)
-        \cdot
-        \begin{Bmatrix}
-            \tensorii{P}{}_{\cell}^k(
-                \tensorii{G}{}_{\cell}^k
-                (
-                    % \delta
-                    \tensori{u}{}_{\cell}^{l,m,n}
-                    ,
-                    % \delta
-                    \tensori{u}{}_{\dCell}^{k,m,n}
-                )
-            )
-        \end{Bmatrix}(\tensori{X}{}_q)
-        % \\
-        % &
-        +
-        \frac{\beta}{h_T}
-        \begin{bmatrix}
-            Z_{\cell}
-            % &&
-            % Z_{\dCell}
-        \end{bmatrix}^{\text{trans}}
-        \cdot
-        \begin{bmatrix}
-            Z_{\cell}
-            % && 
-            % Z_{\dCell}
-        \end{bmatrix}
-        % \begin{bmatrix}
-        %     Z_{\cell \cell} && Z_{\cell \dCell}
-        %     \\
-        %     Z_{\dCell \cell} && Z_{\dCell \dCell}
-        % \end{bmatrix}
-        \cdot
-        \begin{Bmatrix}
-            % \delta
-            \tensori{u}{}_{\cell}^{l,m,n}
-            \\
-            % \delta
-            \tensori{u}{}_{\dCell}^{k,m,n}
-        \end{Bmatrix}
-    \end{aligned}
-\end{equation}
-%
-%
-%
-where the superscript $[\cdot]^{\text{trans}}$ denotes the transpose operation, and
-$\{ \tensorii{P}{}_{\cell}^k(\tensorii{G}{}_{\cell}^k (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})) \}$ is the stress components vector, computed by integration of the behavior law at each quadrature point $\tensori{X}{}_q$ from the values of the displacement gradient $\tensorii{G}{}_{\cell}^k (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})$.
-% The parameter $\beta / h_T$ is the so-called stabilization parameter, that is the stiffness of the interface introduced in \eqref{eq_0009}.
+% In such a context, the internal forces vector $\{ F_{T}^{int} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n}) \}$ writes
+% %
+% %
+% %
+% \begin{equation}
+%     \label{hho_incremenaljjjdjj}
+%     \begin{aligned}
+%         \begin{Bmatrix}
+%             F_{T}^{int}
+%             (
+%                 % \delta
+%                 \tensori{u}{}_{\cell}^{l,m,n}
+%                 ,
+%                 % \delta
+%                 \tensori{u}{}_{\dCell}^{k,m,n}
+%             )
+%         \end{Bmatrix}
+%         = &
+%         \sum_{\tensori{X}{}_q \in \cellQuadrature{}}
+%         \begin{bmatrix}
+%             B_{\cell}
+%             % &&
+%             % B_{\dCell}
+%         \end{bmatrix}^{\text{trans}}(\tensori{X}{}_q)
+%         \cdot
+%         \begin{Bmatrix}
+%             \tensorii{P}{}_{\cell}^k(
+%                 \tensorii{G}{}_{\cell}^k
+%                 (
+%                     % \delta
+%                     \tensori{u}{}_{\cell}^{l,m,n}
+%                     ,
+%                     % \delta
+%                     \tensori{u}{}_{\dCell}^{k,m,n}
+%                 )
+%             )
+%         \end{Bmatrix}(\tensori{X}{}_q)
+%         % \\
+%         % &
+%         +
+%         \frac{\beta}{h_T}
+%         \begin{bmatrix}
+%             Z_{\cell}
+%             % &&
+%             % Z_{\dCell}
+%         \end{bmatrix}^{\text{trans}}
+%         \cdot
+%         \begin{bmatrix}
+%             Z_{\cell}
+%             % && 
+%             % Z_{\dCell}
+%         \end{bmatrix}
+%         % \begin{bmatrix}
+%         %     Z_{\cell \cell} && Z_{\cell \dCell}
+%         %     \\
+%         %     Z_{\dCell \cell} && Z_{\dCell \dCell}
+%         % \end{bmatrix}
+%         \cdot
+%         \begin{Bmatrix}
+%             % \delta
+%             \tensori{u}{}_{\cell}^{l,m,n}
+%             \\
+%             % \delta
+%             \tensori{u}{}_{\dCell}^{k,m,n}
+%         \end{Bmatrix}
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% where the superscript $[\cdot]^{\text{trans}}$ denotes the transpose operation, and
+% $\{ \tensorii{P}{}_{\cell}^k(\tensorii{G}{}_{\cell}^k (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})) \}$ is the stress components vector, computed by integration of the behavior law at each quadrature point $\tensori{X}{}_q$ from the values of the displacement gradient $\tensorii{G}{}_{\cell}^k (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})$.
+% % The parameter $\beta / h_T$ is the so-called stabilization parameter, that is the stiffness of the interface introduced in \eqref{eq_0009}.
+% %
+% %
+% %
 
-\paragraph{External forces}
 
-The external forces vector is, as is customary with the standard finite element method, the evaluation of the given bulk and boundary loads at respective cell and face quadrature points tested against the respective cell and face shape functions, and is denoted
-%
-%
-%
-\begin{equation}
-    \label{hho_incremenaljjjdjj}
-    \begin{aligned}
-        \begin{Bmatrix}
-            F_{T}^{ext}
-        \end{Bmatrix}
-        =
-        \begin{Bmatrix}
-            \loadLag
-            \\
-            \neumannLag
-        \end{Bmatrix}
-    \end{aligned}
-\end{equation}
-%
-%
-%
+% \paragraph{Newton method}
+% %
+% %
+% %
+% Following the iterative Newton method, the algebraic system to solve at the element level consists in finding the displacement increment $(\delta \tensori{u}{}_{\cell}^{l}, \delta \tensori{u}{}_{\dCell}^{k})$ that solves
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_element_system}
+%     \begin{aligned}
+%         -
+%         \begin{bmatrix}
+%             K_{\cell}^{tan}(
+%                 % \delta
+%                 \tensori{u}{}_{\cell}^{l,m,n}
+%                 ,
+%                 % \delta
+%                 \tensori{u}{}_{\dCell}^{k,m,n}
+%             )
+%         \end{bmatrix}
+%         \cdot
+%         \begin{Bmatrix}
+%             \delta
+%             \tensori{u}{}_{\cell}^{l}
+%             \\
+%             \delta
+%             \tensori{u}{}_{\dCell}^{k}
+%         \end{Bmatrix}
+%         =
+%         \begin{Bmatrix}
+%             R_{\cell}^{m,n}
+%         \end{Bmatrix}
+%         &&
+%         \text{with}
+%         &&
+%         \begin{Bmatrix}
+%             R_{\cell}^{m,n}
+%         \end{Bmatrix}
+%         =
+%         \begin{Bmatrix}
+%             F_T^{int} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{Bmatrix}
+%         -
+%         \begin{Bmatrix}
+%             F_T^{ext}
+%         \end{Bmatrix}
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% such that the displacement at the next iteration is incremented by the displacement increment $(\delta \tensori{u}{}_{\cell}^{l}, \delta \tensori{u}{}_{\dCell}^{k})$
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_adding_increment}
+%     \begin{Bmatrix}
+%         \tensori{u}{}_{\cell}^{l,m,n+1}
+%         \\
+%         \tensori{u}{}_{\dCell}^{k,m,n+1}
+%     \end{Bmatrix}
+%     =
+%     \begin{Bmatrix}
+%         \tensori{u}{}_{\cell}^{l,m,n}
+%         \\
+%         \tensori{u}{}_{\dCell}^{k,m,n}
+%     \end{Bmatrix}
+%     +
+%     \begin{Bmatrix}
+%         \delta
+%         \tensori{u}{}_{\cell}^{l}
+%         \\
+%         \delta
+%         \tensori{u}{}_{\dCell}^{k}
+%     \end{Bmatrix}
+% \end{equation}
 
-\paragraph{Tangent matrix}
+% \subsection{Static condensation}
 
-The tangent matrix $[K_{\cell}^{tan}(\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})]$ is the sum of the usual product of the displacement gradients by the tangent operator $\tensoriv{A}{}(\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})$ and of an additional stabilization term such that
-%
-%
-%
-\begin{equation}
-    \label{hho_incremenaljdjjjkk}
-    \begin{aligned}
-        \begin{bmatrix}
-            K_{\cell}^{tan}(
-                % \delta
-                \tensori{u}{}_{\cell}^{l,m,n}
-                ,
-                % \delta
-                \tensori{u}{}_{\dCell}^{k,m,n}
-            )
-        \end{bmatrix}
-        = &
-        \sum_{\tensori{X}{}_q \in \cellQuadrature{}}
-        \begin{bmatrix}
-            B_{\cell}
-            % &&
-            % B_{\dCell}
-        \end{bmatrix}^{\text{trans}}
-        (\tensori{X}{}_q)
-        \cdot
-        \begin{bmatrix}
-            \tensoriv{A}{}
-            (
-                % \delta
-                \tensori{u}{}_{\cell}^{l,m,n}
-                ,
-                % \delta
-                \tensori{u}{}_{\dCell}^{k,m,n}
-            )
-        \end{bmatrix}
-        (\tensori{X}{}_q)
-        \cdot
-        \begin{bmatrix}
-            B_{\cell}
-            % &&
-            % B_{\dCell}
-        \end{bmatrix}
-        (\tensori{X}{}_q)
-        % \\
-        % &
-        +
-        \frac{\beta}{h_T}
-        \begin{bmatrix}
-            Z_{\cell}
-            % &&
-            % Z_{\dCell}
-        \end{bmatrix}^{\text{trans}}
-        \cdot
-        \begin{bmatrix}
-            Z_{\cell}
-            % &&
-            % Z_{\dCell}
-        \end{bmatrix}
-    \end{aligned}
-\end{equation}
-%
-%
-%
-where $\tensoriv{A}{}(\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})$ is the derivative of the stress with respect to the displacement gradient
-%
-%
-%
-\begin{equation}
-    \label{hho_incremenaljdkkjjjkk}
-    \begin{aligned}
-        % \begin{bmatrix}
-            \tensoriv{A}{}
-            (
-                % \delta
-                \tensori{u}{}_{\cell}^{l,m,n}
-                ,
-                % \delta
-                \tensori{u}{}_{\dCell}^{k,m,n}
-            )
-        % \end{bmatrix}
-        =
-        \frac{
-            \partial
-            \tensorii{P}{}_{\cell}^k
-            % (
-            %     \tensorii{G}{}_{\cell}^k
-            %     (
-            %         % \delta
-            %         \tensori{u}{}_{\cell}^{l,m,n}
-            %         ,
-            %         % \delta
-            %         \tensori{u}{}_{\dCell}^{k,m,n}
-            %     )
-            % )
-        }
-        {
-            \partial
-            \tensorii{G}{}_{\cell}^k
-            % (
-            %     % \delta
-            %     \tensori{u}{}_{\cell}^{l,m,n}
-            %     ,
-            %     % \delta
-            %     \tensori{u}{}_{\dCell}^{k,m,n}
-            % )
-        }
-    \end{aligned}
-\end{equation}
-
-\paragraph{Newton method}
-%
-%
-%
-Following the iterative Newton method, the algebraic system to solve at the element level consists in finding the displacement increment $(\delta \tensori{u}{}_{\cell}^{l}, \delta \tensori{u}{}_{\dCell}^{k})$ that solves
-%
-%
-%
-\begin{equation}
-    \label{eq_element_system}
-    \begin{aligned}
-        -
-        \begin{bmatrix}
-            K_{\cell}^{tan}(
-                % \delta
-                \tensori{u}{}_{\cell}^{l,m,n}
-                ,
-                % \delta
-                \tensori{u}{}_{\dCell}^{k,m,n}
-            )
-        \end{bmatrix}
-        \cdot
-        \begin{Bmatrix}
-            \delta
-            \tensori{u}{}_{\cell}^{l}
-            \\
-            \delta
-            \tensori{u}{}_{\dCell}^{k}
-        \end{Bmatrix}
-        =
-        \begin{Bmatrix}
-            R_{\cell}^{m,n}
-        \end{Bmatrix}
-        &&
-        \text{with}
-        &&
-        \begin{Bmatrix}
-            R_{\cell}^{m,n}
-        \end{Bmatrix}
-        =
-        \begin{Bmatrix}
-            F_T^{int} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{Bmatrix}
-        -
-        \begin{Bmatrix}
-            F_T^{ext}
-        \end{Bmatrix}
-    \end{aligned}
-\end{equation}
-%
-%
-%
-such that the displacement at the next iteration is incremented by the displacement increment $(\delta \tensori{u}{}_{\cell}^{l}, \delta \tensori{u}{}_{\dCell}^{k})$
-%
-%
-%
-\begin{equation}
-    \label{eq_adding_increment}
-    \begin{Bmatrix}
-        \tensori{u}{}_{\cell}^{l,m,n+1}
-        \\
-        \tensori{u}{}_{\dCell}^{k,m,n+1}
-    \end{Bmatrix}
-    =
-    \begin{Bmatrix}
-        \tensori{u}{}_{\cell}^{l,m,n}
-        \\
-        \tensori{u}{}_{\dCell}^{k,m,n}
-    \end{Bmatrix}
-    +
-    \begin{Bmatrix}
-        \delta
-        \tensori{u}{}_{\cell}^{l}
-        \\
-        \delta
-        \tensori{u}{}_{\dCell}^{k}
-    \end{Bmatrix}
-\end{equation}
-
-\subsection{Static condensation}
-
-\paragraph{Static condensation}
-%
-%
-%
-Since both $[B_{\cell}]$ and $[Z_{\cell}]$ are expressed in terms of cell and boundary blocks, so does the tangent matrix which can be decomposed into four coupled cell-boundary blocks with the notation
-%
-%
-%
-\begin{equation}
-    \label{hho_incremenahhljdjjjkk}
-    \begin{aligned}
-        \begin{bmatrix}
-            K_{\cell}^{tan}(
-                % \delta
-                \tensori{u}{}_{\cell}^{l,m,n}
-                ,
-                % \delta
-                \tensori{u}{}_{\dCell}^{k,m,n}
-            )
-        \end{bmatrix}
-        =
-        \begin{bmatrix}
-            K_{\cell \cell} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-            &&
-            K_{\cell \dCell} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-            \\
-            K_{\dCell \cell} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-            &&
-            K_{\dCell \dCell} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{bmatrix}
-    \end{aligned}
-\end{equation}
-%
-%
-%
-Moreover, since $\tensoriv{A}{}(\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})$ is definite symmetric (and positive until an eventual loss of coercivity for \textit{e.g.} high plastic deformations), the cell block $K_{\cell \cell}
-% (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-$ is invertible and one can condensate it through a Schur complement step in order to eliminate the cell unknown, such that \eqref{eq_element_system} expresses only in terms of boundary increment unknowns
-%
-%
-%
-\begin{equation}
-    \label{hho_incremenahzhjjjklehhljdjjjkkh}
-    \begin{aligned}
-        -
-        \begin{bmatrix}
-            K_{\cell}^{tan}(
-                % \delta
-                \tensori{u}{}_{\cell}^{l,m,n}
-                ,
-                % \delta
-                \tensori{u}{}_{\dCell}^{k,m,n}
-            )
-        \end{bmatrix}_{\text{cond}}
-        \cdot
-        \begin{Bmatrix}
-            \delta
-            \tensori{u}{}_{\dCell}^{k}
-        \end{Bmatrix}
-        =
-        \begin{Bmatrix}
-            F_T^{int} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{Bmatrix}_{\text{cond}}
-        -
-        \begin{Bmatrix}
-            F_T^{ext}
-        \end{Bmatrix}_{\text{cond}}
-        =
-        \begin{Bmatrix}
-            R_{\cell}^{m,n}
-        \end{Bmatrix}_{\text{cond}}
-    \end{aligned}
-\end{equation}
-%
-%
-%
-with
-%
-%
-%
-\begin{equation}
-    \label{hho_incremenahzhjjjklehhljdjjjkk}
-    \begin{aligned}
-        \begin{bmatrix}
-            K_{\cell}^{tan}
-            % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{bmatrix}_{\text{cond}}
-        = &
-        \begin{bmatrix}
-            K_{\dCell \dCell}
-            % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{bmatrix}
-        -
-        \begin{bmatrix}
-            K_{\dCell \cell}
-            % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{bmatrix}
-        \cdot
-        \begin{bmatrix}
-            K_{\cell \cell}
-            % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{bmatrix}^{-1}
-        \cdot
-        \begin{bmatrix}
-            K_{\cell \dCell}
-            % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{bmatrix}
-        &&
-        \text{and}
-        &&
-        \begin{Bmatrix}
-            R_{\cell}
-            % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{Bmatrix}_{\text{cond}}
-        = &
-        \begin{Bmatrix}
-            R_{\dCell}
-            % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{Bmatrix}
-        -
-        \begin{bmatrix}
-            K_{\dCell \cell}
-            % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{bmatrix}
-        \cdot
-        \begin{bmatrix}
-            K_{\cell \cell}
-            % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{bmatrix}^{-1}
-        \cdot
-        \begin{Bmatrix}
-            R_{\cell}
-            % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{Bmatrix}
-    \end{aligned}
-\end{equation}
-%
-%
-%
-and the incremental cell displacement expresses linearly with the respect to the boundary one such that
-%
-%
-%
-\begin{equation}
-    \label{hho_incremenahzhjjjklehhljdjjjkkhh}
-    \begin{aligned}
-        \begin{Bmatrix}
-            \delta
-            \tensori{u}{}_{\cell}^{l}
-        \end{Bmatrix}
-        =
-        \begin{bmatrix}
-            K_{\cell \cell}
-            % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-        \end{bmatrix}^{-1}
-        (
-            -
-            \begin{Bmatrix}
-                R_{\cell}
-                % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-            \end{Bmatrix}
-            -
-            \begin{bmatrix}
-                K_{\cell \dCell}
-                % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
-            \end{bmatrix}
-            \cdot
-            \begin{Bmatrix}
-                \delta
-                \tensori{u}{}_{\dCell}^{k}
-            \end{Bmatrix}
-        )
-    \end{aligned}
-\end{equation}
+% \paragraph{Static condensation}
+% %
+% %
+% %
+% Since both $[B_{\cell}]$ and $[Z_{\cell}]$ are expressed in terms of cell and boundary blocks, so does the tangent matrix which can be decomposed into four coupled cell-boundary blocks with the notation
+% %
+% %
+% %
+% \begin{equation}
+%     \label{hho_incremenahhljdjjjkk}
+%     \begin{aligned}
+%         \begin{bmatrix}
+%             K_{\cell}^{tan}(
+%                 % \delta
+%                 \tensori{u}{}_{\cell}^{l,m,n}
+%                 ,
+%                 % \delta
+%                 \tensori{u}{}_{\dCell}^{k,m,n}
+%             )
+%         \end{bmatrix}
+%         =
+%         \begin{bmatrix}
+%             K_{\cell \cell} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%             &&
+%             K_{\cell \dCell} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%             \\
+%             K_{\dCell \cell} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%             &&
+%             K_{\dCell \dCell} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{bmatrix}
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% Moreover, since $\tensoriv{A}{}(\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})$ is definite symmetric (and positive until an eventual loss of coercivity for \textit{e.g.} high plastic deformations), the cell block $K_{\cell \cell}
+% % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+% $ is invertible and one can condensate it through a Schur complement step in order to eliminate the cell unknown, such that \eqref{eq_element_system} expresses only in terms of boundary increment unknowns
+% %
+% %
+% %
+% \begin{equation}
+%     \label{hho_incremenahzhjjjklehhljdjjjkkh}
+%     \begin{aligned}
+%         -
+%         \begin{bmatrix}
+%             K_{\cell}^{tan}(
+%                 % \delta
+%                 \tensori{u}{}_{\cell}^{l,m,n}
+%                 ,
+%                 % \delta
+%                 \tensori{u}{}_{\dCell}^{k,m,n}
+%             )
+%         \end{bmatrix}_{\text{cond}}
+%         \cdot
+%         \begin{Bmatrix}
+%             \delta
+%             \tensori{u}{}_{\dCell}^{k}
+%         \end{Bmatrix}
+%         =
+%         \begin{Bmatrix}
+%             F_T^{int} (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{Bmatrix}_{\text{cond}}
+%         -
+%         \begin{Bmatrix}
+%             F_T^{ext}
+%         \end{Bmatrix}_{\text{cond}}
+%         =
+%         \begin{Bmatrix}
+%             R_{\cell}^{m,n}
+%         \end{Bmatrix}_{\text{cond}}
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% with
+% %
+% %
+% %
+% \begin{equation}
+%     \label{hho_incremenahzhjjjklehhljdjjjkk}
+%     \begin{aligned}
+%         \begin{bmatrix}
+%             K_{\cell}^{tan}
+%             % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{bmatrix}_{\text{cond}}
+%         = &
+%         \begin{bmatrix}
+%             K_{\dCell \dCell}
+%             % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{bmatrix}
+%         -
+%         \begin{bmatrix}
+%             K_{\dCell \cell}
+%             % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{bmatrix}
+%         \cdot
+%         \begin{bmatrix}
+%             K_{\cell \cell}
+%             % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{bmatrix}^{-1}
+%         \cdot
+%         \begin{bmatrix}
+%             K_{\cell \dCell}
+%             % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{bmatrix}
+%         &&
+%         \text{and}
+%         &&
+%         \begin{Bmatrix}
+%             R_{\cell}
+%             % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{Bmatrix}_{\text{cond}}
+%         = &
+%         \begin{Bmatrix}
+%             R_{\dCell}
+%             % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{Bmatrix}
+%         -
+%         \begin{bmatrix}
+%             K_{\dCell \cell}
+%             % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{bmatrix}
+%         \cdot
+%         \begin{bmatrix}
+%             K_{\cell \cell}
+%             % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{bmatrix}^{-1}
+%         \cdot
+%         \begin{Bmatrix}
+%             R_{\cell}
+%             % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{Bmatrix}
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% and the incremental cell displacement expresses linearly with the respect to the boundary one such that
+% %
+% %
+% %
+% \begin{equation}
+%     \label{hho_incremenahzhjjjklehhljdjjjkkhh}
+%     \begin{aligned}
+%         \begin{Bmatrix}
+%             \delta
+%             \tensori{u}{}_{\cell}^{l}
+%         \end{Bmatrix}
+%         =
+%         \begin{bmatrix}
+%             K_{\cell \cell}
+%             % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%         \end{bmatrix}^{-1}
+%         (
+%             -
+%             \begin{Bmatrix}
+%                 R_{\cell}
+%                 % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%             \end{Bmatrix}
+%             -
+%             \begin{bmatrix}
+%                 K_{\cell \dCell}
+%                 % (\tensori{u}{}_{\cell}^{l,m,n}, \tensori{u}{}_{\dCell}^{k,m,n})
+%             \end{bmatrix}
+%             \cdot
+%             \begin{Bmatrix}
+%                 \delta
+%                 \tensori{u}{}_{\dCell}^{k}
+%             \end{Bmatrix}
+%         )
+%     \end{aligned}
+% \end{equation}
 %
 %
 %
 
-\subsection{Algorithmic aspects}
+% \subsection{Algorithmic aspects}
 
-\paragraph{Linear static condensation algorithm}
-\label{par_static_cond}
+% \paragraph{Linear static condensation algorithm}
+% \label{par_static_cond}
 
-At a given pseudo-time step $m$ and iteration $n$, the element displacement unknown is incremented by the element displacement increment.
-The reconstructed gradient field is then computed, and is used to integrate the behaviour law, which provides the stress and tangent operator values at quadrature points.
-The internal forces, external forces and tangent matrix are then computed, and condensated on the element faces. The resulting system is assembled on the global system matrix, and a new value of the increment is computed by inverting the global matrix.
-A schematic representation this procedure is given in Figure \ref{res_cond0}
-% Le problème global incrémental (\ref{eq_hho2}) est alors l'assemblage des systèmes élémentaires condensés (\ref{hho_incremental_cond}), dont la résolution consiste en un algorithme de Newton sur l'incrément des inconnues de faces uniquement. Ce schéma de résolution par condensation statique dont on donne le principe Figure \ref{res_cond0} exploite la relation linéaire entre l'incrément des inconnues de cellules et celui des faces.
+% At a given pseudo-time step $m$ and iteration $n$, the element displacement unknown is incremented by the element displacement increment.
+% The reconstructed gradient field is then computed, and is used to integrate the behaviour law, which provides the stress and tangent operator values at quadrature points.
+% The internal forces, external forces and tangent matrix are then computed, and condensated on the element faces. The resulting system is assembled on the global system matrix, and a new value of the increment is computed by inverting the global matrix.
+% A schematic representation this procedure is given in Figure \ref{res_cond0}
+% % Le problème global incrémental (\ref{eq_hho2}) est alors l'assemblage des systèmes élémentaires condensés (\ref{hho_incremental_cond}), dont la résolution consiste en un algorithme de Newton sur l'incrément des inconnues de faces uniquement. Ce schéma de résolution par condensation statique dont on donne le principe Figure \ref{res_cond0} exploite la relation linéaire entre l'incrément des inconnues de cellules et celui des faces.
     
-\begin{figure}[H]
-\centering
-\includegraphics[width=14.cm]{img/reso1.png}
-\caption{
-    schematic description of the Linear static condensation algorithm
-}
-\label{res_cond0}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=14.cm]{img/reso1.png}
+% \caption{
+%     schematic description of the Linear static condensation algorithm
+% }
+% \label{res_cond0}
+% \end{figure}
 
-\paragraph{Cell equlibrium algorithm}
-\label{par_cell_eq}
+% \paragraph{Cell equlibrium algorithm}
+% \label{par_cell_eq}
 
-We propose an alternative to the static condensation solving algorithm, postulating an implicit relation between the increment of the cell unknowns and the increment of the faces, that consists in solving locally a nonlinear system on the cell increment at a fixed face increment. This non-linear local procedure adds up to the algorithm described above, to ensure the equilibrium of the cell with its faces at each iteration of the global problem. This new solution scheme is described in Figure \ref{res_cond}, where we note $i$ a Newton iteration for solving the global problem on the set of face unknowns, and $j$ a Newton iteration for solving the local problem on the cell unknowns in an element.
+% We propose an alternative to the static condensation solving algorithm, postulating an implicit relation between the increment of the cell unknowns and the increment of the faces, that consists in solving locally a nonlinear system on the cell increment at a fixed face increment. This non-linear local procedure adds up to the algorithm described above, to ensure the equilibrium of the cell with its faces at each iteration of the global problem. This new solution scheme is described in Figure \ref{res_cond}, where we note $i$ a Newton iteration for solving the global problem on the set of face unknowns, and $j$ a Newton iteration for solving the local problem on the cell unknowns in an element.
 
-% Nous proposons une alternative à l'algorithme de résolution par condensation statique, postulant une relation implicite entre l'incrément des inconnues de cellule est celui des faces et consistant à résoudre localement un système non-linéaire sur l'incrément de cellule à incrément de faces fixé, afin de vérifier l'équilibre de la cellule avec ses faces à chaque itération du problème global. Ce nouveau schéma de résolution est décrit Figure \ref{res_cond}, où on note $i$ une itération de Newton pour la résolution du problème global sur l'ensemble des inconnues de faces, et $j$ une itération de Newton pour la résolution du problème local sur les inconnues de cellule dans un élément $T$:
+% % Nous proposons une alternative à l'algorithme de résolution par condensation statique, postulant une relation implicite entre l'incrément des inconnues de cellule est celui des faces et consistant à résoudre localement un système non-linéaire sur l'incrément de cellule à incrément de faces fixé, afin de vérifier l'équilibre de la cellule avec ses faces à chaque itération du problème global. Ce nouveau schéma de résolution est décrit Figure \ref{res_cond}, où on note $i$ une itération de Newton pour la résolution du problème global sur l'ensemble des inconnues de faces, et $j$ une itération de Newton pour la résolution du problème local sur les inconnues de cellule dans un élément $T$:
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=14.cm]{img/reso0.png}
-\caption{
-    schematic description of the Linear Cell equlibrium algorithm
-}
-\label{res_cond}
-\end{figure}
+% \begin{figure}[H]
+% \centering
+% \includegraphics[width=14.cm]{img/reso0.png}
+% \caption{
+%     schematic description of the Linear Cell equlibrium algorithm
+% }
+% \label{res_cond}
+% \end{figure}
 
-\paragraph{Comparison of both algorithms}
+% \paragraph{Comparison of both algorithms}
 
-The Linear static condensation algorithm is the one described in the literature \cite{di_pietro_discontinuous-skeletal_2015,cockburn_algorithm_2019,abbas_hybrid_2019-1,abbas_hybrid_2018} to condensate cell unknowns on faces. This procedure needs not iterate at the cell level to acomodate the cell increment, and is hence, faster. However, one needs to store matrices used during the condensation step from one iteration to another in order do decondensate the cell increment.
+% The Linear static condensation algorithm is the one described in the literature \cite{di_pietro_discontinuous-skeletal_2015,cockburn_algorithm_2019,abbas_hybrid_2019-1,abbas_hybrid_2018} to condensate cell unknowns on faces. This procedure needs not iterate at the cell level to acomodate the cell increment, and is hence, faster. However, one needs to store matrices used during the condensation step from one iteration to another in order do decondensate the cell increment.
 
-The Cell equlibrium algorithm, needs iterate at the cell level. It is hence is more costly, and requires to integrate the behaviour law more times that does the Linear static condensation algorithm.
-However, it allows to consider extending the present non-linear algorithm to \textit{e.g.} constrained resolution algorithm, to solve inequality constrained problems, as encountered in multi-field plasticity \cite{schroder_small_2015} for instance.
+% The Cell equlibrium algorithm, needs iterate at the cell level. It is hence is more costly, and requires to integrate the behaviour law more times that does the Linear static condensation algorithm.
+% However, it allows to consider extending the present non-linear algorithm to \textit{e.g.} constrained resolution algorithm, to solve inequality constrained problems, as encountered in multi-field plasticity \cite{schroder_small_2015} for instance.
 
 
 % We show in Section \ref{sec_numerical_examples} that this algorithm gives identical results to those obtains with the Linear static condensation algorithm.

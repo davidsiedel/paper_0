@@ -1,138 +1,19 @@
 \section{Discretization}
 
 % Since the displacement unknown is hybrid, we introduce the \textit{skeleton} of the mesh, that bears boundary unknowns. We then specify the problem to solve at 
-In this section, we specify the nature of the mesh, and introduce the so-called \textit{skeleton} of the mesh, that bears boundary displacement unknowns.
-We then devise the problem to solve at the structural level, from the equilibrium of an element as described in Section \ref{sec_hdg_element_equilibrium}.
-Approximation spaces for unknowns of the global problem are then described, which leads to several choices in terms of definition of the stabilization. Depending on such a choice, one recovers either the HDG method, or the HHO one. Finally, we give the expression of the global problem in discrete form.
+% In this section, we specify the nature of the mesh, and introduce the so-called \textit{skeleton} of the mesh, that bears boundary displacement unknowns.
+% We then devise the problem to solve at the structural level, from the equilibrium of an element as described in Section \ref{sec_hdg_element_equilibrium}.
+In this section, approximation spaces for unknowns of the global problem are described, which leads to several choices in terms of definition of the stabilization. Depending on such a choice, one recovers either the HDG method, or the HHO one.
+In a second part, linearization strategies for non-linear problems are discussed, and a new resolution scheme based on the equilibrium of a cell with its boundary is introduced.
+Finally, the problem to solve at the structural level is presented through the introduction of the so called \textit{skeleton} of the mesh, that bears boundary unknowns.
 
-\subsection{Spatial discretization}
-
-\paragraph{Faces and skeleton of the mesh}
-
-The boundary $\dCell{}$ of each element is decomposed in faces, such that a face $F$ is a subset of $\bodyLag$, and either there are two cells $\cell$ and $\cell'$ such that $F = \dCell \cap \dCell'$ ($F$ is then an interior face), or there is a single cell $\cell$ such that $F = \dCell \cap \partial \Omega$ ($F$ is then an exterior face).
-For any cell $\cell$, let $\mathcal{F}(\cell) = \{ F \in \dHybridMesh \ \vert \ F \subset \dCell \}$ the set of faces composing the boundary of $\cell$.
-Let finally $\dHybridMesh(\bodyLag) = \{ F_i \subset \bodyLag \ \vert \ 1 \leq i \leq N_{F} \}$ the skeleton of the mesh, collecting all element faces $F_i$ in the mesh, where $N_{F}$ denotes the number of faces. The set of faces subjected to Neumann boundary conditions is denoted $\dHybridMesh{}_{N}^e(\bodyLag)$, and $\dHybridMesh{}_{D}^e(\bodyLag)$ denotes that subjected to Dirichlet boundary conditions.
-
-\paragraph{Mesh description}
-
-Likewise, one defines the collection of all cells in the mesh as
-$\HybridMesh(\bodyLag) = \{ \matI \subset \bodyLag \ \vert \ 1 \leq i \leq N_{\cell} \}$, where $N_T$ denotes the total number of cells.
-The composition of both $\mathcal{T}(\bodyLag)$ and $\dHybridMesh{}(\bodyLag)$ forms the hybrid mesh
-% $\overline{\mathcal{T}}({\bodyLag}) = \{T \subset \bodyLag, F \subset \bodyLag \ \vert \ T \in \mathcal{T}(\bodyLag) \ \vert \ F \in \mathcal{F}(\bodyLag) \}$.
-$\HybridMeshWhole({\bodyLag}) = \{ \mathcal{T}(\bodyLag), \mathcal{F}(\bodyLag) \}$.
-
-\subsection{Global continuous problem}
-
-\paragraph{Global unknown}
-
-% Contrary to the standard finite element method that consists in seeking a global solution in a regular enough space over the whole mesh, we consider here a much broader space that consists in $\displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell$ the collection of all regular enough displacements element-wise.
-% Similarly, we consider $\displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)$ the space of all regular enough displacements face-wise for the skeleton unknown, such that the global solution space $\hybridDisplacementSpaceHybridMesh = \displacementSpaceHybridMesh \times \displacementSpaceDHybridMesh$ for the whole problem is simply the assembly of all element and face spaces in the mesh.
-
-Let the global unknown $(\tensori{v}{}_{\HybridMesh}, \tensori{v}{}_{\dHybridMesh})$ a displacement pair such that for each $\cell \in \HybridMesh(\bodyLag), \tensori{v}{}_{\HybridMesh} = \tensori{v}{}_{\cell}$ in $\cell$ and for each $F \in \dHybridMesh(\bodyLag), \tensori{v}{}_{\dHybridMesh} = \tensori{v}{}_{F}$ on $F$, where $\tensori{v}{}_{\cell}$ and $\tensori{v}{}_{F}$ denote a cell and a face displacement field respectively.
-
-% \newcommand\virtualDisplacementSpaceHybridMesh{U_0(\mathcal{T})}
-% \newcommand\virtualDisplacementSpaceDHybridMesh{V_0(\mathcal{F})}
-% \newcommand\virtualHybridDisplacementSpaceHybridMesh{U_0(\bar{\mathcal{T}})}
-% The global unknown is then sought in the space $\displacementSpaceHybridMesh \times \displacementSpaceDHybridMesh$
-% %
-% %
-% %
-% \begin{equation}
-%     \label{eq_space_def}
-%     \begin{aligned}
-%         \displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell
-%         &&
-%         \text{and}
-%         &&
-%         \displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)
-%     \end{aligned}
-% \end{equation}
-
-
-\paragraph{Global weak form}
-
-
-% , where both cells and faces are considered as part of the support for defining
-The weak form of the global mechanical problem in $\bodyLag$ reads : find the global displacement unknown pair $(\tensori{u}{}_{\HybridMesh}, \tensori{u}{}_{\dHybridMesh})$ verifying $\tensori{u}{}_{\dHybridMesh} \vert_{\dirichletBoundaryLag} = \dirichletLag$ on $\dirichletBoundaryLag$ such that
-$\forall (\delta \tensori{u}{}_{\HybridMesh}, \delta \tensori{u}{}_{\dHybridMesh})$
-%
-%
-%
-\begin{equation}
-    \label{eq_0018kdk}
-    \begin{aligned}
-        \delta L_{\HybridMesh, \text{int}}^{VW} - \delta L_{\HybridMesh, \text{ext}}^{HW}
-        =
-        0
-    \end{aligned}
-\end{equation}
-%
-%
-%
-with
-%
-%
-%
-\begin{subequations}
-    \label{eq_0nonamemeerg}
-        \begin{alignat}{3}
-            \delta L_{\HybridMesh, \text{int}}^{VW} & = 
-            \sum_{\cell \in \HybridMesh(\bodyLag)}
-            \int_{\cell}
-            \tensorii{P}{}_{\cell}(\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}))
-            :
-            \tensorii{G}{}_{\cell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
-            % \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_\cell} : \delta \tensorii{G}{}_{\cell}
-            +
-            \int_{\dCell} (\beta / h_{\cell})
-            % (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell})
-            % \tensori{Z}{}_{\dCell{}}
-            \tensori{Z}{}_{\dCell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})
-            \cdot
-            % (\delta \tensori{u}{}_{\dCell} - \delta \tensori{u}{}_{\cell} \vert_{\dCell{}})
-            % \delta \tensori{Z}{}_{\dCell{}}
-            \tensori{Z}{}_{\dCell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
-            \\
-            \delta L_{\HybridMesh, \text{ext}}^{HW} & = 
-            \sum_{F \in \dHybridMesh{}_{N}^e(\bodyLag)}
-            \int_{F} \neumannLag \cdot \delta \tensori{u}{}_{F}
-            +
-            \sum_{\cell \in \HybridMesh(\bodyLag)}
-            \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
-    \end{alignat}
-\end{subequations}
-%
-%
-%
-% where $\displacementSpaceHybridMesh$ (respectively $\displacementSpaceDHybridMesh$) denotes the space of all globally kinematically admissible cell (respectively face) displacement fields,
-% and
-where for each element $\cell \in \HybridMesh(\bodyLag)$, the boundary displacement field $\tensori{v}{}_{\dCell}$ is such that $\tensori{v}{}_{\dCell} = \tensori{v}{}_{F}$ on $F$ for every $F \in \mathcal{F}(\cell)$
-
-% Contrary to the standard finite element method that consists in seeking a global solution in a regular enough space over the whole mesh, we consider here a much broader space that consists in the collection of all regular enough displacements element-wise, such that displacement jumps are actually possible across elements.
-% Similarily, we consider the space of all regular enough displacements face-wise for the skeleton unknown, such that the global unknown space for the whole problem is simply the assembly of all element and face spaces in the mesh :
-% %
-% %
-% %
-% \begin{equation}
-%     \label{eq_space_def}
-%     \begin{aligned}
-%         \displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell
-%         &&
-%         \text{and}
-%         &&
-%         \displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)
-%     \end{aligned}
-% \end{equation}
-% %
-% %
-% %
-% Similarily, for each element $\cell \in \mathcal{T}$, the displacement space of its boundary $\displacementSpaceDCell$ is the collection of the face displacement spaces to which it is connected such that $\displacementSpaceDCell = \prod_{F \in \mathcal{F}(\cell)} V(F)$.
+% Finally, we give the expression of the global problem in discrete form.
 
 \subsection{Functional discretization and stabilization}
 
 \paragraph{Discrete functional space}
 
-For each element $\cell \in \HybridMesh(\bodyLag)$, we denote $\discreteDisplacementSpaceCell$ the approximation displacement space in the cell, and $\discreteDisplacementSpaceDCell$ that on the boundary. Similarly, let $\discreteGradSpaceCell$ the space used to build the discrete reconstructed gradient and $\discreteStressSpaceCell$ that chosen for the discrete stress such that
+For a cell $\cell$, we denote $\discreteDisplacementSpaceCell$ the approximation displacement space in the cell, and $\discreteDisplacementSpaceDCell$ that on the boundary. Similarly, let $\discreteGradSpaceCell$ the space used to build the discrete reconstructed gradient and $\discreteStressSpaceCell$ that chosen for the discrete stress such that
 %
 %
 %
@@ -229,6 +110,545 @@ denotes a higher order discrete displacement in $\discretePotentialSpaceCell$ th
 %
 %
 
+\paragraph{Local discrete problem}
+
+Following discretization of cell and faces unknowns, the local discrete problem to solve reads : find $(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\dCell}^k)$, such that $\forall (\delta \tensori{u}{}_{\cell}^l, \delta \tensori{u}{}_{\dCell}^k)$
+
+\begin{equation}
+    \label{eq_local_hho_1}
+    \begin{aligned}
+        \delta L_{\cell, \text{int}}^{HHO} - \delta L_{\cell, \text{ext}}^{HHO}
+        =
+        0
+    \end{aligned}
+\end{equation}
+%
+%
+%
+with the respective Lagrangian variations
+%
+%
+%
+\begin{equation}
+    \label{eq_local_hho_2}
+    \begin{aligned}
+        \delta L_{\cell, \text{int}}^{HHO} & = 
+        \int_{\cell}
+            \tensorii{P}{}_{\cell}^k(\tensorii{G}{}_{\cell}^k(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\dCell}^k))
+            :
+            \tensorii{G}{}_{\cell}^k(\delta \tensori{u}{}_{\cell}^l, \delta \tensori{u}{}_{\dCell}^k)
+            % \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_\cell} : \delta \tensorii{G}{}_{\cell}
+            +
+            \int_{\dCell} (\beta / h_{\cell})
+            \tensori{Z}{}_{\dCell}^{HHO}(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\dCell}^k)
+            % \tensori{Z}{}_{\dCell{}}
+            \cdot
+            \tensori{Z}{}_{\dCell}^{HHO}(\delta \tensori{u}{}_{\cell}^l, \delta \tensori{u}{}_{\dCell}^k)
+            \\
+            \delta L_{\cell, \text{ext}}^{HHO} & = 
+            \int_{\dCell} \neumannCellLoad \cdot \delta \tensori{u}{}_{F}^k
+            +
+            \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}^l
+    \end{aligned}
+\end{equation}
+%
+%
+%
+and where the discrete reconstructed gradient $\tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteGradSpaceCell$ solves $\forall (\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteHybridDisplacementSpaceCell$
+%
+%
+%
+\begin{equation}
+    \label{eq_discrete_grad}
+    \begin{aligned}
+        \int_{\cell} \tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) : \tensorii{\tau}{}_{\cell}^k
+        =
+        \int_{\cell}  \nabla \tensori{v}{}_{\cell}^l : \tensorii{\tau}{}_{\cell}^k
+        +
+        \int_{\dCell} (\tensori{v}{}_{\dCell}^k - \tensori{v}{}_{\cell}^l \vert_{\dCell}) \cdot \tensorii{\tau}{}_{\cell}^k \vert_{\dCell} \cdot \tensori{n}{}
+        &&
+        \forall \tensorii{\tau}{}_{\cell}^k \in \discreteStressSpaceCell
+    \end{aligned}
+\end{equation}
+
+% \subsubsection{Shape functions}
+
+\paragraph{Shape functions}
+
+Since the displacement is discontinuous, the usual Lagrange basis functions are not necessarily needed for the description of the discrete displacement, gradient ans stress fields. A natural choice amounts to choose monomial basis functions, in the form
+%
+%
+%
+\begin{equation}
+    \label{eq_basis_fun}
+    \begin{aligned}
+        a(\tensori{x}) = \sum_{j} a_j \prod_{1 \leq j \leq d} \frac{(x_i - x_{Ti})^{\alpha^j_i}}{h_T}
+        &&
+        \text{with}
+        &&
+        \alpha^j = \bigg\{ (m_l)_{1 \leq l \leq d},  \sum_{1 \leq l \leq d} m_l = j \bigg\}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+where $a(\tensori{x})$ denotes a polynomial scalar field of order $k$ with coefficients $a_{1 \leq j \leq k}$. Using monomial basis functions, the coefficients $a_{1 \leq j \leq k}$ do not necessarily represent nodal displacements as is the case with Lagrange shape functions, and are just scalar coordinates in polynomial basis. Moreover, the notion of reference element is not used in such a context, since monomial basis functions are directly expressed in the deformed element configuration, by scaling field values by the element diameter $h_T$ and centroid $\tensori{x}{}_T$.
+
+\subsection{Linearization}
+\label{sec_cell_u_elmini}
+
+In the following section, we express the non-linear problem arising from \eqref{eq_local_hho_1} to solve in incremental form, and devise an iterative cell resolution algorithm to express the equilibrium of the cell with its boundary.
+In the latter, cell unknowns are locally eliminated, and expressed in terms of boundary displacements solely. The cell displacement then solves a non-linear system at a fixed boundary displacement, in order to verify the equilibrium of the cell with the boundary.
+The usual static condensation procedure that is used in the literature \cite{abbas_hybrid_2018,pignet_hybrid_2019} to eliminate cell unknowns is then retrieved by considering that cell unknowns evolve independenlty from boundary ones.
+
+% devise a method to express the local problem \eqref{eq_local_hho_1} in terms of boundary displacement only.
+
+\paragraph{Residual} For non-linear behaviors and large deformations, problem \eqref{eq_local_hho_1} does not depend linearly on the displacement pair $(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\dCell}^k)$, since the stress $\tensorii{P}{}_{\cell}^k$ is not linear with respect to $\tensorii{G}{}_{\cell}^k$.
+Hence, one defines the residual quantity $R_{\cell}$ such that
+%
+%
+%
+\begin{equation}
+    \label{eq_residual_def}
+    \begin{aligned}
+        R_{\cell} = \delta L_{\cell, \text{int}}^{HHO} - \delta L_{\cell, \text{ext}}^{HHO}
+    \end{aligned}
+\end{equation}
+
+\paragraph{Linearization}
+%
+%
+%
+From a numerical standpoint, problem \eqref{eq_local_hho_1} is solved iteratively by seeking a displacement correction pair $(\alpha \tensori{u}{}_{\cell}^l, \alpha \tensori{u}{}_{\dCell}^k)$ such that
+%
+%
+%
+\begin{equation}
+    \label{eq_residual_def_2}
+    \begin{aligned}
+        \frac{\partial R_{\cell}}{\partial \tensori{u}{}_{\cell}^l} \alpha \tensori{u}{}_{\cell}^l
+        +
+        \frac{\partial R_{\cell}}{\partial \tensori{u}{}_{\dCell}^k} \alpha \tensori{u}{}_{\dCell}^k
+        =
+        - R_{\cell}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+for a given displacement pair $(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\dCell}^k)$ at some iteration $n$.
+At iteration $n+1$, the displacement $(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\dCell}^k)$ is updated by the correction $(\alpha \tensori{u}{}_{\cell}^l, \alpha \tensori{u}{}_{\dCell}^k)$, and a new value of the residual is computed. The correction at iteration $n+1$ is sought by solving \eqref{eq_residual_def_2} for the updated residual, and the procedure is repeated until $R_{\cell} < \epsilon$ for some tolerance $\epsilon$.
+% The updated estimation of the displacement is then $(\tensori{u}{}_{\cell}^l + \alpha \tensori{u}{}_{\cell}^l, \tensori{u}{}_{\dCell}^k + \alpha \tensori{u}{}_{\dCell}^k)$
+
+\paragraph{Cell and boundary residual}
+%
+%
+%
+$R_{\cell}$ can be decomposed into a cell contribution $R_{\cell}^{\cell}$ and a boundary contribution $R_{\cell}^{\dCell}$, where $R_{\cell} = R_{\cell}^{\cell} + R_{\cell}^{\dCell}$. The problem amounts to seeking the displacement correction $(\alpha \tensori{u}{}_{\cell}^l, \alpha \tensori{u}{}_{\dCell}^k)$ such that
+%
+%
+%
+\begin{equation}
+    \label{eq_residual_lin}
+    \begin{aligned}
+        % \frac{d R_{\cell}}{d \tensori{u}{}_{\cell}^l} \alpha \tensori{u}{}_{\cell}^l + \frac{d R_{\cell}}{d \tensori{u}{}_{\dCell}^k} \alpha \tensori{u}{}_{\cell}^l = - R_{\cell}
+        % &&
+        % \text{or}
+        % &&
+        \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\cell}^l} \alpha \tensori{u}{}_{\cell}^l
+        +
+        \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\dCell}^k} \alpha \tensori{u}{}_{\dCell}^k
+        =
+        - R_{\cell}^{\cell}
+        &&
+        \text{and}
+        &&
+        \frac{\partial R_{\cell}^{\dCell}}{\partial \tensori{u}{}_{\cell}^l} \alpha \tensori{u}{}_{\cell}^l
+        +
+        \frac{\partial R_{\cell}^{\dCell}}{\partial \tensori{u}{}_{\dCell}^k} \alpha \tensori{u}{}_{\dCell}^k
+        =
+        % - R_{\cell}^{\cell}
+        - R_{\cell}^{\dCell}
+    \end{aligned}
+\end{equation}
+
+\subsubsection{Cell equilibrium scheme}
+
+% In the following section, we eliminate cell unknowns by expressing them in terms of boundary unknowns solely.
+
+\paragraph{Implicit cell displacement}
+
+% Since problem \eqref{eq_local_hho_1} depends on both cell and faces displacement unknowns, one needs define a coupling between $\tensori{u}{}_{\cell}^l$ and $\tensori{u}{}_{\dCell}^k$.
+Since the boundary $\dCell$ is linked to the cell $\cell$ through the interface (or equivalently, the stabilization term), a variation of boundary displacement yields a variation of cell displacement for the cell to be in equilibrium with its boundary.
+% at a given boundary displacement $\tensori{u}{}_{\dCell}^k$, the cell needs be in equilibrium with its boundary.
+Hence, the cell displacement can be expressed implicitly as a function of the boundary displacement such that
+% From a mechanical standpoint, the cell needs be in equilibrium with its boundary
+%
+%
+%
+\begin{equation}
+    \begin{aligned}
+        \tensori{u}{}_{\cell}^l = \tensori{u}{}_{\cell}^l(\tensori{u}{}_{\dCell}^k)
+    \end{aligned}
+\end{equation}
+%
+%
+%
+
+\paragraph{Cell equilibrium}
+
+Assuming that the boundary is fixed, the cell displacement correction that expresses the equilibrium of the cell with the boundary solves
+%
+%
+%
+\begin{equation}
+    \begin{aligned}
+        \frac{d R_{\cell}^{\cell}}{d \tensori{u}{}_{\cell}^l} \alpha \tensori{u}{}_{\cell}^l = - R_{\cell}^{\cell}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+and the equilibrium is reached for $R_{\cell}^{\cell}$ close to $0$
+
+\paragraph{Element equilibrium}
+
+Assuming now that the cell is in equilibrium with the boundary, the variation of cell residual with respect to the boundary displacement yields
+%
+%
+%
+% \begin{equation}
+%     \begin{aligned}
+%         R_{\cell}^{\cell}(\tensori{u}{}_{\cell}^l)
+%         =
+%         - \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\dCell}^k}
+%         \frac{\partial \tensori{u}{}_{\dCell}^k}{\partial \tensori{u}{}_{\cell}^l}
+%         \cdot \delta \tensori{u}{}_{\cell}^l
+%         % +
+%         % R_T(\tensori{u}{}_{\cell}^l)
+%         +
+%         o( \lVert \delta \tensori{u}{}_{\cell}^l \rVert)
+%     \end{aligned}
+% \end{equation}
+%
+%
+%
+% \begin{equation}
+%     \begin{aligned}
+%         % R_{\cell}^{\cell}(\tensori{u}{}_{\cell}^l)
+%         R_{\cell}^{\cell}(\tensori{u}{}_{\cell}^l(\tensori{u}{}_{\dCell}^k + d \tensori{u}{}_{\dCell}^k), \tensori{u}{}_{\dCell}^k + d \tensori{u}{}_{\dCell}^k)
+%         =
+%         R_{\cell}^{\cell}(\tensori{u}{}_{\cell}^l(\tensori{u}{}_{\dCell}^k), \tensori{u}{}_{\dCell}^k)
+%         +
+%         \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\cell}^l}
+%         \frac{\partial \tensori{u}{}_{\cell}^l}{\partial \tensori{u}{}_{\dCell}^k}
+%         d \tensori{u}{}_{\dCell}^k
+%         +
+%         \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\dCell}^k}
+%         d \tensori{u}{}_{\dCell}^k
+%     \end{aligned}
+% \end{equation}
+%
+%
+%
+\begin{equation}
+    \begin{aligned}
+        % R_{\cell}^{\cell}(\tensori{u}{}_{\cell}^l)
+        \frac{dR_{\cell}^{\cell}}{d\tensori{u}{}_{\dCell}^k}
+        =
+        \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\cell}^l}
+        \frac{\partial \tensori{u}{}_{\cell}^l}{\partial \tensori{u}{}_{\dCell}^k}
+        +
+        \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\dCell}^k}
+        =
+        0
+        &&
+        \text{and thus}
+        &&
+        \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\cell}^l}
+        \frac{\partial \tensori{u}{}_{\cell}^l}{\partial \tensori{u}{}_{\dCell}^k}
+        =
+        -
+        \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\dCell}^k}
+    \end{aligned}
+\end{equation}
+%
+% \paragraph{Element equilibrium}
+%
+%
+%
+%
+% Assuming that the cell is in equilibrium with its boundary,
+Hence, the variation of boundary residual with respect to a boundary displacement variation writes
+%
+%
+%
+\begin{equation}
+    \begin{aligned}
+        % R_{\cell}^{\cell}(\tensori{u}{}_{\cell}^l)
+        \frac{dR_{\cell}^{\dCell}}{d\tensori{u}{}_{\dCell}^k}
+        =
+        \frac{\partial R_{\cell}^{\dCell}}{\partial \tensori{u}{}_{\cell}^l}
+        \frac{\partial \tensori{u}{}_{\cell}^l}{\partial \tensori{u}{}_{\dCell}^k}
+        +
+        \frac{\partial R_{\cell}^{\dCell}}{\partial \tensori{u}{}_{\dCell}^k}
+        =
+        \frac{\partial R_{\cell}^{\dCell}}{\partial \tensori{u}{}_{\dCell}^k}
+        -
+        \frac{\partial R_{\cell}^{\dCell}}{\partial \tensori{u}{}_{\cell}^l}
+        \frac{\partial \tensori{u}{}_{\cell}^l}{\partial R_{\cell}^{\cell}}
+        \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\dCell}^k}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+and the boundary displacement correction solves
+%
+%
+%
+\begin{equation}
+    \begin{aligned}
+        % R_{\cell}^{\cell}(\tensori{u}{}_{\cell}^l)
+        \frac{dR_{\cell}^{\dCell}}{d\tensori{u}{}_{\dCell}^k}
+        \alpha \tensori{u}{}_{\dCell}^k
+        =
+        -
+        R_{\cell}^{\dCell}
+    \end{aligned}
+\end{equation}
+
+
+% and seeking the boundary displacement correction to solve the equilibrium of the element amounts to solve 
+% %
+% %
+% %
+% \begin{equation}
+%     \begin{aligned}
+%         % R_{\cell}^{\cell}(\tensori{u}{}_{\cell}^l)
+%         \frac{dR_{\cell}^{\dCell}}{d\tensori{u}{}_{\dCell}^k}
+%         \cdot \alpha \tensori{u}{}_{\dCell}^k
+%         =
+%         -R_{\cell}^{\dCell}
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% \begin{equation}
+%     \begin{aligned}
+%         % R_{\cell}^{\cell}(\tensori{u}{}_{\cell}^l)
+%         \frac{dR_{\cell}^{\cell}}{d\tensori{u}{}_{\cell}^l}
+%         \cdot \alpha \tensori{u}{}_{\dCell}^l
+%         =
+%         -R_{\cell}^{\cell}
+%     \end{aligned}
+% \end{equation}
+
+\subsubsection{Static condensation scheme}
+
+\paragraph{Cell displacement correction}
+
+Assuming that the cell and boundary displacements are independent from one another, one can express the displacement correction as a term depending on the cell residual and the boundary displacement correction using \eqref{eq_residual_lin}
+%
+%
+%
+\begin{equation}
+    \label{eq_condensation_0}
+    \begin{aligned}
+        % \frac{d R_{\cell}^{\cell}}{d \tensori{u}{}_{\cell}^l}
+        \alpha \tensori{u}{}_{\cell}^l
+        =
+        -
+        \frac{\partial \tensori{u}{}_{\cell}^l}{\partial R_{\cell}^{\cell}}
+        \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\dCell}^k}
+        \alpha \tensori{u}{}_{\dCell}^k
+        -
+        \frac{\partial \tensori{u}{}_{\cell}^l}{\partial R_{\cell}^{\cell}}
+        R_{\cell}^{\cell}
+    \end{aligned}
+\end{equation}
+
+\paragraph{Condensation of cell unknowns}
+
+Using \eqref{eq_condensation_0}, cell unknowns can be eliminated from the problem such that it writes in terms of boundary displacement correction only
+%
+%
+%
+\begin{equation}
+    \label{eq_condensation_1}
+    \begin{aligned}
+        % % \frac{d R_{\cell}^{\cell}}{d \tensori{u}{}_{\cell}^l}
+        % \alpha \tensori{u}{}_{\cell}^l
+        % =
+        % \frac{\partial \tensori{u}{}_{\cell}^l}{\partial R_{\cell}^{\cell}}
+        % \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\dCell}^k}
+        % \alpha \tensori{u}{}_{\dCell}^k
+        % -
+        % \frac{\partial \tensori{u}{}_{\cell}^l}{\partial R_{\cell}^{\cell}}
+        % R_{\cell}^{\cell}
+        % \\
+        (\frac{\partial R_{\cell}^{\dCell}}{\partial \tensori{u}{}_{\dCell}^k}
+        -
+        \frac{\partial R_{\cell}^{\dCell}}{\partial \tensori{u}{}_{\cell}^l}
+        % \alpha \tensori{u}{}_{\cell}^l
+        \frac{\partial \tensori{u}{}_{\cell}^l}{\partial R_{\cell}^{\cell}}
+        \frac{\partial R_{\cell}^{\cell}}{\partial \tensori{u}{}_{\dCell}^k}
+        )
+        \alpha \tensori{u}{}_{\dCell}^k
+        =
+        - R_{\cell}^{\dCell}
+        +
+        \frac{\partial R_{\cell}^{\dCell}}{\partial \tensori{u}{}_{\cell}^l}
+        \frac{\partial \tensori{u}{}_{\cell}^l}{\partial R_{\cell}^{\cell}}
+        R_{\cell}^{\cell}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+which yields the usual static condensation formulae.
+
+\subsubsection{Comparison between both schemes}
+
+The static condensation algorithm is the one used in the literature \cite{di_pietro_discontinuous-skeletal_2015,cockburn_algorithm_2019,abbas_hybrid_2019-1,abbas_hybrid_2018} to eliminate cell unknowns. Contrary to the introduced cell resolution algorithm, this scheme needs not iterate at the cell level to accomodate the cell correction, and is hence, faster. However, the actualization of the cell unknown displacement by its correction demands that the quantities $\partial \tensori{u}{}_{\cell}^l / \partial R_{\cell}^{\cell}$ and $\partial R_{\cell}^{\cell} / \partial \tensori{u}{}_{\dCell}^k$ computed at the previous iteration are known. From a numerical standpoint, this results in keeping the associated matrices (see Section \ref{sec_implementation}) in memory from an iteration to another.
+% one needs to store matrices used during the condensation step from one iteration to another in order do decondensate the cell increment.
+
+The novel cell resolution scheme needs iterate at the cell level. It is hence is more costly than the static condensation one, and requires to integrate the constitutive equation more times than the static condensation algorithm does. However, it allows to exactly evaluate the equilibrium of the cell with its boundary, what does not the former. Moreover, it allows to consider extending the present cell correction iterative resolution to \textit{e.g.} constrained resolution algorithm, in order to solve inequality constrained problems, as encountered in multi-field plasticity \cite{schroder_small_2015} for instance.
+
+Finally, a schematic representation of the principle of both schemes is given in Figure \ref{fig_resolution}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15.cm]{img_calcs/resolution.png}
+    \caption{Schematic representation of both resolution schemes}
+    \label{fig_resolution}
+\end{figure}
+
+\subsection{Spatial discretization}
+
+\paragraph{Faces and skeleton of the mesh}
+
+The boundary $\dCell{}$ of each element is decomposed in faces, such that a face $F$ is a subset of $\bodyLag$, and either there are two cells $\cell$ and $\cell'$ such that $F = \dCell \cap \dCell'$ ($F$ is then an interior face), or there is a single cell $\cell$ such that $F = \dCell \cap \partial \Omega$ ($F$ is then an exterior face).
+For any cell $\cell$, let $\mathcal{F}(\cell) = \{ F \in \dHybridMesh \ \vert \ F \subset \dCell \}$ the set of faces composing the boundary of $\cell$.
+Let finally $\dHybridMesh(\bodyLag) = \{ F_i \subset \bodyLag \ \vert \ 1 \leq i \leq N_{F} \}$ the skeleton of the mesh, collecting all element faces $F_i$ in the mesh, where $N_{F}$ denotes the number of faces. The set of faces subjected to Neumann boundary conditions is denoted $\dHybridMesh{}_{N}^e(\bodyLag)$, and $\dHybridMesh{}_{D}^e(\bodyLag)$ denotes that subjected to Dirichlet boundary conditions.
+
+\paragraph{Mesh description}
+
+Likewise, one defines the collection of all cells in the mesh as
+$\HybridMesh(\bodyLag) = \{ \matI \subset \bodyLag \ \vert \ 1 \leq i \leq N_{\cell} \}$, where $N_T$ denotes the total number of cells.
+The composition of both $\mathcal{T}(\bodyLag)$ and $\dHybridMesh{}(\bodyLag)$ forms the hybrid mesh
+% $\overline{\mathcal{T}}({\bodyLag}) = \{T \subset \bodyLag, F \subset \bodyLag \ \vert \ T \in \mathcal{T}(\bodyLag) \ \vert \ F \in \mathcal{F}(\bodyLag) \}$.
+$\HybridMeshWhole({\bodyLag}) = \{ \mathcal{T}(\bodyLag), \mathcal{F}(\bodyLag) \}$.
+
+% \subsection{Global continuous problem}
+
+% \paragraph{Global unknown}
+
+% % Contrary to the standard finite element method that consists in seeking a global solution in a regular enough space over the whole mesh, we consider here a much broader space that consists in $\displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell$ the collection of all regular enough displacements element-wise.
+% % Similarly, we consider $\displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)$ the space of all regular enough displacements face-wise for the skeleton unknown, such that the global solution space $\hybridDisplacementSpaceHybridMesh = \displacementSpaceHybridMesh \times \displacementSpaceDHybridMesh$ for the whole problem is simply the assembly of all element and face spaces in the mesh.
+
+% Let the global unknown $(\tensori{v}{}_{\HybridMesh}, \tensori{v}{}_{\dHybridMesh})$ a displacement pair such that for each $\cell \in \HybridMesh(\bodyLag), \tensori{v}{}_{\HybridMesh} = \tensori{v}{}_{\cell}$ in $\cell$ and for each $F \in \dHybridMesh(\bodyLag), \tensori{v}{}_{\dHybridMesh} = \tensori{v}{}_{F}$ on $F$, where $\tensori{v}{}_{\cell}$ and $\tensori{v}{}_{F}$ denote a cell and a face displacement field respectively.
+
+% % \newcommand\virtualDisplacementSpaceHybridMesh{U_0(\mathcal{T})}
+% % \newcommand\virtualDisplacementSpaceDHybridMesh{V_0(\mathcal{F})}
+% % \newcommand\virtualHybridDisplacementSpaceHybridMesh{U_0(\bar{\mathcal{T}})}
+% % The global unknown is then sought in the space $\displacementSpaceHybridMesh \times \displacementSpaceDHybridMesh$
+% % %
+% % %
+% % %
+% % \begin{equation}
+% %     \label{eq_space_def}
+% %     \begin{aligned}
+% %         \displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell
+% %         &&
+% %         \text{and}
+% %         &&
+% %         \displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)
+% %     \end{aligned}
+% % \end{equation}
+
+
+% \paragraph{Global weak form}
+
+
+% % , where both cells and faces are considered as part of the support for defining
+% The weak form of the global mechanical problem in $\bodyLag$ reads : find the global displacement unknown pair $(\tensori{u}{}_{\HybridMesh}, \tensori{u}{}_{\dHybridMesh})$ verifying $\tensori{u}{}_{\dHybridMesh} \vert_{\dirichletBoundaryLag} = \dirichletLag$ on $\dirichletBoundaryLag$ such that
+% $\forall (\delta \tensori{u}{}_{\HybridMesh}, \delta \tensori{u}{}_{\dHybridMesh})$
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_0018kdk}
+%     \begin{aligned}
+%         \delta L_{\HybridMesh, \text{int}}^{VW} - \delta L_{\HybridMesh, \text{ext}}^{HW}
+%         =
+%         0
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% with
+% %
+% %
+% %
+% \begin{subequations}
+%     \label{eq_0nonamemeerg}
+%         \begin{alignat}{3}
+%             \delta L_{\HybridMesh, \text{int}}^{VW} & = 
+%             \sum_{\cell \in \HybridMesh(\bodyLag)}
+%             \int_{\cell}
+%             \tensorii{P}{}_{\cell}(\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}))
+%             :
+%             \tensorii{G}{}_{\cell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
+%             % \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_\cell} : \delta \tensorii{G}{}_{\cell}
+%             +
+%             \int_{\dCell} (\beta / h_{\cell})
+%             % (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell})
+%             % \tensori{Z}{}_{\dCell{}}
+%             \tensori{Z}{}_{\dCell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})
+%             \cdot
+%             % (\delta \tensori{u}{}_{\dCell} - \delta \tensori{u}{}_{\cell} \vert_{\dCell{}})
+%             % \delta \tensori{Z}{}_{\dCell{}}
+%             \tensori{Z}{}_{\dCell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
+%             \\
+%             \delta L_{\HybridMesh, \text{ext}}^{HW} & = 
+%             \sum_{F \in \dHybridMesh{}_{N}^e(\bodyLag)}
+%             \int_{F} \neumannLag \cdot \delta \tensori{u}{}_{F}
+%             +
+%             \sum_{\cell \in \HybridMesh(\bodyLag)}
+%             \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}
+%     \end{alignat}
+% \end{subequations}
+% %
+% %
+% %
+% % where $\displacementSpaceHybridMesh$ (respectively $\displacementSpaceDHybridMesh$) denotes the space of all globally kinematically admissible cell (respectively face) displacement fields,
+% % and
+% where for each element $\cell \in \HybridMesh(\bodyLag)$, the boundary displacement field $\tensori{v}{}_{\dCell}$ is such that $\tensori{v}{}_{\dCell} = \tensori{v}{}_{F}$ on $F$ for every $F \in \mathcal{F}(\cell)$
+
+% Contrary to the standard finite element method that consists in seeking a global solution in a regular enough space over the whole mesh, we consider here a much broader space that consists in the collection of all regular enough displacements element-wise, such that displacement jumps are actually possible across elements.
+% Similarily, we consider the space of all regular enough displacements face-wise for the skeleton unknown, such that the global unknown space for the whole problem is simply the assembly of all element and face spaces in the mesh :
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_space_def}
+%     \begin{aligned}
+%         \displacementSpaceHybridMesh = \prod_{\cell \in \HybridMesh(\bodyLag)} \displacementSpaceCell
+%         &&
+%         \text{and}
+%         &&
+%         \displacementSpaceDHybridMesh = \prod_{F \in \dHybridMesh(\bodyLag)} V(F)
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% Similarily, for each element $\cell \in \mathcal{T}$, the displacement space of its boundary $\displacementSpaceDCell$ is the collection of the face displacement spaces to which it is connected such that $\displacementSpaceDCell = \prod_{F \in \mathcal{F}(\cell)} V(F)$.
+
 \subsection{Global discrete problem}
 
 \paragraph{Discrete global approximtion spaces}
@@ -263,7 +683,7 @@ $
 %
 %
 %
-with
+with respective Lagrangian variations
 %
 %
 %
@@ -293,22 +713,149 @@ with
             \int_{\cell} \loadLag \cdot \delta \tensori{u}{}_{\cell}^l
     \end{alignat}
 \end{subequations}
-%
-%
-%
-where the discrete reconstructed gradient $\tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteGradSpaceCell$ solves $\forall (\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteHybridDisplacementSpaceCell$
+
+\paragraph{Linearization}
+
+Let $R_{\HybridMesh}$ the global residual associated to the non-linear resolution of problem \eqref{eq_0018kdk} such that
 %
 %
 %
 \begin{equation}
-    \label{eq_discrete_grad}
+    \label{eq_gloabl_residual}
     \begin{aligned}
-        \int_{\cell} \tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) : \tensorii{\tau}{}_{\cell}^k
-        =
-        \int_{\cell}  \nabla \tensori{v}{}_{\cell}^l : \tensorii{\tau}{}_{\cell}^k
-        +
-        \int_{\dCell} (\tensori{v}{}_{\dCell}^k - \tensori{v}{}_{\cell}^l \vert_{\dCell}) \cdot \tensorii{\tau}{}_{\cell}^k \vert_{\dCell} \cdot \tensori{n}{}
-        &&
-        \forall \tensorii{\tau}{}_{\cell}^k \in \discreteStressSpaceCell
+        R_{\HybridMesh} = \delta L_{\HybridMesh, \text{int}}^{HHO} - \delta L_{\HybridMesh, \text{ext}}^{HHO}
+        = \sum_{T \in \HybridMesh{}} R_{\cell}
     \end{aligned}
 \end{equation}
+%
+%
+%
+where $R_{\HybridMesh}$ can also be written as the sum of elementary residuals $R_{\cell} \forall \cell \in \HybridMesh{}$, since the sum of Neumann external contributions cancels out by equality of the traction force $\neumannCellLoad{} = - \neumannCellLoad{}_{'}$ for any $\cell{}'$ adjacent to $\cell$.
+%
+%
+%
+Likewise, the global residual $R_{\HybridMesh}$ can be decomposed into a mesh contribution $R_{\HybridMesh}^{\HybridMesh{}}$ and into a skeletal contribution $R_{\HybridMesh}^{\dHybridMesh}$ such that $R_{\HybridMesh} = R_{\HybridMesh}^{\HybridMesh{}} + R_{\HybridMesh}^{\dHybridMesh{}}$.
+
+\paragraph{Cell unknowns elimination and assembly}
+Since cell unknowns are locally eliminated, the problem expresses in terms of faces displacements only, and consists in finding the global faces unknowns correction $\alpha \tensori{u}{}_{\dHybridMesh}^k$ that solves
+%
+%
+%
+\begin{equation}
+    \label{eq_global_problem_hho}
+    \begin{aligned}
+        \frac{
+            d R_{\HybridMesh}^{\dHybridMesh}
+        }
+        {
+            d \tensori{u}{}_{\dHybridMesh}^k
+        }
+        \alpha \tensori{u}{}_{\dHybridMesh}^k
+        =
+        - R_{\dHybridMesh}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+where $R_{\dHybridMesh}$ is the global obtained residual depending on the cell unknown elimination strategy. A schematic representation of the global iterative procedure is given in Figure \ref{fig_resolution_global}
+%
+%
+%
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=8.cm]{img_calcs/resolution2.png}
+    \caption{Schematic representation the global resolution scheme}
+    \label{fig_resolution_global}
+\end{figure}
+
+% \paragraph{Quadrature}
+
+% In the following, the expression $\{ \cdot \}$ denotes a real-valued vector, and the notation $[\cdot]$ a real-valued matrix.
+% Let $\cellQuadrature$ a quadrature rule of order at least $2k$ for the cell $\cell$. A quadrature point in the cell $\cell$ is denoted $\tensori{X}{}_q$, and is associated with a quadrature weight $w_q$.
+
+% \subsection{Reconstructed gradient and stabilization operators}
+
+% \paragraph{Reconstructed gradient operator}
+
+% From an algebraic standpoint, \eqref{eq_discrete_grad} defines a linear problem
+% % with respect to the pair $(\tensori{u}{}_{\cell}^l, \tensori{u}{}_{\cell}^k)$
+% consisting in inverting a mass matrix in $\discreteGradSpaceCell{}$. One can thus define
+% % $\begin{bmatrix}
+% %     B_{\cell} && B_{\dCell}
+% % \end{bmatrix}
+% % (\tensori{x}{}_q)
+% % $
+% $
+% [B_{\cell}]
+% $
+% the discrete gradient operator acting on the pair $(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\cell}^k)$ at a quadrature point $\tensori{X}{}_q \in \cellQuadrature$ such that
+% % Hence, the algebraic realization of \eqref{eq_discrete_grad}
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_discrete_gradient_vector}
+%     \begin{aligned}
+%         \begin{Bmatrix}
+%             \tensorii{G}{}_{\cell}^k(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k)
+%         \end{Bmatrix}
+%         (\tensori{X}{}_q)
+%         =
+%         \begin{bmatrix}
+%             B_{\cell}
+%             % &&
+%             % B_{\dCell}
+%         \end{bmatrix}
+%         (\tensori{X}{}_q)
+%         \cdot
+%         \begin{Bmatrix}
+%             \tensori{v}{}_{\cell}^l
+%             \\
+%             \tensori{v}{}_{\dCell}^k
+%         \end{Bmatrix}
+%         &&
+%         \forall (\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteHybridDisplacementSpaceCell{}
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% % where we have decomposed the expression of $[B_{\cell}]$ into a cell block $B_{\cell}$ and a boundary block $B_{\dCell}$, to emphasize the dependence of the problem on both unknowns.
+% % Once this offline computation step is performed, the 
+% where $[B_{\cell}]$ is composed by a cell block and a boundary block.
+% % to emphasize the dependence of the problem on both unknowns.
+
+
+% \paragraph{Stabilization operator}
+
+% Similarly, the algebraic realization of \eqref{eq_hho_stabilization_vector} amounts to compute the stabilization operator $[Z_{\cell}]$ such that 
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_discrete_stabilization_vector}
+%     \begin{aligned}
+%         \begin{Bmatrix}
+%             \tensori{Z}{}_{\dCell}^{HHO}(\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k)
+%         \end{Bmatrix}
+%         =
+%         \begin{bmatrix}
+%             Z_{\cell}
+%             % &&
+%             % Z_{\dCell}
+%         \end{bmatrix}
+%         \cdot
+%         \begin{Bmatrix}
+%             \tensori{v}{}_{\cell}^l
+%             \\
+%             \tensori{v}{}_{\dCell}^k
+%         \end{Bmatrix}
+%         &&
+%         \forall (\tensori{v}{}_{\cell}^l, \tensori{v}{}_{\dCell}^k) \in \discreteHybridDisplacementSpaceCell{}
+%     \end{aligned}
+% \end{equation}
+% %
+% %
+% %
+% as for $[B_{\cell}]$, the operator $[Z_{\cell}]$ is composed by a cell and a boundary block.
