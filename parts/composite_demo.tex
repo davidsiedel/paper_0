@@ -1,24 +1,173 @@
 \section{Introduction to discontinuous methods through a Hu-Washizu formulation}
 \label{sec_composite_demo}
 
-In order to introduce the discontinuous setting in which lies the Hybrid High Order method, let consider the body $\bodyLag$ to be made out of some material defined by a mechanical potential $\mecPotential{}_{\bodyLag}$. The aim of this section consists in devising the expression of the weak formulation deriving from the HHO formulation of the mechanical model problem described in Section \ref{sec_model_problem}. Following the idea of a composite medium as introduced in \ref{sec_model_problem}, let $\cell$ an arbitrary open subset in $\bodyLag$, split into two distinct media; an open bulk medium $\Bulk \subset \cell$ with boundary $\dBulk \subset \mathbb{R}^{d-1}$, and an open interface medium $\Crown \subset \cell$ between the bulk $\Bulk$ and the boundary $\dCell$, with boundary $\dCrown = \dBulk \cup \dCell$ and of some width $\ell > 0$ that is supposed to be small compared to $h_{\cell}$ the diameter of $\cell$ (see Figure \ref{fig_02}).
+% Many numerical methods
+% consider a partition of the body into elementary subsets called \textit{cells}.
+% % The equilibrium of the body is then expressed in terms of the sum of the mechanical contribution in each of these cells composing it.
+% % The equilibrium of the interface between two cells is then of major 
+% For the equilibrium of the whole body to hold, each cell must be in equilibrium with its neighbors, which means that they have to interact and pass information from one another.
+% Communication between two cells is ensured by knowledge of the displacement field at their shared boundary.
+% For \textit{conformal} methods to which belongs the Lagrange (\textit{i.e.} the standard) Finite Element Method, the displacement over the whole body is continuous, which implies that the displacement at a cell boundary is directly equal to that of its neighbors, and a cell has a direct knowledge of the motion of its neighborhood.
+% For so-called \textit{non-conformal} methods, among which are \textit{e.g.} Discontinuous Galerkin methods, Hybrid Discontinuous Galerkin methods and Hybrid High Order methods, the displacement continuity at a cell boundary is not explicitly enforced, such that one needs to introduce supplementary ingredients in the formulation to pass information from one cell to another. A straightforward way of doing so consists in introducing an interface between cells, that acts as a membrane pulling them together. One can readily feel that the stiffer the membrane, the closer the cells, and the closer to the \textit{conformal} framework. This technique is the one at the foundation of Discontinuous Galerkin methods. By adding an intermediate structure in the membrane, called a \textit{bone}, one defines the framework of Hybrid Discontinuous Galerkin methods and Hybrid High Order methods; the membrane is split into two parts, one at each side of the bone, and communication between cells transits through the bone, via the membrane. The term hybrid expresses the fact that both cells and bones carry information about the displacement field, hence introducing the \textit{skeleton} of the body.
+% In the following section, we show that one recovers the full mathematical framework proper to these non-conformal method, by writing the equilibrium of a cell and its interface with its neighborhood.
+
+% Many numerical methods consider a partition of the body into
+% elementary parts. % subsets called \textit{cells}.
+
+In this section let $\cell$ a subpart of the body
+\(\bodyLag\).
+In the following, one assumes that the cell $\cell$ is located inside the body $\bodyLag{}$, such that its boundary $\dCell{}$ bears contact loads only.
+This subpart is in equilibrium with the rest of the body
+\(\Omega\backslash T\) if the displacements and the normal traction are
+continuous at the boundary $\dCell{}$.
+
+
+\paragraph{Conformal methods} Enforcing the displacement continuity at the interface leads to
+so-called conformal methods, to which the standard Finite Element (FE), or Lagrange
+method belongs (see Figure \ref{fig_02}(a)).
+
+\paragraph{Discontinuous Galerkin methods} On the contrary, this condition can be weakened by introducting an
+elastic interface of negligible size between \(T\) and
+\(\Omega\backslash T\). This representation is at the basis of Discontinuous Galerkin
+methods (see Figure \ref{fig_02}(b)).
+
+\paragraph{Hybird Discontinuous Galerkin methods} In this paper, we consider hybrid discontinuous Galerkin (HDG) methods, where two elastic
+interfaces are introducted: one between \(T\) and its boundary
+\(\partial T\) and a second one between \(\Omega\backslash T\) and
+\(\partial T\) (see Figure \ref{fig_02}(c)).
+Following this idea, we show in this section how the use of the
+Hu-Hashizu Lagrangian allows to recover the main ingredients of the
+HDG/HHO methods, namely the \textit{reconstructed gradient} and the \textit{stabilisation
+operator}.
+
+%% The equilibrium of the body is then expressed in terms of the sum of the mechanical contribution in each of these cells composing it.
+%% The equilibrium of the interface between two cells is then of major 
+%For the equilibrium of the whole body to hold, each cell must be in
+%equilibrium with its neighbors, which means that they have to interact
+%and pass information from one another. Communication between two cells
+%is ensured by knowledge of the displacement field at their shared
+%boundary.
+%
+%For \textit{conformal} methods to which belongs the Lagrange
+%(\textit{i.e.} the standard) Finite Element Method, the displacement
+%over the whole body is continuous, which implies that the displacement
+%at a cell boundary is directly equal to that of its neighbors, and a
+%cell has a direct knowledge of the motion of its neighborhood.
+%
+%For so-called \textit{non-conformal} methods, among which are
+%\textit{e.g.} Discontinuous Galerkin methods, Hybrid Discontinuous
+%Galerkin methods and Hybrid High Order methods, the displacement
+%continuity at a cell boundary is not explicitly enforced, such that one
+%needs to introduce supplementary ingredients in the formulation to pass
+%information from one cell to another. A straightforward way of doing so
+%consists in introducing an interface between cells, that acts as a
+%membrane pulling them together. One can readily feel that the stiffer
+%the membrane, the closer the cells, and the closer to the
+%\textit{conformal} framework. This technique is the one at the
+%foundation of Discontinuous Galerkin methods. By adding an intermediate
+%structure in the membrane, called a \textit{bone}, one defines the
+%framework of Hybrid Discontinuous Galerkin methods and Hybrid High Order
+%methods; the membrane is split into two parts, one at each side of the
+%bone, and communication between cells transits through the bone, via the
+%membrane. The term hybrid expresses the fact that both cells and bones
+%carry information about the displacement field, hence introducing the
+%\textit{skeleton} of the body. In the following section, we show that
+%one recovers the full mathematical framework proper to these
+%non-conformal method, by writing the equilibrium of a cell and its
+%interface with its neighborhood.
+%%  cells must stick together in order to pass the mechanical information from one cell to another
+
+%  cells must stick together in order to pass the mechanical information from one cell to another
+
+% Let $\cell$ be
+% such a cell and let $\dCell{}$ its boundary.
+% % For the sake of
+% % simplicity, the intersection of $\dCell{}$ and $\dBodyLag{}$
+% % is first assumed empty. This special case is treated later.
+
+% In the framework of conforming Galerkin methods, the displacement field is continuous at cells interfaces, and the equilibrium is expressed on the whole structure.
+% For discontinuous Galerkin methods, the displacement continuity is broken, to ensure continuity of the flux between cells instead, such that the equilibrium of the whole structure is the sum of the equilibrium expressed within each cell.
+% In this section, we show that this change of paradigm amounts to consider that a cell in the continuous framework is surrounded by an infinitely thin elastic interface.
+
+% Let the equilibrium of a cell $\cell$
+% %
+% %
+% %
+% \begin{equation}
+%     \label{eq_element}
+%     L_{\cell}^{eq}
+%     % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
+%     =
+%     \int_{\cell} \mecPotential_{\bodyLag{}} + (\nabla \tensori{u}{}_{\cell} - \tensorii{G}{}_{\cell}) : \tensorii{P}{}_{\cell}
+%     -
+%     \int_{\cell} \loadLag \cdot \tensori{u}{}_{\cell}
+%     % -
+%     % \int_{\Crown} \loadLag \cdot \tensori{u}{}_{\Crown}
+%     -
+%     \int_{\neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\dCell}
+% \end{equation}
+% %
+% %
+% %
+% One can either choose a suitable functional space such that the displacement is continuous at the interfaces, or 
+
+
+% Je pense vraiment qu'il faut exprimer explicitement l'équilibre d'un élément avec le reste de la structure (tractions normales et continuité des déplacement), préciser que l'on peut imposer les continuités du déplacement au sens fort ou au sens faible et **ensuite** classifier les méthodes ainsi:
+% Les éléments finis standards assurent la continuité des déplacements aux interfaces
+% Les DG relient directement les éléments entre eux et pénalisent les sauts de déplacement entre les éléments
+% Les HDG et HHO relient les éléments à leurs frontières et pénalisent les sauts de déplacement entre l'élément et la frontière
+
+% Puis on indique qu'un moyen pratique de pénaliser les sauts de déplacement est d'introduire une interphase élastique de faible épaisseur et de faire tendre cette épaisseur vers 0.  Dans le cadre de ce papier, seules les méthodes HDG et HHO sont traitées (et donc pas les DG).
+
+% Cette section montre que l'application de Hu-Hashizu à l'élément à son interphase permet de retrouver tous les ingrédients principaux des méthodes HDG et HH0: le gradient reconstruit et l'opérateur de stabilisation.
+
+\subsection{Element description}
+
+\paragraph{Element geometry}
+
+In the following, the cell $\cell$ is assumed to be convex.
+It is split into a core part $\Bulk \subset \cell$ with boundary $\dBulk$, and into an interface part $\Crown{} \subset \cell$ with boundary $\dCrown = \dBulk \cup \dCell$, as shown in Figure \ref{fig_02}. The interface $\Crown{}$ has some thickness $\ell > 0$ that is supposed to be small compared to $h_{\cell}$ the diameter of $\cell$.
+From a geometrical standpoint, the core par of the element $\Bulk{}$ is an homotethy of $\cell$ by some ratio inferior to $1$.
+
+\paragraph{Element boundary description} The boundary $\dCell{}$ of $\cell$ is the composition of a Neumann boundary $\neumannCell{}$ and a Dirichlet $\dirichletCell{}$, if the element $\cell$ shares a boundary with $\dirichletBoundaryLag{}$. In the following, for the sake of simplicity, we assume that the element is located inside the body $\bodyLag{}$, such that is only subjected to imposed traction forces on $\neumannCell{} = \dCell{}$ with $\dirichletCell{} = \emptyset$.
+
 %
 % 
 % 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=12.cm]{img/hu_washizu.png}
-    \caption{schematic representation of the composite region}
+    \includegraphics[width=14.cm]{img/hu_washizu.png}
+    \caption{schematic representation of a cell and its surrounding depending on the continuity requirement of the displacement field}
     \label{fig_02}
 \end{figure}
 %
-% 
-% 
-The boundary $\dCell$ moves with a boundary displacement field $\tensori{u}{}_{\dCell} \in V_{}(\dCell)$, where $V_{}(\dCell)$ denotes the space of kinematically admissible boundary displacements. The displacement at the boundary $\dCell$ results from the interactions of $\dCell$ with neighbouring media, \textit{i.e.} from the action of $\bodyLag \backslash \cell$ onto $\dCell$ or from some boundary condition.
-% Assuming the bulk $\Bulk$ is \textit{a priori} not influenced by the movements of $\dCell$, such that it only morphs through the action of the body load $\loadLag$, hence producing a displacement gradient $\tensorii{G}{}_{\Bulk} \in \gradSpaceBulk$ and a stress $\tensorii{P}{}_\Bulk \in \stressSpaceBulk$ under the mechanical potential $\mecPotential{}_{\bodyLag}$, one needs to restrict 
-The bulk $\Bulk$ is not directly attached to $\dCell$, and morphs by a displacement $\tensori{u}{}_{\Bulk} \in \displacementSpaceBulk$ under the action of the body load $\loadLag$, hence producing a displacement gradient $\tensorii{G}{}_{\Bulk} \in \gradSpaceBulk$ and a stress $\tensorii{P}{}_\Bulk \in \stressSpaceBulk$ depending on the mechanical potential $\mecPotential{}_{\bodyLag}$.
-% , and communicates with the surrounding medium $\bodyLag \backslash \cell$.
-It is however bound to the interface $\Crown$ that acts as a patch between the bulk $\Bulk$ and the boundary $\dCell$, such that its displacement $\tensori{u}_{\Crown} \in \displacementSpaceCrown$ verifies
+%
+%
+
+\paragraph{Element behaviour}
+
+The core of the element $\Bulk{}$ is made out of the same material that composes $\Omega$ and behaves according to the free energy potential $\mecPotential{}_{\bodyLag{}}$. The interface $\Crown{}$ is made out of a pseudo linear elastic material of Young modulus $\beta (\ell / h_{\cell})$ with a zero Poisson ratio and its behavior is defined by the free energy potential $\mecPotential{}_{\Crown{}}$ such that
+%
+%
+%
+\begin{equation}
+    \label{eq_0009}
+        \mecPotential{}_{\Crown} = \frac{1}{2} \beta \frac{\ell}{h_{\cell}} \nabla \tensori{u}{}_{\Crown} : \nabla \tensori{u}{}_{\Crown}
+\end{equation}
+%
+%
+%
+where the dimensionless ratio $\ell / h_{\cell}$ balances the accumulated energy with the size of the domain $\cell$.
+
+\paragraph{Element loading}
+
+The core $\Bulk$ is subjected to the volumetric loading $\loadLag{}$, and to the traction force applied by the interface $\Crown{}$ onto $\dBulk{}$. By continuity, $\Bulk{}$ applies the opposite traction force on $\Crown{}$ through $\dBulk{}$. The interface $\Crown{}$ is also subjected to the exterior traction force $\neumannCellLoad{}$ acting on $\neumannCell{}$, that accounts for the action of the rest of the solid $\bodyLag{}$ onto the boundary $\dCell$.
+
+\paragraph{Discplacement, displacement gradient and stress fields}
+
+Let note $\tensori{u}{}_{\Bulk}$ the displacement field, $\tensorii{G}{}_{\Bulk}$ the displacement gradient field and $\tensorii{P}{}_{\Bulk}$ the stress field in $\Bulk{}$. Similarly, let $\tensori{u}{}_{\Crown{}}$ the displacement field, $\tensorii{G}{}_{\Crown}$ the displacement gradient field and $\tensorii{P}{}_{\Crown}$ the stress field in $\Crown{}$.
+The displacement of the boundary $\dCell{}$ is denoted $\tensori{u}{}_{\dCell{}}$.
+By continuity of the displacement field between $\Bulk{}$ and $\dCell$,  the displacement $\tensori{u}{}_{\Crown{}}$ verifies
 %
 % 
 % 
@@ -32,29 +181,15 @@ It is however bound to the interface $\Crown$ that acts as a patch between the b
         \label{eq_conformity:eq2}
     \end{alignat}
 \end{subequations}
-%
-%
-%
-The interface $\Crown$ stretches depending on the displacement of the bulk $\Bulk$ with respect to the rest of the solid $\bodyLag \backslash \cell$ under the potential $\mecPotential{}_{\Crown{}}$ describing a linear elastic material of Young modulus $\beta (\ell / h_{\cell})$ with a zero Poisson ratio such that
-% Let endow the interface $\Crown$ with a potential $\mecPotential{}_{\Crown{}}$ describing a linear elastic material of Young modulus $\beta (\ell / h_{\cell})$ with a zero Poisson ratio such that
+
+\paragraph{Hu-Washizu Lagrangian of the element}
+
+By combining both the Lagragian of the core $\Bulk{}$ and that of the interface $\Crown{}$, one obtains the total Lagragian $L_{\cell}^{HW}$ over the element such that
 %
 %
 %
 \begin{equation}
-    \label{eq_0009}
-        \mecPotential{}_{\Crown} = \frac{1}{2} \beta \frac{\ell}{h_{\cell}} \nabla \tensori{u}{}_{\Crown} : \nabla \tensori{u}{}_{\Crown}
-\end{equation}
-%
-% 
-% 
-where the dimensionless ratio $\ell / h_{\cell}$ balances the accumulated energy with the size of the domain $\cell$. Let then $\tensorii{G}{}_{\Crown{}} \in \gradSpaceCrown$ and $\tensorii{P}{}_{\Crown{}} \in \stressSpaceCrown$ the displacement gradient and stress in the interface $\Crown{}$.
-% that stretches depending on the displacement of the bulk $\Bulk$ with respect to the rest of the solid $\bodyLag \backslash \cell$.
-Under such assumptions and following \eqref{eq_hu_washizu_composite}, the Hu–Washizu functional over $\cell$ writes
-%
-% 
-% 
-\begin{equation}
-\label{eq_hu_washizu_split}
+    \label{eq_hu_washizu_split}
     L_{\cell}^{HW}
     % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
     =
@@ -63,315 +198,77 @@ Under such assumptions and following \eqref{eq_hu_washizu_composite}, the Hu–W
     \int_{\Crown} \mecPotential_{\Crown{}} + (\nabla \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
     -
     \int_{\Bulk} \loadLag \cdot \tensori{u}{}_{\Bulk}
-    -
-    \int_{\Crown} \loadLag \cdot \tensori{u}{}_{\Crown}
+    % -
+    % \int_{\Crown} \loadLag \cdot \tensori{u}{}_{\Crown}
     -
     \int_{\neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\dCell}
 \end{equation}
 
+\subsection{Hypotheses}
+\label{sec_assumtions}
 
-% through the interface $\Crown$ that acts as a patch bridging the bulk $\Bulk$ to the boundary $\dCell$
-% % between between $\Bulk$ and $\dCell$.
-% with a displacement $\tensori{u}_{\Crown} \in \displacementSpaceCrown$ that links $\Bulk$ to $\dCell$ such that
+% The behavior and the kinematics having been described,
+% Let make a number of assumptions on the expression of the fields of unknowns, by exploiting the fact that the core is of negligible volume compared to the interface.
+Since the interface is of negligible volume compared to that of the core, let make the following assumptions on the displacement and the stress fields in the interface.
 
-% Let assume that the bulk $\Bulk$ is not directly influenced by the movements of $\dCell$,
-% such that it only morphs through the action of the body load $\loadLag$, hence producing a displacement gradient $\tensorii{G}{}_{\Bulk} \in \gradSpaceBulk$ and a stress $\tensorii{P}{}_\Bulk \in \stressSpaceBulk$ under the mechanical potential $\mecPotential{}_{\bodyLag}$.
-% one needs to restore some cohesion between $\Bulk$ and $\dCell$ through
-% the interface $\Crown$ acting as a patch bridging the bulk to the boundary
-% % between between $\Bulk$ and $\dCell$.
-% with a displacement $\tensori{u}_{\Crown} \in \displacementSpaceCrown$ that links $\Bulk$ to $\dCell$ such that
-% % in order to ensure continuity of the displacement between $\Bulk$ and $\dCell$, let the interface $\Crown$ act as a patch, such that $\tensori{u}_{\Crown} \in \displacementSpaceCrown$ the displacement in $\Crown$ links that of $\Bulk$ to that of $\dCell$ :
-% % it is free to move away up to a rigid body motion from the rest of the body $\bodyLag{}$ at no energetic cost
-% % Let assume that the bulk $\Bulk$ is \textit{a priori} not influenced by the movements of $\dCell$; that is, it supposedly only morphs through the action of the body load $\loadLag$, producing a displacement gradient $\tensorii{G}{}_{\Bulk} \in \gradSpaceBulk$ and a stress $\tensorii{P}{}_\Bulk \in \stressSpaceBulk$ under the mechanical potential $\mecPotential{}_{\bodyLag}$, that are free from the influence of $\dCell{}$ onto $\Bulk{}$. Hence, the bulk $\Bulk{}$ is free to move away up to a rigid body motion from the rest of the body $\bodyLag{}$ at no energetic cost, which violates the conservation laws. Therefore, in order to ensure continuity of the displacement between $\Bulk$ and $\dCell$, let $\Crown$ act as a patch, such that $\tensori{u}_{\Crown} \in \displacementSpaceCrown$ the displacement in $\Crown$ links that of $\Bulk$ to that of $\dCell$ :
-% %
-% % 
-% % 
-% \begin{subequations}
-%     \label{eq_conformity}
-%         \begin{alignat}{2}
-%         \tensori{u}{}_{\Crown} \vert_{\dBulk} & = \tensori{u}{}_{\Bulk} \vert_{\dBulk}
-%         \label{eq_conformity:eq1}
-%         \\
-%         \tensori{u}{}_{\Crown} \vert_{\dCell} & = \tensori{u}{}_{\dCell}
-%         \label{eq_conformity:eq2}
-%     \end{alignat}
-% \end{subequations}
-% % 
-% % 
-% %
-% In order to bind the behaviour of $\Bulk{}$ to that of its neighbourhood through $\dCell{}$, let endow the interface $\Crown$ with a mechanical potential  $\mecPotential{}_{\Crown{}}$ such that it behaves like a linear elastic material of Young modulus $\beta (\ell / h_{\cell})$ with a zero Poisson ratio :
-% %
-% % 
-% % 
-% \begin{equation}
-%     \label{eq_0009}
-%         \mecPotential{}_{\Crown} = \frac{1}{2} \beta \frac{\ell}{h_{\cell}} \nabla \tensori{u}{}_{\Crown} : \nabla \tensori{u}{}_{\Crown}
-% \end{equation}
-% %
-% % 
-% % 
-% where the dimensionless ratio $\ell / h_{\cell}$ balances the accumulated energy with the size of the domain $\cell$. Let then $\tensorii{G}{}_{\Crown{}} \in \gradSpaceCrown$ and $\tensorii{P}{}_{\Crown{}} \in \stressSpaceCrown$ the displacement gradient and stress in $\Crown{}$. Under such assumptions and using \eqref{eq_hu_washizu_composite}, the Hu–Washizu functional over $\cell$ writes as :
-% %
-% % 
-% % 
-% \begin{equation}
-% \label{eq_hu_washizu_split}
-%     L_{\cell}^{HW}
-%     % (\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})
-%     =
-%     \int_{\Bulk} \mecPotential_{\bodyLag{}} + (\nabla \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
-%     +
-%     \int_{\Crown} \mecPotential_{\Crown{}} + (\nabla \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
-%     -
-%     \int_{\Bulk} \loadLag \cdot \tensori{u}{}_{\Bulk}
-%     -
-%     \int_{\Crown} \loadLag \cdot \tensori{u}{}_{\Crown}
-%     -
-%     \int_{\neumannCell} \neumannCellLoad \cdot \tensori{u}{}_{\dCell}
-% \end{equation}
-% % 
-% % 
-% %
-% %
-% In the following, $\cell$ is supposed to be convex, and will be called a \textit{cell}.
+\paragraph{Displacement in the interface}
 
-\subsection{Interface description}
-\label{sec_interface_description}
-% 
-% 
-% 
-In the following, let $\cell$ be convex, and denote it as \textit{cell}.
-Let $\tensori{\Xi}{}_{\cell}$ the homothety of ratio $(1 - \alpha \ell)$ and center $\tensori{x}{}_{\cell}$ the centroid of $\cell$, with $0 < \alpha < 1 / \ell$ such that $\Bulk$ (respectively $\dBulk$) is the image of $\cell$ (respectively $\dCell$) by $\tensori{\Xi}{}_{\cell}$. Since $\dBulk$ is an homothety of $\dCell$, any point $\tensori{x}{}_{\dCell} \in \dCell$ and $\tensori{x}{}_{\dBulk} = \tensori{\Xi}{}_{\cell}(\tensori{x}{}_{\dCell}) \in \dBulk$ share the same unit outward normal $\tensori{n}{}$. Assuming the interface $\Crown$ to be thin compared to the cell volume $\cell$, let linearize the displacement in the interface $\Crown$ with respect to $\tensori{n}$, such that
+The displacement in the interface $\Crown$ is assumed to be linear with respect to $\tensori{n}$, such that
+its gradient is homogeneous in $\Crown{}$ along $\tensori{n}$
 %
 % 
 % 
+% \begin{equation}
+%     \label{eq_crown_displacement}
+%     \tensori{u}{}_{\Crown} (\tensori{x})
+%     =
+%     \frac{\tensori{u}{}_{\dCell}(\tensori{m}{}_{\dCell})
+%     -
+%     \tensori{u}{}_{\Bulk} \vert_{\dBulk} (\tensori{m}{}_{\dBulk})}{\ell} \otimes \tensori{n} \cdot (\tensori{x} - \tensori{m}{}_{\dBulk})
+%     +
+%     \tensori{u}{}_{\Bulk} \vert_{\dBulk}(\tensori{m}{}_{\dBulk})
+% \end{equation}
 \begin{equation}
     \label{eq_crown_displacement}
-    \tensori{u}{}_{\Crown} (\tensori{x})
+    \nabla
+    \tensori{u}{}_{\Crown}
     =
-    \frac{\tensori{u}{}_{\dCell}(\tensori{m}{}_{\dCell})
+    \frac{\tensori{u}{}_{\dCell}
     -
-    \tensori{u}{}_{\Bulk} \vert_{\dBulk} (\tensori{m}{}_{\dBulk})}{\ell} \otimes \tensori{n} \cdot (\tensori{x} - \tensori{m}{}_{\dBulk})
-    +
-    \tensori{u}{}_{\Bulk} \vert_{\dBulk}(\tensori{m}{}_{\dBulk})
+    \tensori{u}{}_{\Bulk} \vert_{\dBulk} }{\ell} \otimes \tensori{n}
 \end{equation}
 % 
 % 
 %
-where $\tensori{m}{}_{\dBulk} = \min_{\tensori{x}{}_{\dBulk} \in \dBulk} \lVert \tensori{x}{}_{\dBulk} - \tensori{x} \rVert$ and $\tensori{m}{}_{\dCell} = \min_{\tensori{x}{}_{\dCell} \in \dCell} \lVert \tensori{x}{}_{\dCell} - \tensori{x} \rVert$. Furthermore, let assume that the interface is thin enough such that $\tensorii{P}{}_{\Crown}$ is supposed to be constant along the direction $\tensori{n}{}$ in $\Crown{}$. By continuity of the traction force across $\dBulk$, the following equality holds true
+That is, the displacement of the interface $\Crown{}$ linearly bridges that of the boundary $\dCell{}$ to that of the bulk $\Bulk{}$.
+
+\paragraph{Stress in the interface}
+
+Furthermore, let assume that $\tensorii{P}{}_{\Crown}$ is constant along the direction $\tensori{n}{}$ in $\Crown{}$. By continuity of the traction force across $\dBulk$, the following equality holds true
 %
 % 
 % 
 \begin{equation}
     \label{eq_continuity_traction_force}
     \begin{aligned}
-        (\tensorii{P}{}_{\Crown} - \tensorii{P}{}_{\Bulk} \vert_{\dBulk{}}) \cdot \tensori{n}{} =  0
-        &&
-        \text{in}
-        &&
-        \Crown{}
+        (\tensorii{P}{}_{\Crown} \vert_{\dBulk{}} - \tensorii{P}{}_{\Bulk} \vert_{\dBulk{}}) \cdot \tensori{n}{} = 0
+        % &&
+        % \text{in}
+        % &&
+        % \Crown{}
     \end{aligned}
 \end{equation}
-%
-% 
-% 
-Using \eqref{eq_continuity_traction_force} and \eqref{eq_crown_displacement}, one can write the internal contribution $L_{\Crown{}, \text{int}}^{HW}$ in $\Crown{}$ as a term depending on the bulk and boundary displacement such that
-%
-% 
-% 
-\begin{equation}
-    \label{eq22}
-    \begin{aligned}
-        L_{\Crown{}, \text{int}}^{HW}
-        := &
-        \int_{\Crown{}} \mecPotential{}_{\Crown} + (\nabla \tensori{u}{}_{\Crown} - \tensorii{G}{}_{\Crown}) : \tensorii{P}{}_{\Crown}
-        % -
-        % \int_{\Crown{}} \loadLag \cdot \tensori{u}{}_{\Crown}
-        \\
-        = &
-        (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2
-        +
-        (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk} (\tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}}) \cdot \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}} \cdot \tensori{n}{}
-        -
-        \int_{\Crown{}} \tensorii{G}{}_{\Crown{}} : \tensorii{P}{}_{\Crown{}}
-        % -
-        % \int_{\Crown{}} \loadLag \cdot \tensori{u}{}_{\Crown}
-    \end{aligned}
-\end{equation}
-%
-% 
-% ------------------------------------------------------- DEVELOPMENT
-\textcolor{blue}{
-%
-\begin{development}[Interafce simplification]
-%
-Let $C_\Crown = \{ v \in L^2(\Crown) \ \vert \ v \cdot \tensori{n} = \text{cste} \}$ the set of $L^2$-functions which are constant along the normal axis in $\Crown$. For any function in $C_\Crown$, the following equality holds true:
-%
-% 
-% 
-\begin{equation}
-    \label{eq_virtual_works0}
-        \int_{\Crown} v \ dV
-        =
-        \int_{\dBulk{}} \int_{\epsilon = 0}^{\ell} v (1 - \alpha \epsilon) \ dS d \epsilon
-        =
-        \ell (1 - \frac{\alpha}{2} \ell) \int_{\dBulk{}} v \ dS
-\end{equation}
-%
-% 
-% 
-Noticing that $\nabla \tensori{u}{}_{\Crown} \in C_\Crown$, one has :
-%
-% 
-% 
-\begin{equation}
-    \begin{aligned}
-        \int_{\Crown{}} \mecPotential{}_{\Crown}
-        % = &
-        % \int_{\Crown{}} \frac{1}{2} \beta \frac{\ell}{h_{\cell}} \nabla \tensori{u}{}_{\Crown} : \nabla \tensori{u}{}_{\Crown}
-        % \\
-        = & 
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{1}{2} \beta \frac{\ell}{h_{\cell}} \nabla \tensori{u}{}_{\Crown} : \nabla \tensori{u}{}_{\Crown}
-        \\
-        = & 
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}) \otimes
-        \tensori{n} : (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}) \otimes
-        \tensori{n}
-        \\
-        = & 
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{i,j} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
-        \tensoro{n}_{j}{}^2
-        \\
-        = & 
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{j} \tensoro{n}_{j}{}^2 \sum_{i} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
-        \\
-        = & 
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \sum_{i} (\tensoro{u}{}_{\dCell}{}_{i}- \tensoro{u}{}_{\Bulk}{}_{i} \vert_{\dBulk}){}^2
-        \\
-        = & 
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 \ell h_{\cell}} \lVert \tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk} \lVert {}^2
-        \\
-        = & 
-        (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk} \lVert {}^2
-    \end{aligned}
-\end{equation}
-%
-% 
-% 
-Moreover, for $\tensorii{P}{}_{\Crown}$ in $C_\Crown{}$ :
-%
-% 
-% 
-\begin{equation}
-    \begin{aligned}
-        \int_{\Crown{}} \nabla \tensori{u}{}_{\Crown} : \tensorii{P}{}_{\Crown}
-        = &
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \nabla \tensori{u}{}_{\Crown} : \tensorii{P}{}_{\Crown}
-        \\
-        = &
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}}
-        \frac{1}{\ell}
-        (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk}) \otimes \tensori{n} : \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}}
-        \\
-        = &
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}}
-        \frac{1}{\ell}
-        \sum_{i,j}
-        (\tensoro{u}{}_{\dCell}{}_{i} - \tensoro{u}{}_{\Bulk}{}{}_{i} \vert_{\dBulk}) \tensoro{n}{}_{j} \tensoro{P}{}_{\Bulk{}}{}_{ij} \vert_{\dBulk{}}
-        \\
-        = &
-        \ell (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}}
-        \frac{1}{\ell}
-        (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk}) \cdot \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}} \cdot \tensori{n}
-        \\
-        = &
-        (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}}
-        (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\Bulk}{} \vert_{\dBulk}) \cdot \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}} \cdot \tensori{n}
-    \end{aligned}
-\end{equation}
-% 
-% 
-% 
-And Finally :
-%
-% 
-% 
-\begin{equation}
-    \begin{aligned}
-        L_{\Crown{}, \text{int}}^{HW}
-        =
-        (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}} \rVert^2
-        +
-        (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk} (\tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk{}} \vert_{\dBulk{}}) \cdot \tensorii{P}{}_{\Bulk{}} \vert_{\dBulk{}} \cdot \tensori{n}{}
-        -
-        \int_{\Crown{}} \tensorii{G}{}_{\Crown{}} : \tensorii{P}{}_{\Crown{}}
-    \end{aligned}
-\end{equation}
-%
-\end{development}
-}
-% ------------------------------------------------------- DEVELOPMENT
-% 
-%
-Injecting \eqref{eq22} in \eqref{eq_hu_washizu_split} yields
-%
-% 
-% 
-\begin{equation}
-    \label{eq_0014}
-    \begin{aligned}
-        L_{\cell}^{HW}
-        = &
-        \int_{\Bulk} \mecPotential{}_{\bodyLag{}} + (\nabla \tensori{u}{}_{\Bulk} - \tensorii{G}{}_{\Bulk}) : \tensorii{P}{}_{\Bulk}
-        % \\
-        % &
-        +
-        (1 - \frac{\alpha}{2} \ell)
-        % \Biggl(
-        \int_{\dBulk{}} (\tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk} \vert_{\dBulk}) \cdot \tensorii{P}{}_{\Bulk} \vert_{\dBulk} \cdot \tensori{n}{}
-        % \\
-        % &
-        \\
-        &
-        +
-        (1 - \frac{\alpha}{2} \ell)
-        \int_{\dBulk{}} \frac{\beta}{2 h_T} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\Bulk} \vert_{\dBulk{}} \rVert^2
-        % \Biggr)
-        % \\
-        % &
-        -
-        \int_{\Crown{}} \tensorii{G}{}_{\Crown{}} : \tensorii{P}{}_{\Crown{}}
-        % \\
-        % &
-        -
-        \int_{\Bulk} \loadLag \cdot \tensori{u}{}_{\Bulk}
-        -
-        \int_{\Crown{}} \loadLag \cdot \tensori{u}{}_{\Crown{}}
-        -
-        \int_{\neumannCell{}} \neumannCellLoad{} \cdot \tensori{u}{}_{\dCell{}}
-    \end{aligned}
-\end{equation}
-%
-% 
-% 
-Since $\ell$ is arbitrary, let $\ell \rightarrow 0$,
-the interface region vanishes such that $\Crown{} \rightarrow \emptyset, \Bulk{} \rightarrow \cell$ and $\dBulk{} \rightarrow \dCell$, and the expression of the Hu–Washizu functional over the region $\cell$ writes
+
+% \subsection{Deriving the formulation of Hybrid discontinuous methods from the Hu-Washizu functional on the element}
+\subsection{Towards Hybrid discontinuous methods from the Hu-Washizu Lagrangian}
+
+Using the hypotheses stated in Section \ref{sec_assumtions} on the displacement field and the stress field in $\Crown{}$,
+one can write \eqref{eq_hu_washizu_split} as a term depending on the thickness of the interface $\ell$ and on the core and boundary unknowns only. The reader can refer to \ref{sec_appendix_Hu_Washizu} for more details.
+% one can writes \eqref{eq_hu_washizu_split} as the simplified Hu–Washizu Lagrangian
+
+\paragraph{Simplified Hu–Washizu Lagrangian for a vanishing interface}
+
+In particular, making the thickness of the interface $\ell \rightarrow 0$, such that $\Crown{}$ vanishes and the core part $\Bulk{}$ identifies to $\cell$, one obtains the simplified Hu–Washizu Lagrangian
 % 
 % 
 %
@@ -395,17 +292,37 @@ the interface region vanishes such that $\Crown{} \rightarrow \emptyset, \Bulk{}
         \int_{\neumannCell{}} \neumannCellLoad{} \cdot \tensori{u}{}_{\dCell{}}
     \end{aligned}
 \end{equation}
-% 
-% 
 %
-Assuming that the displacement is continuous at the boundary $\dCell{}$ such that $\tensori{u}{}_{\dCell{}}$ is the trace of the cell displacement $\tensori{u}{}_{\cell{}}$ on $\dCell{}$ and $\tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\cell{}} \vert_{\dCell{}} = 0$, one recovers equation \eqref{eq_hu_washizu} over the element for the three variables $(\tensori{u}{}_{\cell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})$. However, if one considers that $\tensori{u}{}_{\dCell}$ and $\tensori{u}{}_{\cell}$ are distinct variables, \textit{i.e.} that the cell $\cell$ is able to move from the boundary $\dCell$ such that the displacement across $\dCell$ is discontinuous, $L_{\cell}^{HW}$ writes as a function of the four variables $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}, \tensorii{G}{}_{\cell}, \tensorii{P}{}_{\cell})$.
-Such an assumption relates to the concept of hybridization of the displacement unknown, which is at the foundation of Hybrid Discontinuous Galerkin methods.
-Besides, replacing $\tensori{u}{}_{\dCell}$ by $\tensori{u}{}_{\cell'} \vert_{\dCell}$ for any neighbouring cell $\cell'$ to $\cell$ amounts to describe the framework for Discontinuous Galerkin methods, where only the core unknown $\tensori{u}{}_{\cell}$ is considered, and the displacement jump on $\dCell$ depends on the trace of neighbouring cells  displacement.
-Following the idea of an hybrid bulk-boundary displacement field over the cell, let introduce $\hybridDisplacementSpaceCell = \displacementSpaceCell \times \displacementSpaceDCell$ the space of all kinematically admissible bulk and boundary displacement pairs, and $\virtualHybridDisplacementSpaceCell = \virtualDisplacementSpaceCell \times \virtualDisplacementSpaceDCell$ that of all kinematically admissible bulk and boundary virtual displacement pairs, with $\virtualDisplacementSpaceDCell$ the space of kinematically admissible virtual displacement fields on the boundary $\dCell$.
-Differentiating $L_{\cell}^{HW}$ with respect to each variable, and introducing the \textit{reconstructed traction force} $\tensori{\theta}{}_{\dCell} = \tensorii{P}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{} + (\beta / h_{\cell}) (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell})$ one obtains the system
-% 
-% 
 %
+%
+which fully defines the equilibrium of an element for discontinuous methods.
+
+\paragraph{Hybridization of the primal unknown; the HDG and HHO methods}
+
+Since the interface $\Crown{}$ has vanished by making $\ell \rightarrow 0$, both $\tensori{u}{}_{\cell} \vert_{\dCell{}}$ the trace of the displacement of the core part $\cell$ onto $\dCell{}$ and the displacement of the boundary $\tensori{u}{}_{\dCell{}}$ coexist on $\dCell{}$. The displacement of the element $\cell$ is thus said to be \textit{hybrid}, and is denoted by the pair $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})$.
+
+% The displacement is discontinuous across $\dCell{}$ by considering the vanishing interface, that allows for the core part $\cell{}$ to move away from the boundary $\dCell$, thus introducing a possible displacement jump on $\dCell{}$.
+% This assumption relates to the concept of hybridization of the displacement unknown, which is at the foundation of Hybrid Discontinuous Galerkin methods.
+% The displacement of the element $\cell$ hence depends on the pair $(\tensori{u}_{\cell}, \tensori{u}_{\dCell})$, where the trace of the core unknown $\tensori{u}_{\cell} \vert_{\dCell{}}$ coexists with $\tensori{u}_{\dCell}$ on $\dCell{}$.
+
+\paragraph{The special case of DG methods}
+
+Replacing $\tensori{u}{}_{\dCell}$ by $\tensori{u}{}_{\cell'} \vert_{\dCell}$ for any neighboring cell $\cell'$ amounts to describe the framework of Discontinuous Galerkin methods, where only the core unknown $\tensori{u}{}_{\cell}$ is considered, and the displacement jump on $\dCell$ depends on $\tensori{u}{}_{\cell'} \vert_{\dCell}$ the trace of the displacement of neighboring cells instead.
+% of that of an independent boundary shared by both $\cell$ and $\cell '$.
+
+\paragraph{Conformal Galerkin formulation}
+
+By strongly enforcing continuity of the displacement across $\dCell{}$ such that $\tensori{u}_{\cell} \vert_{\dCell} = \tensori{u}_{\dCell}$, one recovers the Principle of Virtual Work \eqref{eq_HW_0}, which defines the framework of conformal methods.
+
+% The displacement is discontinuous across $\dCell{}$ by considering the vanishing interface, that allows for the core part $\cell{}$ to move away from the boundary $\dCell$, thus introducing a possible displacement jump on $\dCell{}$.
+% This assumption relates to the concept of hybridization of the displacement unknown, which is at the foundation of Hybrid Discontinuous Galerkin methods.
+% The displacement of the element $\cell$ hence depends on the pair $(\tensori{u}_{\cell}, \tensori{u}_{\dCell})$, where the trace of the core unknown $\tensori{u}_{\cell} \vert_{\dCell{}}$ coexists with $\tensori{u}_{\dCell}$ on $\dCell{}$.
+
+\paragraph{Mixed problem for HDG mehtods}
+
+By derivation of the total Lagrangian \eqref{eq_0015} with respect to each variable of the problem, one obtains the weak equations
+% The Lagrangian \eqref{eq_0015} defines the mixed field functional to minimize, which amounts to solve the system
+
 \begin{subequations}
     \label{eq_0017}
         \begin{alignat}{3}
@@ -419,7 +336,7 @@ Differentiating $L_{\cell}^{HW}$ with respect to each variable, and introducing 
             \ \ \ \ \ \ \ \ 
             &&
             \forall \delta \tensori{u}{}_{\cell}
-            \in \virtualDisplacementSpaceCell
+            % \in \virtualDisplacementSpaceCell
         \label{eq_0017:eq0}
         \\
             \frac{\partial L_{\cell}^{HW}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
@@ -429,7 +346,7 @@ Differentiating $L_{\cell}^{HW}$ with respect to each variable, and introducing 
             \ \ \ \ \ \ \ \ 
             &&
             \forall \delta \tensori{u}{}_{\dCell}
-            \in \virtualDisplacementSpaceDCell
+            % \in \virtualDisplacementSpaceDCell
         \label{eq_0017:eq1}
         \\
             \frac{\partial L_{\cell}^{HW}}{\partial \tensorii{G}{}_{\cell}} \delta \tensorii{G}{}_{\cell}
@@ -439,7 +356,7 @@ Differentiating $L_{\cell}^{HW}$ with respect to each variable, and introducing 
             \ \ \ \ \ \ \ \ 
             &&
             \forall \delta \tensorii{G}{}_{\cell}
-            \in \gradSpaceCell
+            % \in \gradSpaceCell
         \label{eq_0017:eq2}
         \\
             \frac{\partial L_{\cell}^{HW}}{\partial \tensorii{P}{}_{\cell}} \delta \tensorii{P}{}_{\cell}
@@ -450,28 +367,86 @@ Differentiating $L_{\cell}^{HW}$ with respect to each variable, and introducing 
             \ \ \ \ \ \ \ \ 
             &&
             \forall \delta \tensorii{P}{}_{\cell}
-            \in \stressSpaceCell
+            % \in \stressSpaceCell
         \label{eq_0017:eq3}
     \end{alignat}
 \end{subequations}
 % 
 % 
 %
-The set of equations \eqref{eq_0017} fully defines the framework for Discontinuous Galerkin methods.
-In particular, \eqref{eq_0017:eq0} is the expression of the principle of virtual works in $\cell$, where the \textit{reconstructed traction force} $\tensori{\theta}{}_{\dCell}$ replaces the usual expression $\tensorii{P}{}_{\cell} \cdot \tensori{n}{}$ in the external contribution, and \eqref{eq_0017:eq1} denotes a supplementary equation to the usual continuous problem as described in \eqref{eq_hu_washizu_derivative}, to account for the continuity of the flux $\tensori{\theta}{}_{\dCell}$ across the cell boundary.
-This feature constitutes one of the key assets of non-conformal method; indeed, by defining a richer flux than in the usual continuous framework, that also depends on the displacement jump, one allows for the latter to act as a Lagrange multiplier in order to fulfill the flux continuity requirement on $\dCell$. The tradeoff for this condition to hold true consists in loosening the displacement continuity condition through the introduction of the displacement jump at the boundary.
+where we introduced the \textit{reconstructed traction force} $\tensori{\theta}{}_{\dCell} = \tensorii{P}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{} + (\beta / h_{\cell}) (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell})$.
+In particular, \eqref{eq_0017:eq0} is the expression of the Principle of Virtual Work in $\cell$, where the \textit{reconstructed traction force} $\tensori{\theta}{}_{\dCell}$ replaces the usual expression $\tensorii{P}{}_{\cell} \cdot \tensori{n}{}$ in the external contribution. \eqref{eq_0017:eq1} denotes a supplementary equation to the usual continuous problem as described in \eqref{eq_hu_washizu_derivative_0}, to account for the continuity of the flux $\tensori{\theta}{}_{\dCell}$ across the cell boundary.
+% This feature constitutes one of the key assets of non-conformal method; indeed, by defining a richer flux than in the usual continuous framework, that also depends on the displacement jump, one allows for the latter to act as a Lagrange multiplier in order to fulfill the flux continuity requirement on $\dCell$.
+% La continuité du flux aux interfaces is indeed the tradeoff for having loosened la continuité du déplacement aux interfaces.
 % Stability of the problem is then recovered through the interface behaviour that penalizes displacement jumps in a weak sense.
 % \eqref{eq_0017:eq2} defines the stress-behaviour law relation, and \eqref{eq_0017:eq3} defines a gradient field reconstruction based on a linear problem, whose second term depends on both a body and a boundary term.
-\eqref{eq_0017:eq2} accounts for the constitutive equation in a weak sense, and \eqref{eq_0017:eq3} defines the equation of an enhanced gradient field, that does not reduce to the projection of $\nabla \tensori{u}{}_{\cell}$ onto $\gradSpaceCell$ as in \eqref{eq_hu_washizu_derivative:eq3}, since it is enriched by a boundary component that depends on the displacement jump, which is at the origin of the robustness of non-conformal methods to volumetric locking.
+\eqref{eq_0017:eq2} accounts for the constitutive equation in a weak sense, and \eqref{eq_0017:eq3} defines the equation of an enhanced gradient field, that does not reduce to the projection of $\nabla \tensori{u}{}_{\cell}$ as in \eqref{eq_hu_washizu_derivative_0:eq3}, since it is enriched by a boundary component that depends on the displacement jump.
+This feature is at the origin of the robustness of non-conformal methods to volumetric locking (see \ref{sec_appendix_gradient} for more details on this note).
 %
 %
 %
 %
 % Indeed, defining $\tensori{I}{}(\tensori{v}{})$ the interpolation operator
 
-Instead of seeking the four fields explicitly, by noticing that minimization of \eqref{eq_0017:eq3} defines a linear problem with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \hybridDisplacementSpaceCell$ such that there is a unique $\tensorii{G}{}_{\cell}$ minimizing \eqref{eq_0017:eq3}, and that minimization of \eqref{eq_0017:eq2} is linear with the derivative of $\mecPotential_{\bodyLag}$ with respect to $\tensorii{G}{}_{\cell}$, one can eliminate
-\eqref{eq_0017:eq2} and \eqref{eq_0017:eq3} from the system, by considering the simplified functional
-% By explicitly eliminating \eqref{eq_0017:eq2} and \eqref{eq_0017:eq3} from the system, \textit{i.e.} by considering the simplifed functional
+\subsection{Problem in primal form}
+\label{sec_hdg_element_equilibrium}
+
+\paragraph{Reconstructed gradient}
+
+Since minimization of \eqref{eq_0017:eq3} defines a linear problem with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$, one can eliminate \eqref{eq_0017:eq3} from the system \eqref{eq_0017}. The resulting equation defines the so-called \textit{reconstructed gradient} $\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ associated with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$, that solves
+%
+%
+%
+\begin{equation}
+    \label{eq_grad}
+    \begin{aligned}
+        \int_{\cell} \tensorii{G}{}_{\cell} : \tensorii{\tau}{}_{\cell}
+        =
+        \int_{\cell}  \nabla \tensori{v}{}_{\cell} : \tensorii{\tau}{}_{\cell}
+        +
+        \int_{\dCell} (\tensori{v}{}_{\dCell} - \tensori{v}{}_{\cell} \vert_{\dCell}) \cdot \tensorii{\tau}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{}
+        &&
+        \forall \tensorii{\tau}{}_{\cell}
+        % \in \stressSpaceCell
+    \end{aligned}
+\end{equation}
+%
+%
+%
+where $\tensorii{\tau}{}_{\cell}$ denotes an arbitrary kinematically admissible stress field.
+
+\paragraph{Stress tensor}
+
+Likewise, \eqref{eq_0017:eq2} is eliminated from \eqref{eq_0017} since it is linear with $\tensorii{G}{}_{\cell}$. Assuming in addition that the space of kinematically admissible stress fields is included in that of kinematically admissible displacement gradient fields, \eqref{eq_0017:eq2} holds in a strong sense such that
+%
+%
+%
+% \begin{equation}
+%     \label{eq_stress}
+%     \begin{aligned}
+%         \int_{\cell} \tensorii{P}{}_{\cell} : \tensorii{\gamma}{}_{\cell}
+%         =
+%         \int_{\cell} \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{\cell}}  : \tensorii{\gamma}{}_{\cell}
+%         &&
+%         \forall \tensorii{\gamma}{}_{\cell} \in \gradSpaceCell
+%     \end{aligned}
+% \end{equation}
+%
+%
+%
+\begin{equation}
+    \label{eq_stress}
+    \begin{aligned}
+        \tensorii{P}{}_{\cell} = \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{\cell}}
+    \end{aligned}
+\end{equation}
+
+\paragraph{Total Lagrangian for the problem in primal form}
+
+By elimination of both \eqref{eq_0017:eq2} and \eqref{eq_0017:eq3} from \eqref{eq_0017}, the only remaining unknowns are the cell and boundary displacement fields. Hence, a new Lagrangian that accounts for the problem in primal form arises from \eqref{eq_0015}.
+% the Principle of Virtual Work
+
+% the functional for the problem in primal form \eqref{eq_simple} arises from \eqref{eq_0015}
 %
 %
 %
@@ -495,171 +470,14 @@ Instead of seeking the four fields explicitly, by noticing that minimization of 
         \int_{\neumannCell{}} \neumannCellLoad{} \cdot \tensori{u}{}_{\dCell{}}
     \end{aligned}
 \end{equation}
+
+\paragraph{Principle of virtual works for HDG methods}
 %
 %
 %
-where \eqref{eq_0017:eq3} results in the definition of the \textit{reconstructed gradient} $\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ associated with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \hybridDisplacementSpaceCell$ that solves
-% where \eqref{eq_0017:eq2} and \eqref{eq_0017:eq3} are taken to be zero such that the reconstructed gradient $\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ associated with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \displacementSpaceCell \times \displacementSpaceDCell$ explicitly solves
-%
-%
-%
-\begin{equation}
-    \label{eq_grad}
-    \begin{aligned}
-        \int_{\cell} \tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) : \tensorii{\tau}{}_{\cell}
-        =
-        \int_{\cell}  \nabla \tensori{v}{}_{\cell} : \tensorii{\tau}{}_{\cell}
-        +
-        \int_{\dCell} (\tensori{v}{}_{\dCell} - \tensori{v}{}_{\cell} \vert_{\dCell}) \cdot \tensorii{\tau}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{}
-        &&
-        \forall \tensorii{\tau}{}_{\cell} \in \stressSpaceCell
-    \end{aligned}
-\end{equation}
-%
-%
-%
-and the stress $\tensorii{P}{}_{\cell}(\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}))$ is defined as the projection onto $\gradSpaceCell$ of the derivative of $\mecPotential_{\bodyLag}$ with respect to $\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ for any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \hybridDisplacementSpaceCell$
-%
-%
-%
-\begin{equation}
-    \label{eq_stress}
-    \begin{aligned}
-        \int_{\cell} \tensorii{P}{}_{\cell}(\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})) : \tensorii{\gamma}{}_{\cell}
-        =
-        \int_{\cell} \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})}  : \tensorii{\gamma}{}_{\cell}
-        &&
-        \forall \tensorii{\gamma}{}_{\cell} \in \gradSpaceCell
-    \end{aligned}
-\end{equation}
-%
-%
-%
-where one notices that the equality holds in a strong sense if $\stressSpaceCell \subset \gradSpaceCell$.
-% Indeed, the gradient unknown does not only defines as the projection of the gradient of $\tensori{u}{}_{\cell}$ onto $\gradSpaceCell$ as in \eqref{eq_hu_washizu_derivative:eq3}, as it is enriched by a boundary component that depends on the displacement jump, which is at the origin of the robustness of non-conformal methods to volumetric locking.
-%
-%
-%
-\textcolor{blue}{
-    \begin{development}[Elliptic projection]
-        %
-        %
-        %
-        Let $\discreteDisplacementSpaceCell \subset \displacementSpaceCell$ and $U^\perp(\cell) \subset \displacementSpaceCell$ such that $\displacementSpaceCell = \discreteDisplacementSpaceCell \oplus U^\perp(\cell)$, and set $\tensori{u}{}_{\cell} = \tensori{u}{}_{\cell}^h + \tensori{u}{}_{\cell}^\perp$ with
-        $\tensori{u}{}_{\cell}^h \in U^h(\cell)$ and $\tensori{u}{}_{\cell}^\perp \in U^\perp(\cell)$ the orthogonal projections of $\tensori{u}{}_{\cell}$ onto $U^h(\cell)$ and $U^\perp(\cell)$ respectively.
-        Let $V^h(\dCell) \subset \displacementSpaceDCell$ and $\tensori{u}{}_{\dCell}^h \in V^h(\dCell)$ the orthogonal projection of $\tensori{u}{}_{\cell}$ onto $V^h(\dCell)$.
-        The orthogonal projection of $\tensori{u}{}_{\cell}$ onto $\discreteHybridDisplacementSpaceCell = U^h(\cell) \times V^h(\dCell)$ is then the displacement pair $(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h)$.
-        Let $S^h(\cell) = \{ \tensorii{\tau}{}_{\cell}^h \in \stressSpaceCell \ \ \vert \ \ \nabla \cdot  \tensorii{\tau}{}_{\cell}^h \in U^h(\cell) \ \ \vert \ \  \tensorii{\tau}{}_{\cell}^h \vert_{\dCell} \cdot \tensori{n}{} \in V^h(\dCell) \}$,
-        and $\tensorii{G}{}_{\cell}^h \in S^h(\cell)$ the solution of \eqref{eq_grad} for $(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h)$ such that
-        %
-        %
-        %
-        \begin{equation}
-            \begin{aligned}
-                \int_{\cell} \tensorii{G}{}_{\cell}^h(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h) : \tensorii{\tau}{}_{\cell}^h
-                =
-                \int_{\cell} \nabla \tensori{u}{}_{\cell}^h : \tensorii{\tau}{}_{\cell}^h
-                +
-                \int_{\dCell} (\tensori{u}{}_{\dCell}^h - \tensori{u}{}_{\cell}^h \vert_{\dCell}) \cdot \tensorii{\tau}{}_{\cell}^h \vert_{\dCell} \cdot \tensori{n}{}
-                &&
-                \ \ \ \ \ \ \ \ 
-                &&
-                \forall \tensorii{\tau}{}_{\cell}^h \in S^h(\cell)
-            \end{aligned}
-        \end{equation}
-        %
-        %
-        %
-        using the fact that $\tensori{u}{}_{\dCell}^h$ is the projection of $\tensori{u}{}_{\cell}$ onto $V^h(\dCell)$ and that $\tensorii{\tau}{} \vert_{\dCell} \cdot \tensori{n}{} \in V^h(\dCell)$:
-        %
-        %
-        %
-        \begin{equation}
-            \begin{aligned}
-                \int_{\cell} \tensorii{G}{}_{\cell}^h(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h) : \tensorii{\tau}{}_{\cell}^h
-                = &
-                \int_{\cell} \nabla \tensori{u}{}_{\cell}^h : \tensorii{\tau}{}_{\cell}^h
-                +
-                \int_{\dCell} (\tensori{u}{}_{\cell} \vert_{\dCell} - \tensori{u}{}_{\cell}^h \vert_{\dCell}) \cdot \tensorii{\tau}{}_{\cell}^h \vert_{\dCell} \cdot \tensori{n}{}
-                &&
-                \ \ \ \ \ \ \ \ 
-                &&
-                \forall \tensorii{\tau}{}_{\cell}^h \in S^h(\cell)
-                \\
-                = &
-                \int_{\cell} \nabla \tensori{u}{}_{\cell}^h : \tensorii{\tau}{}_{\cell}^h
-                +
-                \int_{\dCell} \tensori{u}{}_{\cell}^\perp \vert_{\dCell} \cdot \tensorii{\tau}{}_{\cell}^h \vert_{\dCell} \cdot \tensori{n}{}
-                &&
-                \ \ \ \ \ \ \ \ 
-                &&
-                \forall \tensorii{\tau}{}_{\cell}^h \in S^h(\cell)
-            \end{aligned}
-        \end{equation}
-        %
-        %
-        %
-        using the divergence theorem and the fact that $\nabla \cdot  \tensorii{\tau}{}_{\cell}^h \in U^h(\cell)$, one has :
-        %
-        %
-        %
-        \begin{equation}
-            \begin{aligned}
-                \int_{\cell} \nabla \tensori{u}{}_{\cell}^\perp :  \tensorii{\tau}{}_{\cell}^h
-                = &
-                % -
-                % \int_{\cell} \tensori{u}{}_{\cell}^\perp \cdot \nabla \cdot \tensorii{\tau}{}
-                % +
-                % \int_{\dCell} \tensori{u}{}_{\cell}^\perp \vert_{\dCell} \cdot \tensorii{\tau}{} \vert_{\dCell} \cdot \tensori{n}{}
-                % \\
-                % = &
-                \int_{\dCell} \tensori{u}{}_{\cell}^\perp \vert_{\dCell} \cdot  \tensorii{\tau}{}_{\cell}^h \vert_{\dCell} \cdot \tensori{n}{}
-            \end{aligned}
-        \end{equation}
-        %
-        %
-        %
-        such that :
-        %
-        %
-        %
-        \begin{equation}
-            \begin{aligned}
-                \int_{\cell} \tensorii{G}{}_{\cell}^h(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h) : \tensorii{\tau}{}_{\cell}^h
-                = &
-                \int_{\cell} \nabla \tensori{u}{}_{\cell}^h : \tensorii{\tau}{}_{\cell}^h
-                +
-                \int_{\cell} \nabla \tensori{u}{}_{\cell}^\perp : \tensorii{\tau}{}_{\cell}^h
-                &&
-                \ \ \ \ \ \ \ \ 
-                &&
-                \forall \tensorii{\tau}{}_{\cell}^h \in S^h(\cell)
-                \\
-                = &
-                \int_{\cell} \nabla \tensori{u}{}_{\cell} : \tensorii{\tau}{}_{\cell}^h
-                &&
-                \ \ \ \ \ \ \ \ 
-                &&
-                \forall \tensorii{\tau}{}_{\cell}^h \in S^h(\cell)
-            \end{aligned}
-        \end{equation}
-        %
-        %
-        %
-        which states that $\tensorii{G}{}_{\cell}^h(\tensori{u}{}_{\cell}^h, \tensori{u}{}_{\dCell}^h)$ is the orthogonal projection of $\nabla \tensori{u}{}_{\cell}$ onto $S^h(\cell)$.
-        % IL FAUDRAIT MONTRER QUE $S^h(\cell)$ EST SUFFISANT POUR EMPECHER LE LOCKING DANS $U^h(\cell) \times V^h(\dCell)$ ??
-        % ET FAIRE LE LIEN ENTRE $S^h(\cell)$ et $G^h(\cell)$.
-        % Trouver aussi une justification pour $\stressSpaceCell \subset \gradSpaceCell$, la contrainte est plus régulière que le gradient, ce qui semble vrai (avec les décompositions sphérique dévaitoriques par exemples, etc)
-        %
-        %
-        %
-    \end{development}
-}
-%
-%
-%
-The problem in primal form amounts to find the displacement pair $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}) \in \hybridDisplacementSpaceCell$ verifying $\tensori{u}{}_{\dCell} = \dirichletLag$ on $\dirichletCell$,
-such that for all kinematically admissible displacements pairs $(\delta \tensori{u}{}_{T}, \delta \tensori{u}{}_{\partial T}) \in \virtualHybridDisplacementSpaceCell$, the functional \eqref{eq_simple} is minimal, \textit{i.e.}
+% The problem in primal form amounts to find the displacement pair $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}) \in \hybridDisplacementSpaceCell$ verifying $\tensori{u}{}_{\dCell} = \dirichletLag$ on $\dirichletCell$,
+% such that for all kinematically admissible displacements pairs $(\delta \tensori{u}{}_{T}, \delta \tensori{u}{}_{\partial T}) \in \virtualHybridDisplacementSpaceCell$, the functional \eqref{eq_simple} is minimal, \textit{i.e.} such that
+Minimization of the Lagrangian \eqref{eq_simple} amounts to the definition of a Principle of Virtual Work, in the context of HDG methods. It consists in finding the displacement pair $(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})$ that solves
 %
 %
 %
@@ -672,9 +490,20 @@ such that for all kinematically admissible displacements pairs $(\delta \tensori
         % +
         % \frac{\partial L_{\cell}}{\partial \tensori{u}{}_{\dCell}} \delta \tensori{u}{}_{\dCell}
         % =
-        \delta L_{\cell, \text{int}}^{VW} - \delta L_{\cell, \text{ext}}^{VW}
+        \delta L_{\cell, \text{int}}^{VW}
+        % (
+            % (\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})
+            % ,
+            % (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
+        % )
+        -
+        \delta L_{\cell, \text{ext}}^{VW}
+        % (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
         =
         0
+        % &&
+        % &&
+        % \forall (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
         % \\
         % = & \delta L_{\cell}^{\text{int}} + \delta L_{\cell}^{\text{ext}}
         % \\
@@ -704,19 +533,26 @@ such that for all kinematically admissible displacements pairs $(\delta \tensori
 %
 %
 %
-with
+where $\forall (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})$
 %
 %
 %
 \begin{subequations}
     \label{eq_0nonamemee}
         \begin{alignat}{3}
-            \delta L_{\cell, \text{int}}^{VW} & = 
+            \delta L_{\cell, \text{int}}^{VW}
+            % (
+                % (\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})
+                % ,
+                % (\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
+            % )
+            = & 
             \int_{T}
             \tensorii{P}{}_{\cell}(\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell}))
             :
             \tensorii{G}{}_{\cell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
             % \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{G}{}_T} : \delta \tensorii{G}{}_{T}
+            % \\ &
             +
             \int_{\dCell} (\beta / h_{\cell})
             % (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell})
@@ -727,7 +563,7 @@ with
             % \delta \tensori{Z}{}_{\dCell{}}
             \tensori{Z}{}_{\dCell}(\delta \tensori{u}{}_{\cell}, \delta \tensori{u}{}_{\dCell})
             \\
-            \delta L_{\cell, \text{ext}}^{VW} & = 
+            \delta L_{\cell, \text{ext}}^{VW} = & 
             \int_{\neumannCell} \neumannCellLoad{} \cdot \delta \tensori{u}{}_{\dCell{}}
             +
             \int_{T} \loadLag \cdot \delta \tensori{u}{}_{\cell}
@@ -736,7 +572,7 @@ with
 %
 %
 %
-where we introduced the jump function $\tensori{Z}{}_{\dCell}$ :
+and where we introduced the jump function $\tensori{Z}{}_{\dCell}$ such that
 %
 %
 %
@@ -744,14 +580,168 @@ where we introduced the jump function $\tensori{Z}{}_{\dCell}$ :
     \begin{aligned}
         \tensori{Z}{}_{\dCell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) = \tensori{v}{}_{\dCell} - \tensori{v}{}_{\cell} \vert_{\dCell}
         &&
-        \forall (\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \hybridDisplacementSpaceCell
+        \forall (\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})
+        % \in \hybridDisplacementSpaceCell
     \end{aligned}
 \end{equation}
 %
 %
 %
 In particular, one can readliy see the resemblance of \eqref{eq_0nonamemee} with
-\eqref{eq_virtual_works},
+\eqref{eq_virtual_works_0},
 % the ususal formulation of the principle of virtual works
-where the so called \textit{reconstructed gradient} $\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})$ plays the role of the usual displacement Lagrangian gradient $\nabla \tensori{u}{}_{\cell}$, and where an additional \textit{stabilization term} corresponding to a traction energy on the boundary has been added to account for the penalization of the displacement jump on $\dCell$ through $\tensori{Z}{}_{\dCell}$.
-Equations \eqref{eq_simple}, \eqref{eq_grad} and \eqref{eq_stress} define the mechanical problem to solve at the cell level for Hybrid Discontinuous Galerkin methods, and \eqref{eq_0018} describes the weak form of these equations.
+where the so called \textit{reconstructed gradient} $\tensorii{G}{}_{\cell}(\tensori{u}{}_{\cell}, \tensori{u}{}_{\dCell})$ plays the role of the usual displacement Lagrangian gradient $\nabla \tensori{u}{}_{\cell}$, and where an additional \textit{stabilization term} corresponding to a traction energy on the boundary has been added to account for the penalization of the displacement jump on $\dCell$ through $\tensori{Z}{}_{\dCell}$ (or, equivalently, to account for the infinitesimal interface that lays between the bulk domain and its boundary).
+Equations \eqref{eq_simple}, \eqref{eq_grad} and \eqref{eq_stress} define the mechanical problem to solve at the cell level for HDG methods, and \eqref{eq_0018} describes the weak form of these equations.
+
+\subsection{Small strain hypothesis}
+
+% La formulation proposée en grandes déformations permet également un passage naturel au cadre des petites déformations. Dans ce contexte, étant donné que le gradient de la transformation $\tensorii{F}{}_{\cell}$ est supposé petit devant $\tensorii{1}$, on cherche le champ de déformation infinitésimale $\tensorii{\varepsilon}{}_{\cell}$ comme la formulation faible de $\nabla^s \tensori{u}{}_{\cell}$ plutot que le gradient du champ de déplacement $\tensorii{G}{}_{\cell}$. le tenseur des contraintes $\tensorii{P}{}_{\cell}$ est alors identifié à $\tensorii{\sigma}{}_{\cell}$, de sorte que le problème \eqref{eq_0015} devient
+The proposed large deformation formulation also allows a natural transition to the small deformation framework. In this context, since the gradient of the transformation $\tensorii{F}{}_{\cell}$ is assumed to be small compared to $\tensorii{1}$, we seek the infinitesimal deformation field $\tensorii{\varepsilon}_{\cell}$ as the weak formulation of $\nabla^s \tensori{u}_{\cell}$ rather than the gradient of the displacement field $\tensorii{G}{}_{\cell}$. The stress tensor $\tensorii{P}{}_{\cell}$ is then identified with the Cauchy stress $\tensorii{\sigma}{}_{\cell}$, so that problem \eqref{eq_0015} becomes
+%
+%
+%
+\begin{equation}
+    \label{eq_small_defs}
+    \begin{aligned}
+        L_{\cell}^{HW}
+        = &
+        \int_{\cell{}} \mecPotential{}_{\bodyLag{}} + (\nabla^s \tensori{u}{}_{\cell{}} - \tensorii{\varepsilon}{}_{\cell{}}) : \tensorii{\sigma}{}_{\cell}
+        % \\
+        % &
+        + \int_{\dCell{}} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell}) \cdot \tensorii{\sigma}{}_{\cell} \vert_{\dCell{}} \cdot \tensori{n}{}
+        % \\
+        % &
+        + \int_{\dCell} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\cell{}} \vert_{\dCell{}} \rVert^2
+        \\
+        &
+        -
+        \int_{\cell} \loadLag{} \cdot \tensori{u}{}_{\cell{}}
+        -
+        \int_{\neumannCell{}} \neumannCellLoad{} \cdot \tensori{u}{}_{\dCell{}}
+    \end{aligned}
+\end{equation}
+%
+%
+%
+% En poursuivant le même développement que précédemment, l'énargie à minimiser est donnée par l'équation \ref{eq_simple} comme dans le cadre des grandes déformations. En revanche,l'équation du gradient reconstruit \ref{eq_grad} devient
+Continuing the same development as above, the energy to be minimized is given by equation \ref{eq_simple} as in the large deformation framework. On the other hand, the reconstructed gradient equation \ref{eq_grad} becomes
+%
+%
+%
+% \begin{equation}
+%     \label{eq_simple_ss}
+%     \begin{aligned}
+%         L_{\cell}^{VW}
+%         = &
+%         \int_{\cell{}} \mecPotential{}_{\bodyLag{}}
+%         % \\
+%         % &
+%         % + \int_{\dCell{}} (\tensori{u}{}_{\dCell} - \tensori{u}{}_{\cell} \vert_{\dCell}) \cdot \tensorii{P}{}_{\cell} \vert_{\dCell{}} \cdot \tensori{n}{}
+%         % \\
+%         % &
+%         + \int_{\dCell} \frac{\beta}{2 h_{\cell}} \lVert \tensori{u}{}_{\dCell{}} - \tensori{u}{}_{\cell{}} \vert_{\dCell{}} \rVert^2
+%         % \\
+%         % &
+%         -
+%         \int_{\cell} \loadLag{} \cdot \tensori{u}{}_{\cell{}}
+%         -
+%         \int_{\neumannCell{}} \neumannCellLoad{} \cdot \tensori{u}{}_{\dCell{}}
+%     \end{aligned}
+% \end{equation}
+%
+%
+%
+% where \eqref{eq_0017:eq3} results in the definition of the \textit{reconstructed gradient} $\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ associated with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \hybridDisplacementSpaceCell$ that solves
+% where \eqref{eq_0017:eq2} and \eqref{eq_0017:eq3} are taken to be zero such that the reconstructed gradient $\tensorii{G}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell})$ associated with any displacement pair $(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) \in \displacementSpaceCell \times \displacementSpaceDCell$ explicitly solves
+%
+%
+%
+\begin{equation}
+    \label{eq_grad_ss}
+    \begin{aligned}
+        \int_{\cell} \tensorii{\varepsilon}{}_{\cell}(\tensori{v}{}_{\cell}, \tensori{v}{}_{\dCell}) : \tensorii{\tau}{}_{\cell}
+        =
+        \int_{\cell}  \nabla^s \tensori{v}{}_{\cell} : \tensorii{\tau}{}_{\cell}
+        +
+        \int_{\dCell} (\tensori{v}{}_{\dCell} - \tensori{v}{}_{\cell} \vert_{\dCell}) \cdot \tensorii{\tau}{}_{\cell} \vert_{\dCell} \cdot \tensori{n}{}
+        &&
+        \forall \tensorii{\tau}{}_{\cell}
+        % \in \stressSpaceCell
+    \end{aligned}
+\end{equation}
+%
+%
+%
+where $\tensorii{\tau}{}_{\cell}$ deotes an arbitrary kinematically admissible symmetric stress field, since the deformations $\tensorii{\varepsilon}{}_{\cell}$ and the Cauchy stress $\tensorii{\sigma}{}_{\cell}$ are symmetric.
+The expression of the stress as a function of the cell deformation is then given by
+%
+%
+%
+% \begin{equation}
+%     \label{eq_stress_ss}
+%     \begin{aligned}
+%         \int_{\cell} \tensorii{\sigma}{}_{\cell} : \tensorii{\gamma}{}_{\cell}
+%         =
+%         \int_{\cell} \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{\varepsilon}{}_{\cell}}  : \tensorii{\gamma}{}_{\cell}
+%         &&
+%         \forall \tensorii{\gamma}{}_{\cell} \in \gradSpaceCell
+%     \end{aligned}
+% \end{equation}
+%
+%
+%
+\begin{equation}
+    \label{eq_stress_ss}
+    \begin{aligned}
+        \tensorii{\sigma}{}_{\cell} = \frac{\partial \mecPotential_{\bodyLag}}{\partial \tensorii{\varepsilon}{}_{\cell}}
+    \end{aligned}
+\end{equation}
+
+\subsection{Extension to the axi-symmetric framework}
+
+In the following section, we devise a Hybrid High order method for an axi-symmetric framework. Owing to geometrical assumptions on the displacement and its gradient, the definition of the reconstructed gradient \eqref{eq_grad} and of that of the higher order displacement \eqref{eq_potential} needs be modified accordingly. Details about the definitions of these ingredients can be found in \ref{sec_appendix_axi}.
+
+\paragraph{Axi-symmetric framework}
+
+The cartesian space is expressed in cylindrical coordinates and a point $\tensori{X} \in \bodyLag$ has coordinates $\tensori{X} = (r, z, \theta)$ where $r$ denotes the radial component, $z$ the ordinate one, and $\theta$ is the angular component describing a revolution around the axis $r = 0$. By cylindrical symmetry, the angular displacement $\tensoro{u}{}_{\theta}$ is supposed to be zero, and both components $u_r$ and $u_z$ do not depend on the angular coordinate $\theta$.
+
+% \paragraph{Cell displacement gradient}
+
+% % Adopting notations introduced in Section \ref{sec_composite_demo}, let $\cell$ an open subset of $\bodyLag \subset \mathbb{R}^2$ in the $(r,z)$ plane with cell displacement $\tensori{u}{}_{\cell} \in \displacementSpaceCell$ and boundary displacement $\tensori{u}{}_{\dCell} \in \displacementSpaceDCell$.
+% The partial derivatives of $\tensori{u}{}_{\cell}$ with respect to the cylindrical coordinates are given by
+% %
+% %
+% %
+% \begin{equation}
+%     \begin{aligned}
+%         \forall i, j \in \{ r,z \}, \tensoro{u}{}_{\cell i,j} = \frac{\partial u_{\cell i}}{\partial j} && \text{and} && \tensoro{u}{}_{\cell \theta, \theta} = \frac{u_{\cell r}}{r}
+%     \end{aligned}
+% \end{equation}
+
+\paragraph{Axis faces treatment}
+
+Since in cylindrical coordinates, all integrals depend on the radial component $r$, boundary integrals vanish at $r = 0$ on the symmetry axis.
+Therefore, the reconstructed gradient (and the stabilization) do not depend on a closed surface wrapping a cell $\cell$ located on the symmetry axis.
+However, this feature is necessary to prove the robustness of the HHO method to volumetric locking (see \ref{sec_appendix_gradient}).
+Therefore, in order to restore full mobility of a face located on the symmetry axis, we consider infinitely thin cylindrical faces wrapping it, that are subjected to Dirichlet boundary conditions along the radial direction.
+
+% Therefore, we exclude the symmetry axis from the domain, by considering infinitely thin cylindrical faces of radius $\varrho > 0$ surrounding it (see Figure \ref{fig_axi}).
+
+
+% On the symmetry axis
+
+% Moreover, since in cylindrical coordinates, all integrals depend on the radial component $r$, there is a singularity at $r = 0$ for boundary integrals on faces located on the symmetry axis, and from a geometrical standpoint, these faces lose a dimension; a face that is not located on the symmetry axis behaves like a shell by revolution of the $(r,z)$ plane,
+% whereas one attached to the axis reduces to a beam that is only allowed to move and morph in the $z$ direction.
+% On a more algebraic note, the problem as such is ill-defined, since building the jump function involves inverting a mass matrix in $\discreteDisplacementSpaceDCell$ to define the projector $\Pi_{\dCell}^k$.
+% Therefore, a face on the axis is swelled by a small radius $\varrho $ such that it becomes a cylinder with same dimensions as the others (see Figure \ref{fig_axi})
+%
+%
+%
+
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=8.cm]{img/sketch_axi.png}
+%     \caption{schematic representation of the modeling of a face located on the symmetry axis}
+%     \label{fig_axi}
+% \end{figure}

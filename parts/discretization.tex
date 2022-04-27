@@ -179,6 +179,10 @@ Since the displacement is discontinuous, the usual Lagrange basis functions are 
 %
 %
 %
+\textcolor{red}{Func lag en EF -> ici pas besoin de metre 1 aux noauds}
+%
+%
+%
 \begin{equation}
     \label{eq_basis_fun}
     \begin{aligned}
@@ -510,6 +514,7 @@ Using \eqref{eq_condensation_0}, cell unknowns can be eliminated from the proble
 which yields the usual static condensation formulae.
 
 \subsubsection{Comparison between both schemes}
+\label{par_cell_eq}
 
 The static condensation algorithm is the one used in the literature \cite{di_pietro_discontinuous-skeletal_2015,cockburn_algorithm_2019,abbas_hybrid_2019-1,abbas_hybrid_2018} to eliminate cell unknowns. Contrary to the introduced cell resolution algorithm, this scheme needs not iterate at the cell level to accomodate the cell correction, and is hence, faster. However, the actualization of the cell unknown displacement by its correction demands that the quantities $\partial \tensori{u}{}_{\cell}^l / \partial R_{\cell}^{\cell}$ and $\partial R_{\cell}^{\cell} / \partial \tensori{u}{}_{\dCell}^k$ computed at the previous iteration are known. From a numerical standpoint, this results in keeping the associated matrices (see Section \ref{sec_implementation}) in memory from an iteration to another.
 % one needs to store matrices used during the condensation step from one iteration to another in order do decondensate the cell increment.
